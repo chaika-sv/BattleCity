@@ -137,4 +137,7 @@ public class Game implements Runnable{
         // Todo: reset something
     }
 
+    public Playing getPlaying() {
+        return playing;
+    }
 }

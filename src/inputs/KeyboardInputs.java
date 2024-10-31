@@ -1,5 +1,6 @@
 package inputs;
 
+import gamestates.Gamestate;
 import main.GamePanel;
 
 import java.awt.event.KeyEvent;
@@ -15,16 +16,32 @@ public class KeyboardInputs implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        switch (Gamestate.state) {
+            case PLAYING -> {
+                gamePanel.getGame().getPlaying().keyPressed(e);
+            }
+            case MENU -> {
+                //gamePanel.getGame().getMenu().keyPressed(e);
+            }
+            case OPTIONS -> {
+                //gamePanel.getGame().getGameOptions().keyPressed(e);
+            }
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        switch (Gamestate.state) {
+            case PLAYING -> {
+                gamePanel.getGame().getPlaying().keyReleased(e);
+            }
+            case MENU -> {
+                //gamePanel.getGame().getMenu().keyReleased(e);
+            }
+        }
     }
 }
