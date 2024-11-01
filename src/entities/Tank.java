@@ -10,6 +10,7 @@ public abstract class Tank {
     protected float x, y;
     protected int width, height;
     protected Rectangle2D.Float hitbox;
+    protected int hitboxYOffset = (int)(10 * Game.SCALE);
     protected int aniTick, aniIndex;
     protected int state;
     protected int type;

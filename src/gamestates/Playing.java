@@ -1,6 +1,7 @@
 package gamestates;
 
 import entities.Player;
+import levels.LevelManager;
 import main.Game;
 
 import java.awt.*;
@@ -10,17 +11,23 @@ import java.awt.event.MouseEvent;
 public class Playing extends State implements Statemethods{
 
     Player player;
+    LevelManager levelManager;
+
     private boolean gameOver = false;
 
     public Playing(Game game) {
         super(game);
-
-
         initClasses();
+        resetAll();
     }
 
     private void initClasses() {
+        levelManager = new LevelManager(game);
         player = new Player(200, 200, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), this);
+    }
+
+    private void resetAll() {
+        player.resetAll();
     }
 
     @Override
@@ -30,7 +37,12 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void draw(Graphics g) {
+
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
+
         player.draw(g);
+        levelManager.draw(g);
     }
 
     @Override

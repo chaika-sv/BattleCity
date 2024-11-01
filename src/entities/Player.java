@@ -5,6 +5,7 @@ import main.Game;
 import utils.LoadSave;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import static utils.Constants.ANI_SPEED;
@@ -25,8 +26,12 @@ public class Player extends Tank{
     private boolean moving = false, attacking = false;
     private boolean attackChecked;
 
-    private float xDrawOffset = 0 * Game.SCALE;        // 21px - offset from tile border to actual player position
-    private float yDrawOffset = 0 * Game.SCALE;         // 4px - offset from tile border to actual player position
+    private float xDrawOffset = 0 * Game.SCALE;
+    private float yDrawOffset = 0 * Game.SCALE;
+
+    private float yFlipOffset = 13 * Game.SCALE;
+
+
 
     private int flipX = 0;
     private int flipW = 1;
@@ -46,7 +51,7 @@ public class Player extends Tank{
         this.driveSpeed = 1.0f * Game.SCALE;
 
         loadAnimations();
-        initHitbox(52, 63);
+        initHitbox(48, 48);
     }
 
     private void loadAnimations() {
@@ -56,15 +61,27 @@ public class Player extends Tank{
 
         // i - tank types (8 types)
         // j - animation (2 ani indexes)
+
+        // Player's tank up
         for (int i = 0; i < animationsV.length; i++)
-            for (int j = 0; j < animationsV[i].length; j++)
-                animationsV[i][j] = img.getSubimage(j * 64, i * 65, 64, 65);
+            for (int j = 0; j < animationsV[i].length; j++) {
+                int yCorrection = 0;
+                if (i == 7)
+                    yCorrection = (int)(1 * Game.SCALE);      // for SUPER_HEAVY
+                animationsV[i][j] = img.getSubimage(j * 64, i * 65 + yCorrection, 64, 64);
+            }
 
         animationsH = new BufferedImage[8][2];
 
-        for (int i = 0; i < animationsH.length; i++)
-            for (int j = 0; j < animationsH[i].length; j++)
-                animationsH[i][j] = img.getSubimage(127 + j * 67,  i * 65, 67, 65);
+        // Player's tank left
+        // The sprite sheet is bit uneven so I grab the sprites this way
+        for (int i = 0; i < animationsH.length; i++) {
+            int yCorrection = 0;
+            if (i >= 4)
+                yCorrection = (int)(1 * Game.SCALE);
+            animationsH[i][0] = img.getSubimage(127, i * 65 + yCorrection, 66, 65);
+            animationsH[i][1] = img.getSubimage(195, i * 65 + yCorrection, 66, 65);
+        }
 
     }
 
@@ -76,6 +93,7 @@ public class Player extends Tank{
     }
 
     private void updatePosition() {
+
         moving = false;
 
         float xSpeed = 0;
@@ -86,27 +104,49 @@ public class Player extends Tank{
             flipX = 0;
             flipW = 1;
             curDir = LEFT;
+            moving = true;
         } else if (right) {
             xSpeed += driveSpeed;
             flipX = width;
             flipW = -1;
             curDir = RIGHT;
+            moving = true;
         } else if (up) {
             ySpeed -= driveSpeed;
             flipY = 0;
             flipH = 1;
             curDir = UP;
+            moving = true;
         } else if (down) {
             ySpeed += driveSpeed;
             flipY = height;
             flipH = -1;
             curDir = DOWN;
+            moving = true;
         }
 
         updateXPos(xSpeed);
         updateYPos(ySpeed);
 
-        moving = true;
+        updateHitbox();
+
+    }
+
+    private void updateHitbox() {
+        /*
+        if (curDir == UP || curDir == DOWN) {
+
+            hitbox.width = 50 * Game.SCALE;
+            hitbox.height = 55 * Game.SCALE;
+
+        } else if (curDir == LEFT || curDir == RIGHT) {
+
+            hitbox.width = 55 * Game.SCALE;
+            hitbox.height = 50 * Game.SCALE;
+
+        }
+
+         */
     }
 
     /**
@@ -141,18 +181,23 @@ public class Player extends Tank{
     public void draw(Graphics g) {
 
         if (curDir == UP || curDir == DOWN) {
-            g.drawImage(animationsV[type][aniIndex],
-                    (int) (hitbox.x - xDrawOffset + flipX),
-                    (int) (hitbox.y - yDrawOffset + flipY),
+            int correctionY = (int)(((flipH == 1) ? -12 : 0) * Game.SCALE);
+
+            g.drawImage(animationsV[type][state == IDLE ? 0 : aniIndex],
+                    (int) (hitbox.x + flipX),
+                    (int) (hitbox.y + correctionY + flipY),
                     width * flipW,
                     height * flipH,
                     null
             );
         } else if (curDir == LEFT || curDir == RIGHT) {
-            g.drawImage(animationsH[type][aniIndex],
-                    (int) (hitbox.x - xDrawOffset + flipX),
-                    (int) (hitbox.y - yDrawOffset + flipY),
-                    height * flipW,
+            int correctionX = (int)(((flipW == 1) ? -13 : 8) * Game.SCALE);
+            int correctionY = (int)(((flipH == 1) ? -13 : -2) * Game.SCALE);
+
+            g.drawImage(animationsH[type][state == IDLE ? 0 : aniIndex],
+                    (int) (hitbox.x + correctionX + flipX),
+                    (int) (hitbox.y + correctionY + flipY + yFlipOffset * flipH),
+                    height * flipW,     // Switch width and height
                     width * flipH,
                     null
             );
@@ -205,6 +250,22 @@ public class Player extends Tank{
         if (startAni != state)
             resetAnyTick();
 
+    }
+
+    /**
+     * Reset everything for the player to be ready to start the game again
+     */
+    public void resetAll() {
+        up = false;
+        down = false;
+        left = false;
+        right = false;
+        attacking = false;
+        moving = false;
+        state = IDLE;
+        currentHealth = maxHealth;
+        hitbox.x = x;
+        hitbox.y = y;
     }
 
     /**
