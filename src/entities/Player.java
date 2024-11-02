@@ -1,6 +1,7 @@
 package entities;
 
 import gamestates.Playing;
+import levels.LevelManager;
 import main.Game;
 import utils.LoadSave;
 
@@ -18,6 +19,7 @@ import static utils.HelpMethods.*;
 public class Player extends Tank{
 
     Playing playing;
+    LevelManager levelManager;
 
     BufferedImage[][] animationsV;
     BufferedImage[][] animationsH;
@@ -49,6 +51,8 @@ public class Player extends Tank{
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
         this.driveSpeed = 1.0f * Game.SCALE;
+
+        levelManager = playing.getLevelManager();
 
         loadAnimations();
         initHitbox(48, 48);
@@ -125,56 +129,11 @@ public class Player extends Tank{
             moving = true;
         }
 
-        updateXPos(xSpeed);
-        updateYPos(ySpeed);
-
-        updateHitbox();
-
-    }
-
-    private void updateHitbox() {
-        /*
-        if (curDir == UP || curDir == DOWN) {
-
-            hitbox.width = 50 * Game.SCALE;
-            hitbox.height = 55 * Game.SCALE;
-
-        } else if (curDir == LEFT || curDir == RIGHT) {
-
-            hitbox.width = 55 * Game.SCALE;
-            hitbox.height = 50 * Game.SCALE;
-
-        }
-
-         */
-    }
-
-    /**
-     * Update x position from updatePosition() method
-     */
-    private void updateXPos(float xSpeed) {
-        int[][] lvlData = null;     // todo: get real lvlData
-
-        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)) {
+        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y + ySpeed, hitbox.width, hitbox.height, levelManager.getLevelBlocks())) {
             hitbox.x += xSpeed;
-        } else {
-            // Can't move but still some little space between the player and wall so we want to move right to the wall
-            hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
-        }
-    }
-
-    /**
-     * Update y position from updatePosition() method
-     */
-    private void updateYPos(float ySpeed) {
-        int[][] lvlData = null;     // todo: get real lvlData
-
-        if (CanMoveHere(hitbox.x, hitbox.y + ySpeed, hitbox.width, hitbox.height, lvlData)) {
             hitbox.y += ySpeed;
-        } else {
-            // Can't move but still some little space between the player and wall so we want to move right to the wall
-            hitbox.x = GetEntityXPosNextToWall(hitbox, ySpeed);
         }
+
     }
 
 

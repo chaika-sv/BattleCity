@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static utils.Constants.DEBUG_MODE;
 import static utils.LoadSave.LoadBlockImages;
 
 public class LevelManager {
@@ -17,7 +18,9 @@ public class LevelManager {
 
     private ArrayList<Level> levels;
 
-    private int currentLevelIndex;
+    private ArrayList<LevelBlock> levelBlocks;
+
+    private int currentLevelIndex = 0;
 
     public LevelManager(Game game) {
         this.game = game;
@@ -26,7 +29,7 @@ public class LevelManager {
         levels = new ArrayList<>();
         loadAllLevels();
 
-        currentLevelIndex = 0;
+        currentLevelIndex = -1;
     }
 
     private void loadLevelSprites() {
@@ -34,17 +37,30 @@ public class LevelManager {
     }
 
     private void loadAllLevels() {
-        levels.add(new Level());
+        // todo: load levels from somewhere
+        levels.add(new Level(1));
+        levels.add(new Level(2));
+        levels.add(new Level(3));
     }
 
+    public void loadNextLevel() {
+        currentLevelIndex++;
+        levelBlocks = levels.get(currentLevelIndex).getLevelBlocks();
+    }
 
     /**
      * Draw current level using building blocks from levelSprite and based on data from levelOne
      */
     public void draw(Graphics g) {
-        for (LevelBlock block : levels.get(currentLevelIndex).getLevelBlocks()) {
+        for (LevelBlock block : levelBlocks) {
             block.draw(g);
+            if (DEBUG_MODE)
+                block.drawHitbox(g);
+
         }
     }
 
+    public ArrayList<LevelBlock> getLevelBlocks() {
+        return levelBlocks;
+    }
 }

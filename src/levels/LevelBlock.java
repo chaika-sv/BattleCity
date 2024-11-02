@@ -33,6 +33,11 @@ public class LevelBlock {
         g.drawImage(BLOCK_IMAGES.get(type), (int)x, (int)y, width, height,null);
     }
 
+    public void drawHitbox(Graphics g) {
+        g.setColor(Color.RED);
+        g.drawRect((int)hitbox.x, (int)hitbox.y, (int)hitbox.width, (int)hitbox.height);
+    }
+
     public LevelBlockType getType() {
         return type;
     }

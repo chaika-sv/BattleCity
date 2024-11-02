@@ -1,12 +1,24 @@
 package utils;
 
+import levels.LevelBlock;
 import main.Game;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
+import static utils.Constants.DEBUG_MODE;
 
 public class HelpMethods {
 
-    public static boolean CanMoveHere(float x, float y, float width, float height, int[][] lvlData) {
+    public static boolean CanMoveHere(float x, float y, float width, float height, ArrayList<LevelBlock> levelBlocks) {
+
+        // New possible hitbox to be checked
+        Rectangle2D.Float hitbox = new Rectangle2D.Float(x, y, width, height);
+
+        for (LevelBlock block : levelBlocks)
+            if (hitbox.intersects(block.getHitbox()))
+                return false;
+
         return true;
     }
 

@@ -18,13 +18,21 @@ public class Playing extends State implements Statemethods{
     public Playing(Game game) {
         super(game);
         initClasses();
-        resetAll();
+
+        loadNextLevel();
     }
 
     private void initClasses() {
         levelManager = new LevelManager(game);
         player = new Player(200, 200, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), this);
     }
+
+    private void loadNextLevel() {
+        resetAll();
+        levelManager.loadNextLevel();
+    }
+
+
 
     private void resetAll() {
         player.resetAll();
@@ -41,8 +49,8 @@ public class Playing extends State implements Statemethods{
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 
-        player.draw(g);
         levelManager.draw(g);
+        player.draw(g);
     }
 
     @Override
@@ -94,5 +102,7 @@ public class Playing extends State implements Statemethods{
         }
     }
 
-
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
 }
