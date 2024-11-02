@@ -1,18 +1,40 @@
 package levels;
 
 import main.Game;
+import utils.LoadSave;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import static main.Game.TILES_SIZE;
-import static utils.Constants.DEBUG_MODE;
+import static utils.LoadSave.LoadBlockImages;
 
 public class LevelManager {
 
     private Game game;
 
+    private ArrayList<Level> levels;
+
+    private int currentLevelIndex;
+
     public LevelManager(Game game) {
         this.game = game;
+        loadLevelSprites();
+
+        levels = new ArrayList<>();
+        loadAllLevels();
+
+        currentLevelIndex = 0;
+    }
+
+    private void loadLevelSprites() {
+        LoadBlockImages();
+    }
+
+    private void loadAllLevels() {
+        levels.add(new Level());
     }
 
 
@@ -20,21 +42,9 @@ public class LevelManager {
      * Draw current level using building blocks from levelSprite and based on data from levelOne
      */
     public void draw(Graphics g) {
-
-//        for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
-//            for (int i = 0; i < Game.TILES_IN_WIDTH; i++) {
-//                if (DEBUG_MODE)
-//                    g.drawRect(i*TILES_SIZE, j*TILES_SIZE, TILES_SIZE, TILES_SIZE);
-//            }
-
-//        for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
-//            for (int i = 0; i < levels.get(lvlIndex).getLvlData()[0].length; i++) {
-//                int index = levels.get(lvlIndex).getSpriteIndex(i, j);
-//                g.drawImage(levelSprite[index], i*TILES_SIZE - xLvlOffset, j*TILES_SIZE, TILES_SIZE, TILES_SIZE, null);
-//                if (DEBUG_MODE)
-//                    g.drawRect(i*TILES_SIZE - xLvlOffset, j*TILES_SIZE, TILES_SIZE, TILES_SIZE);
-//            }
-
-
+        for (LevelBlock block : levels.get(currentLevelIndex).getLevelBlocks()) {
+            block.draw(g);
+        }
     }
+
 }
