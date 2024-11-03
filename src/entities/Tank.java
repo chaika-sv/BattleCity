@@ -16,7 +16,9 @@ public abstract class Tank {
     protected int type;
     protected int maxHealth;
     protected int currentHealth = maxHealth;
-    protected float driveSpeed = 1.2f * Game.SCALE;
+    protected float driveSpeed;
+    protected long lastShootTimeMS;
+    protected long shootDelayMS;
 
     public Tank(float x, float y, int width, int height) {
         this.x = x;

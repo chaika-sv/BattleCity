@@ -9,11 +9,16 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static utils.Constants.DirConstants.*;
+import static utils.Constants.ProjectileConstants.PROJECTILE_DEFAULT_HEIGHT;
+import static utils.Constants.ProjectileConstants.PROJECTILE_DEFAULT_WIDTH;
+
 public class LoadSave {
 
     public static final String MAIN_SPRITE = "sprite.png";
 
     public static Map<LevelBlockType, BufferedImage> BLOCK_IMAGES;
+    public static Map<Integer, BufferedImage> PROJECTILE_IMAGES;
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
@@ -58,6 +63,17 @@ public class LoadSave {
         BLOCK_IMAGES.put(LevelBlockType.BRICK_HALF, img.getSubimage(1308, 0, 64, 32));
         BLOCK_IMAGES.put(LevelBlockType.METAL_HALF, img.getSubimage(1308, 64, 64, 32));
 
+    }
+
+    public static void LoadProjectileImages() {
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+
+        PROJECTILE_IMAGES = new LinkedHashMap<>();
+
+        PROJECTILE_IMAGES.put(LEFT, img.getSubimage(1248, 408, PROJECTILE_DEFAULT_HEIGHT, PROJECTILE_DEFAULT_WIDTH));
+        PROJECTILE_IMAGES.put(RIGHT, img.getSubimage(1412, 408, PROJECTILE_DEFAULT_HEIGHT, PROJECTILE_DEFAULT_WIDTH));
+        PROJECTILE_IMAGES.put(UP, img.getSubimage(1320, 408, PROJECTILE_DEFAULT_WIDTH, PROJECTILE_DEFAULT_HEIGHT));
+        PROJECTILE_IMAGES.put(DOWN, img.getSubimage(1384, 408, PROJECTILE_DEFAULT_WIDTH, PROJECTILE_DEFAULT_HEIGHT));
     }
 
 }

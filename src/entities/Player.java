@@ -3,33 +3,31 @@ package entities;
 import gamestates.Playing;
 import levels.LevelManager;
 import main.Game;
+import objects.ObjectManager;
 import utils.LoadSave;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import static utils.Constants.ANI_SPEED;
 import static utils.Constants.DEBUG_MODE;
-import static utils.Constants.TankDirConstants.*;
+import static utils.Constants.DirConstants.*;
+import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankStateConstants.*;
 import static utils.Constants.TankTypeConstants.*;
 import static utils.HelpMethods.*;
 
 public class Player extends Tank{
 
-    Playing playing;
-    LevelManager levelManager;
+    private Playing playing;
+    private LevelManager levelManager;
+    private ObjectManager objectManager;
 
-    BufferedImage[][] animationsV;
-    BufferedImage[][] animationsH;
+    private BufferedImage[][] animationsV;
+    private BufferedImage[][] animationsH;
 
     private boolean left, right, up, down;
     private boolean moving = false, attacking = false;
-    private boolean attackChecked;
-
-    private float xDrawOffset = 0 * Game.SCALE;
-    private float yDrawOffset = 0 * Game.SCALE;
 
     private float yFlipOffset = 13 * Game.SCALE;
 
@@ -51,8 +49,10 @@ public class Player extends Tank{
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
         this.driveSpeed = 1.0f * Game.SCALE;
+        this.shootDelayMS = (long)(1000 * Game.SCALE);
 
         levelManager = playing.getLevelManager();
+        objectManager = playing.getObjectManager();
 
         loadAnimations();
         initHitbox(48, 48);
@@ -91,9 +91,14 @@ public class Player extends Tank{
 
 
     public void update() {
+        long currentTime = System.currentTimeMillis();
+
         updatePosition();
         updateAnimationTick();
         setAnimation();
+
+        if (attacking && currentTime - lastShootTimeMS > shootDelayMS)
+            shoot();
     }
 
     private void updatePosition() {
@@ -135,6 +140,31 @@ public class Player extends Tank{
         }
 
     }
+
+    private void shoot() {
+        int xOffset = 0;
+        int yOffset = 0;
+
+        // Spawn the projectile if the middle of tank's hitbox
+        if (curDir == UP || curDir == DOWN)
+            xOffset += (hitbox.width - PROJECTILE_WIDTH) / 2;
+
+        if (curDir == LEFT || curDir == RIGHT)
+            yOffset += (hitbox.height - PROJECTILE_HEIGHT) / 2;
+
+        // Just give some space if front of tank to spawn the projectile
+        int spaceInFront = 10;
+        switch (curDir) {
+            case UP -> yOffset -= spaceInFront * Game.SCALE;
+            case DOWN -> yOffset += hitbox.height + spaceInFront * Game.SCALE;
+            case RIGHT -> xOffset += hitbox.width + spaceInFront * Game.SCALE;
+            case LEFT -> xOffset -= spaceInFront * Game.SCALE;
+        }
+
+        objectManager.shootProjectiles((int)(hitbox.x + xOffset), (int)hitbox.y + yOffset, curDir);
+        lastShootTimeMS = System.currentTimeMillis();
+    }
+
 
 
     public void draw(Graphics g) {
@@ -179,7 +209,6 @@ public class Player extends Tank{
             if (aniIndex >= 2) {
                 aniIndex = 0;
                 attacking = false;
-                attackChecked = false;
             }
         }
     }
@@ -265,5 +294,13 @@ public class Player extends Tank{
 
     public void setDown(boolean down) {
         this.down = down;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
     }
 }

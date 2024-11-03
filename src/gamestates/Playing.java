@@ -3,6 +3,7 @@ package gamestates;
 import entities.Player;
 import levels.LevelManager;
 import main.Game;
+import objects.ObjectManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ public class Playing extends State implements Statemethods{
 
     Player player;
     LevelManager levelManager;
+    ObjectManager objectManager;
 
     private boolean gameOver = false;
 
@@ -24,6 +26,7 @@ public class Playing extends State implements Statemethods{
 
     private void initClasses() {
         levelManager = new LevelManager(game);
+        objectManager = new ObjectManager(this);
         player = new Player(200, 200, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), this);
     }
 
@@ -40,6 +43,7 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void update() {
+        objectManager.update();
         player.update();
     }
 
@@ -50,6 +54,7 @@ public class Playing extends State implements Statemethods{
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 
         levelManager.draw(g);
+        objectManager.draw(g);
         player.draw(g);
     }
 
@@ -83,6 +88,7 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_D -> player.setRight(true);
                 case KeyEvent.VK_W -> player.setUp(true);
                 case KeyEvent.VK_S -> player.setDown(true);
+                case KeyEvent.VK_SPACE -> player.setAttacking(true);
             }
         }
 
@@ -98,11 +104,16 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_D -> player.setRight(false);
                 case KeyEvent.VK_W -> player.setUp(false);
                 case KeyEvent.VK_S -> player.setDown(false);
+                case KeyEvent.VK_SPACE -> player.setAttacking(false);
             }
         }
     }
 
     public LevelManager getLevelManager() {
         return levelManager;
+    }
+
+    public ObjectManager getObjectManager() {
+        return objectManager;
     }
 }
