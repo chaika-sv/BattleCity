@@ -43,4 +43,13 @@ public class Constants {
         public static final float PROJECTILE_SPEED = 1.5f * Game.SCALE;
     }
 
+    public static class ExplosionConstants {
+        public static final int EXPLOSION_DEFAULT_WIDTH = 64;
+        public static final int EXPLOSION_DEFAULT_HEIGHT = 64;
+
+        public static final int EXPLOSION_WIDTH = (int)(Game.SCALE * EXPLOSION_DEFAULT_WIDTH);
+        public static final int EXPLOSION_HEIGHT = (int)(Game.SCALE * EXPLOSION_DEFAULT_HEIGHT);
+    }
+
+
 }

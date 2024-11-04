@@ -16,8 +16,9 @@ public class HelpMethods {
         Rectangle2D.Float hitbox = new Rectangle2D.Float(x, y, width, height);
 
         for (LevelBlock block : levelBlocks)
-            if (hitbox.intersects(block.getHitbox()))
-                return false;
+            if (block.isActive())
+                if (hitbox.intersects(block.getHitbox()))
+                    return false;
 
         return true;
     }

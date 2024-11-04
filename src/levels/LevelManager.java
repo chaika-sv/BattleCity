@@ -53,10 +53,11 @@ public class LevelManager {
      */
     public void draw(Graphics g) {
         for (LevelBlock block : levelBlocks) {
-            block.draw(g);
-            if (DEBUG_MODE)
-                block.drawHitbox(g);
-
+            if (block.isActive()) {
+                block.draw(g);
+                if (DEBUG_MODE)
+                    block.drawHitbox(g);
+            }
         }
     }
 
