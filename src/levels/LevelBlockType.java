@@ -7,6 +7,8 @@ public enum LevelBlockType {
     BRICK_HALF(11, 64, 32),
     BRICK_SMALL(12, 32, 32),
     BRICK_HALF_SMALL(13, 32, 16),
+    BRICK_LITTLE1(14, 16, 16),
+    BRICK_LITTLE2(14, 16, 16),
     METAL(2, 64, 64),
     METAL_BIG(20, 64, 64),
     METAL_HALF(21, 64, 32),

@@ -61,6 +61,8 @@ public class LoadSave {
         BLOCK_IMAGES.put(LevelBlockType.RIVER3_SMALL, img.getSubimage(1116, 320, 32, 32));
 
         BLOCK_IMAGES.put(LevelBlockType.BRICK_HALF_SMALL, img.getSubimage(1180, 256, 32, 16));
+        BLOCK_IMAGES.put(LevelBlockType.BRICK_LITTLE1, img.getSubimage(1180, 256, 16, 16));
+        BLOCK_IMAGES.put(LevelBlockType.BRICK_LITTLE2, img.getSubimage(1196, 256, 16, 16));
         BLOCK_IMAGES.put(LevelBlockType.BRICK_HALF, img.getSubimage(1308, 0, 64, 32));
         BLOCK_IMAGES.put(LevelBlockType.METAL_HALF, img.getSubimage(1308, 64, 64, 32));
 

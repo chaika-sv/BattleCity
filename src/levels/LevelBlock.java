@@ -31,7 +31,7 @@ public class LevelBlock {
         this.height = (int)(drawType.getHeight() * Game.SCALE);
 
         switch (drawType) {
-            case BRICK_BIG, BRICK_HALF, BRICK_SMALL, BRICK_HALF_SMALL ->
+            case BRICK_BIG, BRICK_HALF, BRICK_SMALL, BRICK_HALF_SMALL, BRICK_LITTLE1, BRICK_LITTLE2 ->
                     this.type = BRICK;
             case METAL_BIG, METAL_HALF, METAL_SMALL ->
                     this.type = METAL;
