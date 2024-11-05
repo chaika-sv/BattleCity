@@ -4,24 +4,44 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
+import static levels.LevelBlockType.*;
+import static utils.Constants.DEBUG_MODE;
 import static utils.LoadSave.BLOCK_IMAGES;
 
 public class LevelBlock {
 
+    private LevelBlockType drawType;
     private LevelBlockType type;
     private float x, y;
     private int width, height;
     private Rectangle2D.Float hitbox;
     private boolean active = true;
 
-    public LevelBlock(LevelBlockType type, float x, float y) {
-        this.type = type;
+    /**
+     * Creates level block
+     * The constructor sets type based on drawType
+     * @param drawType is type like BRICK_BIG, BRICK_HALF_SMALL or RIVER1_SMALL
+     */
+    public LevelBlock(LevelBlockType drawType, float x, float y) {
+        this.drawType = drawType;
         this.x = x;
         this.y = y;
-        this.width = (int)(type.getWidth() * Game.SCALE);
-        this.height = (int)(type.getHeight() * Game.SCALE);
+        this.width = (int)(drawType.getWidth() * Game.SCALE);
+        this.height = (int)(drawType.getHeight() * Game.SCALE);
+
+        switch (drawType) {
+            case BRICK_BIG, BRICK_HALF, BRICK_SMALL, BRICK_HALF_SMALL ->
+                    this.type = BRICK;
+            case METAL_BIG, METAL_HALF, METAL_SMALL ->
+                    this.type = METAL;
+            case RIVER1_BIG, RIVER1_SMALL, RIVER2_BIG, RIVER2_SMALL, RIVER3_BIG, RIVER3_SMALL ->
+                    this.type = RIVER;
+            case GRASS_BIG, GRASS_SMALL ->
+                    this.type = GRASS;
+            case ICE_BIG, ICE_SMALL ->
+                    this.type = ICE;
+        }
 
         initHitbox();
     }
@@ -32,20 +52,17 @@ public class LevelBlock {
      */
     public boolean hitByProjectile() {
         switch (type) {
-            case BRICK_BIG, BRICK_HALF, BRICK_SMALL, BRICK_HALF_SMALL -> {
+            case BRICK -> {
                 // If brick then destroy the brick and the projectile
                 active = false;
                 return true;
             }
-            case METAL_BIG, METAL_HALF, METAL_SMALL -> {
+            case METAL -> {
                 // If metal then destroy the projectile only
                 return true;
             }
-            case RIVER1_BIG, RIVER1_SMALL, RIVER2_BIG, RIVER2_SMALL, RIVER3_BIG, RIVER3_SMALL,
-                    GRASS_BIG, GRASS_SMALL,
-                    ICE_BIG, ICE_SMALL
-                    -> {
-                // River, grass or ice then don't do anything with the level block and the projectile
+            case RIVER, GRASS, ICE -> {
+                // If river, grass or ice then don't do anything with the level block and let the projectile move through it
                 return false;
             }
         }
@@ -58,7 +75,9 @@ public class LevelBlock {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(BLOCK_IMAGES.get(type), (int)x, (int)y, width, height,null);
+        g.drawImage(BLOCK_IMAGES.get(drawType), (int)x, (int)y, width, height,null);
+        if (DEBUG_MODE)
+            drawHitbox(g);
     }
 
     public void drawHitbox(Graphics g) {

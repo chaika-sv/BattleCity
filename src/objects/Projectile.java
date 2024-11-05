@@ -2,11 +2,9 @@ package objects;
 
 import gamestates.Playing;
 import levels.LevelBlock;
-import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.ExplosionConstants.*;

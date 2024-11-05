@@ -18,7 +18,17 @@ public class HelpMethods {
         for (LevelBlock block : levelBlocks)
             if (block.isActive())
                 if (hitbox.intersects(block.getHitbox()))
-                    return false;
+                    switch (block.getType()) {
+                        case BRICK, METAL, RIVER -> {
+                            // If brick, metal or river then cannot move
+                            return false;
+                        }
+                        case GRASS, ICE -> {
+                            // Grass or ice then can move
+                            // todo: set something for ice
+                            return true;
+                        }
+                    }
 
         return true;
     }

@@ -49,16 +49,22 @@ public class LevelManager {
     }
 
     /**
-     * Draw current level using building blocks from levelSprite and based on data from levelOne
+     * Draw current level using building blocks from levelBlocks
      */
     public void draw(Graphics g) {
-        for (LevelBlock block : levelBlocks) {
-            if (block.isActive()) {
+        for (LevelBlock block : levelBlocks)
+            if (block.isActive() && block.getType() != LevelBlockType.GRASS)
                 block.draw(g);
-                if (DEBUG_MODE)
-                    block.drawHitbox(g);
-            }
-        }
+    }
+
+    /**
+     * Draw current level using building blocks from levelBlocks
+     * The blocks need to be drawn on top of the player
+     */
+    public void drawAfterPlayer(Graphics g) {
+        for (LevelBlock block : levelBlocks)
+            if (block.isActive() && block.getType() == LevelBlockType.GRASS)
+                block.draw(g);
     }
 
     public ArrayList<LevelBlock> getLevelBlocks() {

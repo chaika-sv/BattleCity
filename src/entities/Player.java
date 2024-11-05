@@ -172,7 +172,7 @@ public class Player extends Tank{
         if (curDir == UP || curDir == DOWN) {
             int correctionY = (int)(((flipH == 1) ? -12 : 0) * Game.SCALE);
 
-            g.drawImage(animationsV[type][state == IDLE ? 0 : aniIndex],
+            g.drawImage(animationsV[type][state == IDLE || state == ATTACK ? 0 : aniIndex],
                     (int) (hitbox.x + flipX),
                     (int) (hitbox.y + correctionY + flipY),
                     width * flipW,
@@ -183,7 +183,7 @@ public class Player extends Tank{
             int correctionX = (int)(((flipW == 1) ? -13 : 8) * Game.SCALE);
             int correctionY = (int)(((flipH == 1) ? -13 : -2) * Game.SCALE);
 
-            g.drawImage(animationsH[type][state == IDLE ? 0 : aniIndex],
+            g.drawImage(animationsH[type][state == IDLE || state == ATTACK ? 0 : aniIndex],
                     (int) (hitbox.x + correctionX + flipX),
                     (int) (hitbox.y + correctionY + flipY + yFlipOffset * flipH),
                     height * flipW,     // Switch width and height

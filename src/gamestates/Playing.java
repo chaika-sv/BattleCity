@@ -56,6 +56,7 @@ public class Playing extends State implements Statemethods{
         levelManager.draw(g);
         objectManager.draw(g);
         player.draw(g);
+        levelManager.drawAfterPlayer(g);
     }
 
     @Override
