@@ -12,6 +12,9 @@ public class HelpMethods {
 
     public static boolean CanMoveHere(float x, float y, float width, float height, ArrayList<LevelBlock> levelBlocks) {
 
+        if (x < 0 || y < 0 || x > Game.GAME_WIDTH - width || y > Game.GAME_HEIGHT - height)
+            return false;
+
         // New possible hitbox to be checked
         Rectangle2D.Float hitbox = new Rectangle2D.Float(x, y, width, height);
 
