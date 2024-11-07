@@ -1,6 +1,8 @@
 package gamestates;
 
+import entities.EnemyManager;
 import entities.Player;
+import entities.TankType;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
@@ -11,9 +13,10 @@ import java.awt.event.MouseEvent;
 
 public class Playing extends State implements Statemethods{
 
-    Player player;
-    LevelManager levelManager;
-    ObjectManager objectManager;
+    private Player player;
+    private LevelManager levelManager;
+    private ObjectManager objectManager;
+    private EnemyManager enemyManager;
 
     private boolean gameOver = false;
 
@@ -27,7 +30,8 @@ public class Playing extends State implements Statemethods{
     private void initClasses() {
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
-        player = new Player(200, 200, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), this);
+        enemyManager = new EnemyManager(this);
+        player = new Player(TankType.T_HEAVY, 200, 200, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), this);
     }
 
     private void loadNextLevel() {
@@ -45,6 +49,7 @@ public class Playing extends State implements Statemethods{
     public void update() {
         objectManager.update();
         player.update();
+        enemyManager.update();
     }
 
     @Override
@@ -56,6 +61,7 @@ public class Playing extends State implements Statemethods{
         levelManager.draw(g);
         objectManager.draw(g);
         player.draw(g);
+        enemyManager.draw(g);
         levelManager.drawAfterPlayer(g);
     }
 

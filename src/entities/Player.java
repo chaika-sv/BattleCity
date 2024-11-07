@@ -1,92 +1,22 @@
 package entities;
 
 import gamestates.Playing;
-import levels.LevelManager;
 import main.Game;
-import objects.ObjectManager;
-import utils.LoadSave;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import static utils.Constants.ANI_SPEED;
-import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankStateConstants.*;
-import static utils.Constants.TankTypeConstants.*;
 import static utils.HelpMethods.*;
 
 public class Player extends Tank{
 
-    private Playing playing;
-    private LevelManager levelManager;
-    private ObjectManager objectManager;
-
-    private BufferedImage[][] animationsV;
-    private BufferedImage[][] animationsH;
-
     private boolean left, right, up, down;
     private boolean moving = false, attacking = false;
 
-    private float yFlipOffset = 13 * Game.SCALE;
-
-
-
-    private int flipX = 0;
-    private int flipW = 1;
-    private int flipY = 0;
-    private int flipH = 1;
-
-    private int curDir = UP;
-
-    public Player(float x, float y, int width, int height, Playing playing) {
-        super(x, y, width, height);
-
-        this.playing = playing;
+    public Player(TankType tankType, float x, float y, int width, int height, Playing playing) {
+        super(tankType, x, y, width, height, playing);
         this.state = IDLE;
-        this.type = BASE;
-        this.maxHealth = 100;
-        this.currentHealth = maxHealth;
-        this.driveSpeed = 1.0f * Game.SCALE;
-        this.shootDelayMS = (long)(1000 * Game.SCALE);
-
-        levelManager = playing.getLevelManager();
-        objectManager = playing.getObjectManager();
-
-        loadAnimations();
-        initHitbox(48, 48);
-    }
-
-    private void loadAnimations() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
-
-        animationsV = new BufferedImage[8][2];
-
-        // i - tank types (8 types)
-        // j - animation (2 ani indexes)
-
-        // Player's tank up
-        for (int i = 0; i < animationsV.length; i++)
-            for (int j = 0; j < animationsV[i].length; j++) {
-                int yCorrection = 0;
-                if (i == 7)
-                    yCorrection = (int)(1 * Game.SCALE);      // for SUPER_HEAVY
-                animationsV[i][j] = img.getSubimage(j * 64, i * 65 + yCorrection, 64, 64);
-            }
-
-        animationsH = new BufferedImage[8][2];
-
-        // Player's tank left
-        // The sprite sheet is bit uneven so I grab the sprites this way
-        for (int i = 0; i < animationsH.length; i++) {
-            int yCorrection = 0;
-            if (i >= 4)
-                yCorrection = (int)(1 * Game.SCALE);
-            animationsH[i][0] = img.getSubimage(127, i * 65 + yCorrection, 66, 65);
-            animationsH[i][1] = img.getSubimage(195, i * 65 + yCorrection, 66, 65);
-        }
-
     }
 
 
@@ -167,35 +97,7 @@ public class Player extends Tank{
 
 
 
-    public void draw(Graphics g) {
 
-        if (curDir == UP || curDir == DOWN) {
-            int correctionY = (int)(((flipH == 1) ? -12 : 0) * Game.SCALE);
-
-            g.drawImage(animationsV[type][state == IDLE || state == ATTACK ? 0 : aniIndex],
-                    (int) (hitbox.x + flipX),
-                    (int) (hitbox.y + correctionY + flipY),
-                    width * flipW,
-                    height * flipH,
-                    null
-            );
-        } else if (curDir == LEFT || curDir == RIGHT) {
-            int correctionX = (int)(((flipW == 1) ? -13 : 8) * Game.SCALE);
-            int correctionY = (int)(((flipH == 1) ? -13 : -2) * Game.SCALE);
-
-            g.drawImage(animationsH[type][state == IDLE || state == ATTACK ? 0 : aniIndex],
-                    (int) (hitbox.x + correctionX + flipX),
-                    (int) (hitbox.y + correctionY + flipY + yFlipOffset * flipH),
-                    height * flipW,     // Switch width and height
-                    width * flipH,
-                    null
-            );
-        }
-
-        if (DEBUG_MODE)
-            drawHitbox(g);
-
-    }
 
     /**
      * Increment animTick and when we reach animSpeed then increment animIndex
