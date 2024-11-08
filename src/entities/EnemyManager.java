@@ -16,11 +16,13 @@ public class EnemyManager {
     public EnemyManager(Playing playing) {
         this.playing = playing;
 
-        enemies.add(new Enemy(TankType.T_HEAVY,  100, 100, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
+        enemies.add(new Enemy(TankType.T_BASE,  100, 100, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
     }
 
     public void update() {
-
+        for (Enemy e : enemies)
+            if (e.isActive())
+                e.update();
     }
 
     public void draw(Graphics g) {
