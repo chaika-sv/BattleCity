@@ -1,6 +1,7 @@
 package utils;
 
 import levels.LevelBlockType;
+import objects.TemporaryObjectType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -12,8 +13,8 @@ import java.util.Map;
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.ProjectileConstants.*;
-import static utils.Constants.ExplosionConstants.*;
 import static utils.Constants.TankTypeConstants.*;
+import static utils.Constants.TempObjectsConstants.*;
 
 public class LoadSave {
 
@@ -21,7 +22,8 @@ public class LoadSave {
 
     public static Map<LevelBlockType, BufferedImage> BLOCK_IMAGES;
     public static Map<Integer, BufferedImage> PROJECTILE_IMAGES;
-    public static BufferedImage[] EXPLOSION_IMAGES;
+    public static BufferedImage[][] TEMP_OBJECTS_IMAGES;
+    public static BufferedImage[] BIG_EXPLOSION_IMAGES;
     public static BufferedImage[][][] TANK_IMAGES;      // dim1: tank type, dim2: direction, dim3: animation
     public static int[][][] TANK_HITBOX_OFFSETS;      // dim1: tank type, dim2: direction, dim3: x, y
 
@@ -189,10 +191,21 @@ public class LoadSave {
     public static void LoadExplosionImages() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
 
-        EXPLOSION_IMAGES = new BufferedImage[3];
+        TEMP_OBJECTS_IMAGES = new BufferedImage[4][3];
 
-        for (int i = 0; i < EXPLOSION_IMAGES.length; i++)
-            EXPLOSION_IMAGES[i] = img.getSubimage(1052 + EXPLOSION_DEFAULT_WIDTH * i , 512, EXPLOSION_DEFAULT_WIDTH, EXPLOSION_DEFAULT_HEIGHT);
+        for (int i = 0; i < TemporaryObjectType.TO_SMALL_EXPLOSION.getSpritesNumber(); i++)
+            TEMP_OBJECTS_IMAGES[SMALL_EXPLOSION][i] = img.getSubimage(
+                    1052 + TemporaryObjectType.TO_SMALL_EXPLOSION.getWidth() * i ,
+                    512,
+                    TemporaryObjectType.TO_SMALL_EXPLOSION.getWidth(),
+                    TemporaryObjectType.TO_SMALL_EXPLOSION.getHeight());
+
+        for (int i = 0; i < TemporaryObjectType.TO_BIG_EXPLOSION.getSpritesNumber(); i++)
+            TEMP_OBJECTS_IMAGES[BIG_EXPLOSION][i] = img.getSubimage(
+                    1244 + TemporaryObjectType.TO_BIG_EXPLOSION.getWidth() * i ,
+                    512,
+                    TemporaryObjectType.TO_BIG_EXPLOSION.getWidth(),
+                    TemporaryObjectType.TO_BIG_EXPLOSION.getHeight());
 
     }
 

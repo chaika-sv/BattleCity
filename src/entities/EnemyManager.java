@@ -16,7 +16,7 @@ public class EnemyManager {
     public EnemyManager(Playing playing) {
         this.playing = playing;
 
-        enemies.add(new Enemy(TankType.T_FAST,  100, 100, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
+        enemies.add(new Enemy(TankType.T_HEAVY,  100, 100, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
     }
 
     public void update() {
@@ -27,5 +27,9 @@ public class EnemyManager {
         for (Enemy e : enemies)
             if (e.isActive())
                 e.draw(g);
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
     }
 }

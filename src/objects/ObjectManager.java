@@ -1,5 +1,6 @@
 package objects;
 
+import entities.Tank;
 import gamestates.Playing;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ public class ObjectManager {
 
     private Playing playing;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
-    private ArrayList<Explosion> explosions = new ArrayList<>();
+    private ArrayList<TemporaryObject> temporaryObjects = new ArrayList<>();
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
@@ -23,12 +24,12 @@ public class ObjectManager {
         LoadExplosionImages();
     }
 
-    public void shootProjectile(int x, int y, int dir) {
-        projectiles.add(new Projectile(x, y, dir, playing));
+    public void shootProjectile(int x, int y, int dir, float speed, Tank tank) {
+        projectiles.add(new Projectile(x, y, dir, speed, tank, playing));
     }
 
-    public void createExplosion(int x, int y) {
-        explosions.add(new Explosion(x, y, playing));
+    public void createExplosion(int x, int y, TemporaryObjectType type) {
+        temporaryObjects.add(new TemporaryObject(x, y, type, playing));
     }
 
     public void update() {
@@ -49,7 +50,7 @@ public class ObjectManager {
     }
 
     private void updateExplosions() {
-        for (Explosion e : explosions)
+        for (TemporaryObject e : temporaryObjects)
             if (e.isActive())
                 e.update();
     }
@@ -61,7 +62,7 @@ public class ObjectManager {
     }
 
     private void drawExplosions(Graphics g) {
-        for (Explosion e : explosions)
+        for (TemporaryObject e : temporaryObjects)
             if (e.isActive())
                 e.draw(g);
     }

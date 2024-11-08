@@ -94,7 +94,7 @@ public class Player extends Tank{
             case LEFT -> xOffset -= spaceInFront * Game.SCALE;
         }
 
-        objectManager.shootProjectile((int)(hitbox.x + xOffset), (int)hitbox.y + yOffset, curDir);
+        objectManager.shootProjectile((int)(hitbox.x + xOffset), (int)hitbox.y + yOffset, curDir, projectileSpeed, this);
         lastShootTimeMS = System.currentTimeMillis();
     }
 

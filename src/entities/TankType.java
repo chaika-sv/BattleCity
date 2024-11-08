@@ -6,7 +6,7 @@ public enum TankType {
     T_BASE(BASE,                    100, 1, 1.0f, 1.2f, 500, 52),
     T_FAST(FAST,                    200, 1, 3.0f, 3.2f, 500, 60),
     T_POWER(POWER,                  300, 1, 2.0f, 3.0f, 500, 60),
-    T_HEAVY(HEAVY,                  400, 4, 2.0f, 10.0f, 500, 60),
+    T_HEAVY(HEAVY,                  400, 4, 2.0f, 2.2f, 500, 60),
 
     T_LONG_GUN(LONG_GUN,            120, 1, 1.0f, 1.3f, 1000, 52),
     T_BIG_GUN(BIG_GUN,              140, 1, 1.0f, 1.3f, 500, 52),

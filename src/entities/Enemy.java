@@ -14,6 +14,21 @@ public class Enemy extends Tank{
         this.state = IDLE;
     }
 
+    /**
+     * Projectile hit the enemy
+     * @param damageValue how many health to decrease
+     * @return true if the enemy was destroyed by the projectile
+     */
+    public boolean hitByProjectile(int damageValue) {
+        currentHealth -= damageValue;
+        if (currentHealth <= 0) {
+            active = false;
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean isActive() {
         return active;
     }
