@@ -10,11 +10,15 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.DirConstants.RIGHT;
 import static utils.Constants.TankStateConstants.ATTACK;
 import static utils.Constants.TankStateConstants.IDLE;
+import static utils.Constants.TankTypeConstants.*;
+import static utils.LoadSave.TANK_HITBOX_OFFSETS;
+import static utils.LoadSave.TANK_IMAGES;
 
 public abstract class Tank {
 
@@ -25,7 +29,6 @@ public abstract class Tank {
     protected float x, y;
     protected int width, height;
     protected Rectangle2D.Float hitbox;
-    protected int hitboxYOffset = (int)(10 * Game.SCALE);
     protected int aniTick, aniIndex;
     protected int state;
 
@@ -48,6 +51,9 @@ public abstract class Tank {
     protected int flipY = 0;
     protected int flipH = 1;
 
+    protected int hitboxXOffset;
+    protected int hitboxYOffset;
+
 
     protected BufferedImage[][] animationsV;
     protected BufferedImage[][] animationsH;
@@ -64,12 +70,27 @@ public abstract class Tank {
         this.width = width;
         this.height = height;
 
+        // Like health, speed, points for selected tank type
         applyTankCharacteristics(tankType);
         this.currentHealth = maxHealth;
 
-        loadAnimations();
+        // Number of pixels (x and y) from top-left corner of sprite image to actual tank picture
+        applyHitboxOffset();
+        // It's always square (same in width and height)
+        initHitbox(hitboxXOffset, hitboxYOffset, tankType.getHitboxSize(), tankType.getHitboxSize());
+    }
 
-        initHitbox(48, 48);
+    protected void applyHitboxOffset() {
+        this.hitboxXOffset = TANK_HITBOX_OFFSETS[tankType.getId()] [curDir] [0];
+        this.hitboxYOffset = TANK_HITBOX_OFFSETS[tankType.getId()] [curDir] [1];
+    }
+
+    /**
+     * When move hitbox we need to move sprite that we are drawing
+     */
+    protected void syncHitboxWithSprite() {
+        x = hitbox.x - hitboxXOffset;
+        y = hitbox.y - hitboxYOffset;
     }
 
     protected void applyTankCharacteristics(TankType tankType) {
@@ -81,72 +102,25 @@ public abstract class Tank {
     }
 
 
-    private void loadAnimations() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
-
-        animationsV = new BufferedImage[8][2];
-
-        // i - tank types (8 types)
-        // j - animation (2 ani indexes)
-
-        // Player's tank up
-        for (int i = 0; i < animationsV.length; i++)
-            for (int j = 0; j < animationsV[i].length; j++) {
-                int yCorrection = 0;
-                if (i == 7)
-                    yCorrection = (int)(1 * Game.SCALE);      // for SUPER_HEAVY
-                animationsV[i][j] = img.getSubimage(j * 64, i * 65 + yCorrection, 64, 64);
-            }
-
-        animationsH = new BufferedImage[8][2];
-
-        // Player's tank left
-        // The sprite sheet is bit uneven so I grab the sprites this way
-        for (int i = 0; i < animationsH.length; i++) {
-            int yCorrection = 0;
-            if (i >= 4)
-                yCorrection = (int)(1 * Game.SCALE);
-            animationsH[i][0] = img.getSubimage(127, i * 65 + yCorrection, 66, 65);
-            animationsH[i][1] = img.getSubimage(195, i * 65 + yCorrection, 66, 65);
-        }
-
-    }
-
-
-
-    protected void initHitbox(int width, int height) {
-        hitbox = new Rectangle2D.Float(x, y, (int) (width * Game.SCALE), (int) (height * Game.SCALE));
+    protected void initHitbox(int offsetX, int offsetY, int width, int height) {
+        hitbox = new Rectangle2D.Float(x + offsetX, y + offsetY, (int) (width * Game.SCALE), (int) (height * Game.SCALE));
     }
 
     public void draw(Graphics g) {
 
-        if (curDir == UP || curDir == DOWN) {
-            int correctionY = (int)(((flipH == 1) ? -12 : 0) * Game.SCALE);
-
-            g.drawImage(animationsV[tankType.getId()][state == IDLE || state == ATTACK ? 0 : aniIndex],
-                    (int) (hitbox.x + flipX),
-                    (int) (hitbox.y + correctionY + flipY),
-                    width * flipW,
-                    height * flipH,
-                    null
-            );
-        } else if (curDir == LEFT || curDir == RIGHT) {
-            int correctionX = (int)(((flipW == 1) ? -13 : 8) * Game.SCALE);
-            int correctionY = (int)(((flipH == 1) ? -13 : -2) * Game.SCALE);
-
-            g.drawImage(animationsH[tankType.getId()][state == IDLE || state == ATTACK ? 0 : aniIndex],
-                    (int) (hitbox.x + correctionX + flipX),
-                    (int) (hitbox.y + correctionY + flipY + yFlipOffset * flipH),
-                    height * flipW,     // Switch width and height
-                    width * flipH,
-                    null
-            );
-        }
+        g.drawImage(TANK_IMAGES[tankType.getId()] [curDir] [state == IDLE || state == ATTACK ? 0 : aniIndex],
+                (int) (x),
+                (int) (y),
+                width,
+                height,
+                null
+        );
 
         if (DEBUG_MODE)
             drawHitbox(g);
 
     }
+
 
     /**
      * Draw it just for debugging

@@ -69,6 +69,9 @@ public class Player extends Tank{
             hitbox.y += ySpeed;
         }
 
+        applyHitboxOffset();
+        syncHitboxWithSprite();
+
     }
 
     private void shoot() {
@@ -154,8 +157,6 @@ public class Player extends Tank{
         moving = false;
         state = IDLE;
         currentHealth = maxHealth;
-        hitbox.x = x;
-        hitbox.y = y;
     }
 
     /**

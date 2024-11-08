@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import static main.Game.TILES_DEFAULT_SIZE;
+import static utils.LoadSave.LoadTankImages;
+
 public class Playing extends State implements Statemethods{
 
     private Player player;
@@ -22,16 +25,21 @@ public class Playing extends State implements Statemethods{
 
     public Playing(Game game) {
         super(game);
+        loadImages();
         initClasses();
 
         loadNextLevel();
+    }
+
+    private void loadImages() {
+        LoadTankImages();
     }
 
     private void initClasses() {
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player = new Player(TankType.T_HEAVY, 200, 200, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), this);
+        player = new Player(TankType.T_HEAVY, 200, 200, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
     }
 
     private void loadNextLevel() {

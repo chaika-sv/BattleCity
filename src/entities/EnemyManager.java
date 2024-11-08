@@ -6,6 +6,8 @@ import main.Game;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static main.Game.TILES_DEFAULT_SIZE;
+
 public class EnemyManager {
 
     private Playing playing;
@@ -14,7 +16,7 @@ public class EnemyManager {
     public EnemyManager(Playing playing) {
         this.playing = playing;
 
-        enemies.add(new Enemy(TankType.T_BIG_GUN,  100, 100, (int)(52 * Game.SCALE), (int)(63 * Game.SCALE), playing ));
+        enemies.add(new Enemy(TankType.T_FAST,  100, 100, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
     }
 
     public void update() {
