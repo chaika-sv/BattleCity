@@ -1,5 +1,6 @@
 package inputs;
 
+import editor.EditorPanel;
 import gamestates.Gamestate;
 import main.GamePanel;
 
@@ -9,9 +10,14 @@ import java.awt.event.KeyListener;
 public class KeyboardInputs implements KeyListener {
 
     private GamePanel gamePanel;
+    private EditorPanel editorPanel;
 
     public KeyboardInputs(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
+    }
+
+    public KeyboardInputs(EditorPanel editorPanel) {
+        this.editorPanel = editorPanel;
     }
 
     @Override
@@ -30,6 +36,9 @@ public class KeyboardInputs implements KeyListener {
             case OPTIONS -> {
                 //gamePanel.getGame().getGameOptions().keyPressed(e);
             }
+            case EDITOR ->  {
+                editorPanel.getEditor().getEditing().keyPressed(e);
+            }
         }
     }
 
@@ -42,6 +51,10 @@ public class KeyboardInputs implements KeyListener {
             case MENU -> {
                 //gamePanel.getGame().getMenu().keyReleased(e);
             }
+            case EDITOR ->  {
+                editorPanel.getEditor().getEditing().keyReleased(e);
+            }
+
         }
     }
 }

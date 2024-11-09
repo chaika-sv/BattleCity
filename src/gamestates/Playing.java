@@ -39,7 +39,7 @@ public class Playing extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player = new Player(TankType.T_BASE, 200, 200, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
+        player = new Player(TankType.T_FAST, 200, 200, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
     }
 
     private void loadNextLevel() {
