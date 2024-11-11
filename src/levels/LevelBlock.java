@@ -116,4 +116,8 @@ public class LevelBlock {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public LevelBlockType getDrawType() {
+        return drawType;
+    }
 }

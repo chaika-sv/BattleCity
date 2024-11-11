@@ -1,21 +1,28 @@
 package editor;
 
 import gamestates.Editing;
+import levels.LevelBlockType;
 import main.Game;
 
 import java.awt.*;
 
+import static main.Game.GAME_HEIGHT;
+import static main.Game.GAME_WIDTH;
 import static utils.Constants.DirConstants.*;
+import static utils.LoadSave.BLOCK_IMAGES;
 
 public class Brush {
 
-    protected Editing editing;
-    protected boolean left, right, up, down;
-    protected boolean moving;
 
-    protected float x, y;
-    protected int width, height;
-    protected float brushStep;
+    private Editing editing;
+    private LevelBlockType levelBlockType;
+    private boolean left, right, up, down;
+    private boolean moving;
+
+    private float x, y;
+    private int width, height;
+    private float brushStepX;
+    private float brushStepY;
 
 
     public Brush(Editing editing, float x, float y, int width, int height) {
@@ -25,15 +32,28 @@ public class Brush {
         this.width = width;
         this.height = height;
 
-        this.brushStep = 64 * Game.SCALE;
+        this.brushStepX = 64 * Game.SCALE;
+        this.brushStepY = 64 * Game.SCALE;
     }
 
     public void move(int dir) {
         switch (dir) {
-            case UP: y -= brushStep;
-            case DOWN: y += brushStep;
-            case LEFT: x -= brushStep;
-            case RIGHT: x += brushStep;
+            case UP -> {
+                if (y - brushStepX >= 0)
+                    y -= brushStepY;
+            }
+            case DOWN -> {
+                if (y + height + brushStepX <= GAME_HEIGHT)
+                    y += brushStepY;
+            }
+            case LEFT -> {
+                if (x - brushStepX >= 0)
+                    x -= brushStepX;
+            }
+            case RIGHT -> {
+                if (x + width + brushStepX <= GAME_WIDTH)
+                    x += brushStepX;
+            }
         }
     }
 
@@ -46,16 +66,16 @@ public class Brush {
         float ySpeed = 0;
 
         if (left) {
-            xSpeed -= brushStep;
+            xSpeed -= brushStepX;
             moving = true;
         } else if (right) {
-            xSpeed += brushStep;
+            xSpeed += brushStepX;
             moving = true;
         } else if (up) {
-            ySpeed -= brushStep;
+            ySpeed -= brushStepX;
             moving = true;
         } else if (down) {
-            ySpeed += brushStep;
+            ySpeed += brushStepX;
             moving = true;
         }
 
@@ -65,8 +85,12 @@ public class Brush {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.drawRect((int)x, (int)y, width, height);
+        if (levelBlockType == null) {
+            g.setColor(Color.LIGHT_GRAY);
+            g.drawRect((int) x, (int) y, width, height);
+        } else {
+            g.drawImage(BLOCK_IMAGES.get(levelBlockType), (int)x, (int)y, width, height, null);
+        }
     }
 
     public boolean isLeft() {
@@ -99,5 +123,25 @@ public class Brush {
 
     public void setDown(boolean down) {
         this.down = down;
+    }
+
+    public void setLevelBlockType(LevelBlockType levelBlockType) {
+        this.levelBlockType = levelBlockType;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setBrushStepX(float brushStepX) {
+        this.brushStepX = brushStepX;
+    }
+
+    public void setBrushStepY(float brushStepY) {
+        this.brushStepY = brushStepY;
     }
 }
