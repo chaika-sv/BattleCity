@@ -25,7 +25,14 @@ public enum LevelBlockType {
     RIVER3_SMALL(45, 32, 32),
     ICE(5, 64, 64),
     ICE_BIG(50, 64, 64),
-    ICE_SMALL(51, 32, 32);
+    ICE_SMALL(51, 32, 32),
+    BASE(60, 64, 64),
+    BASE_UP(61, 64, 64),
+    BASE_DOWN(62, 64, 64),
+    CONTROLS(70, 64, 64),
+    ERASE(71, 64, 64),
+    SAVE(71, 64, 64),
+    OPEN(72, 64, 64);
 
     private final int id;
     private final int width;

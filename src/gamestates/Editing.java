@@ -3,44 +3,43 @@ package gamestates;
 import editor.Brush;
 import editor.Editor;
 import editor.EditorSpace;
+import levels.Level;
 import levels.LevelBlock;
-import levels.LevelBlockType;
 import main.Game;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 import static main.Game.*;
 import static utils.Constants.DirConstants.*;
+import static utils.Constants.LevelConstants.*;
 
 public class Editing  extends State implements Statemethods {
 
     private Brush brush;
     private EditorSpace editorSpace;
+    private Level level;
 
     public Editing(Editor editor) {
         super(editor);
 
-        brush = new Brush(this, 0, 0, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE));
+        level = new Level(0);
+        brush = new Brush(this, level, 0, 0, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE));
         editorSpace = new EditorSpace(this);
 
     }
 
     @Override
     public void update() {
-        //brush.update();
     }
 
     @Override
     public void draw(Graphics g) {
         editorSpace.draw(g);
+        level.draw(g, DRAW_ALL_LEVEL);
         brush.draw(g);
 
-    }
-
-    private void drawGameField(Graphics g) {
     }
 
     @Override
@@ -62,6 +61,13 @@ public class Editing  extends State implements Statemethods {
         brush.setBrushStepX(b.getWidth());
         brush.setBrushStepY(b.getHeight());
         brush.setLevelBlockType(b.getDrawType());
+
+        stickToNet();
+    }
+
+    private void stickToNet() {
+        brush.setX((int)(brush.getX() / brush.getWidth()) * brush.getWidth());
+        brush.setY((int)(brush.getY() / brush.getHeight()) * brush.getHeight() );
     }
 
     @Override
@@ -81,7 +87,7 @@ public class Editing  extends State implements Statemethods {
             case KeyEvent.VK_D -> brush.move(RIGHT);
             case KeyEvent.VK_W -> brush.move(UP);
             case KeyEvent.VK_S -> brush.move(DOWN);
-            //case KeyEvent.VK_SPACE -> brush.setAttacking(true);
+            case KeyEvent.VK_SPACE -> brush.addBlock();
         }
     }
 
@@ -92,7 +98,6 @@ public class Editing  extends State implements Statemethods {
             case KeyEvent.VK_D -> brush.setRight(false);
             case KeyEvent.VK_W -> brush.setUp(false);
             case KeyEvent.VK_S -> brush.setDown(false);
-            //case KeyEvent.VK_SPACE -> player.setAttacking(false);
         }
     }
 

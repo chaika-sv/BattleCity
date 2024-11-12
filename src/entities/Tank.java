@@ -125,7 +125,7 @@ public abstract class Tank {
             moving = true;
         }
 
-        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y + ySpeed, hitbox.width, hitbox.height, levelManager.getLevelBlocks())) {
+        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y + ySpeed, hitbox.width, hitbox.height, levelManager.getCurrentLevel().getLevelBlocks())) {
             hitbox.x += xSpeed;
             hitbox.y += ySpeed;
 

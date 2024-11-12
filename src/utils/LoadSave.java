@@ -175,6 +175,12 @@ public class LoadSave {
         BLOCK_IMAGES.put(LevelBlockType.BRICK_HALF, img.getSubimage(1308, 0, 64, 32));
         BLOCK_IMAGES.put(LevelBlockType.METAL_HALF, img.getSubimage(1308, 64, 64, 32));
 
+        BLOCK_IMAGES.put(LevelBlockType.BASE_UP, img.getSubimage(1244, 128, 64, 64));
+        BLOCK_IMAGES.put(LevelBlockType.BASE_DOWN, img.getSubimage(1308, 128, 64, 64));
+
+        BLOCK_IMAGES.put(LevelBlockType.ERASE, img.getSubimage(1372, 128, 64, 64));
+        BLOCK_IMAGES.put(LevelBlockType.SAVE, img.getSubimage(1436, 128, 64, 64));
+        BLOCK_IMAGES.put(LevelBlockType.OPEN, img.getSubimage(1436, 192, 64, 64));
     }
 
     public static void LoadProjectileImages() {

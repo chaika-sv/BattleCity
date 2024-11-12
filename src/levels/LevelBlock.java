@@ -41,6 +41,10 @@ public class LevelBlock {
                     this.type = GRASS;
             case ICE_BIG, ICE_SMALL ->
                     this.type = ICE;
+            case BASE_UP, BASE_DOWN ->
+                    this.type = BASE;
+            case ERASE, SAVE, OPEN ->
+                    this.type = drawType;
         }
 
         initHitbox();
@@ -76,6 +80,11 @@ public class LevelBlock {
 
     public void draw(Graphics g) {
         g.drawImage(BLOCK_IMAGES.get(drawType), (int)x, (int)y, width, height,null);
+//        if (type == LevelBlockType.ERASE) {
+//            g.setColor(Color.GRAY);
+//            g.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
+//        }
+
         if (DEBUG_MODE)
             drawHitbox(g);
     }

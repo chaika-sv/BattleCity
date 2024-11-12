@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static utils.Constants.DEBUG_MODE;
+import static utils.Constants.LevelConstants.*;
 import static utils.LoadSave.LoadBlockImages;
 
 public class LevelManager {
@@ -17,8 +18,6 @@ public class LevelManager {
     private Game game;
 
     private ArrayList<Level> levels;
-
-    private ArrayList<LevelBlock> levelBlocks;
 
     private int currentLevelIndex = 0;
 
@@ -45,16 +44,14 @@ public class LevelManager {
 
     public void loadNextLevel() {
         currentLevelIndex++;
-        levelBlocks = levels.get(currentLevelIndex).getLevelBlocks();
     }
 
     /**
      * Draw current level using building blocks from levelBlocks
+     * Everything without grass
      */
     public void draw(Graphics g) {
-        for (LevelBlock block : levelBlocks)
-            if (block.isActive() && block.getType() != LevelBlockType.GRASS)
-                block.draw(g);
+        getCurrentLevel().draw(g, DRAW_LEVEL_WO_GRASS);
     }
 
     /**
@@ -62,12 +59,10 @@ public class LevelManager {
      * The blocks need to be drawn on top of the player
      */
     public void drawAfterPlayer(Graphics g) {
-        for (LevelBlock block : levelBlocks)
-            if (block.isActive() && block.getType() == LevelBlockType.GRASS)
-                block.draw(g);
+        getCurrentLevel().draw(g, DRAW_GRASS);
     }
 
-    public ArrayList<LevelBlock> getLevelBlocks() {
-        return levelBlocks;
+    public Level getCurrentLevel() {
+        return levels.get(currentLevelIndex);
     }
 }

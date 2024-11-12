@@ -2,17 +2,23 @@ package levels;
 
 import main.Game;
 
+import java.awt.*;
 import java.util.ArrayList;
+
+import static utils.Constants.LevelConstants.*;
 
 public class Level {
 
+    private int index;
     private ArrayList<LevelBlock> levelBlocks;
 
-    public Level(int v) {
+    public Level(int index) {
+
+        this.index = index;
 
         levelBlocks = new ArrayList<>();
 
-        switch (v) {
+        switch (index) {
             case 1 -> {
                 addLevelBlock(LevelBlockType.BRICK_BIG, 300, 300);
                 addLevelBlock(LevelBlockType.BRICK_BIG, 500, 500);
@@ -29,7 +35,7 @@ public class Level {
 
     }
 
-    private void addLevelBlock(LevelBlockType type, int x, int y) {
+    public void addLevelBlock(LevelBlockType type, int x, int y) {
         if (type == LevelBlockType.BRICK_BIG) {
 
             for (int i = 0; i < 4; i++)
@@ -51,6 +57,16 @@ public class Level {
         } else {
             levelBlocks.add(new LevelBlock(type, x, y));
         }
+    }
+
+    public void draw(Graphics g, int drawOption) {
+        for (LevelBlock block : levelBlocks)
+            if (block.isActive())
+                if ((drawOption == DRAW_ALL_LEVEL)
+                        || ((drawOption == DRAW_LEVEL_WO_GRASS) && block.getType() != LevelBlockType.GRASS )
+                        || ((drawOption == DRAW_GRASS) && block.getType() == LevelBlockType.GRASS )
+                )
+                    block.draw(g);
     }
 
     public ArrayList<LevelBlock> getLevelBlocks() {

@@ -64,5 +64,11 @@ public class Constants {
         public static final int BIG_EXPLOSION_HEIGHT = (int)(Game.SCALE * BIG_EXPLOSION_DEFAULT_HEIGHT);
     }
 
+    public static class LevelConstants {
+        public static final int DRAW_ALL_LEVEL = 0;
+        public static final int DRAW_LEVEL_WO_GRASS = 1;
+        public static final int DRAW_GRASS = 2;
+    }
+
 
 }

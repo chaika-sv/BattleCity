@@ -1,10 +1,13 @@
 package editor;
 
 import gamestates.Editing;
+import levels.Level;
+import levels.LevelBlock;
 import levels.LevelBlockType;
 import main.Game;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 import static main.Game.GAME_HEIGHT;
 import static main.Game.GAME_WIDTH;
@@ -15,6 +18,7 @@ public class Brush {
 
 
     private Editing editing;
+    private Level level;
     private LevelBlockType levelBlockType;
     private boolean left, right, up, down;
     private boolean moving;
@@ -25,8 +29,9 @@ public class Brush {
     private float brushStepY;
 
 
-    public Brush(Editing editing, float x, float y, int width, int height) {
+    public Brush(Editing editing, Level level, float x, float y, int width, int height) {
         this.editing = editing;
+        this.level = level;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -36,14 +41,40 @@ public class Brush {
         this.brushStepY = 64 * Game.SCALE;
     }
 
+    public void addBlock() {
+        Rectangle2D.Float brushRect = new Rectangle2D.Float(x, y, width, height);
+
+        if (levelBlockType != null)
+            if (levelBlockType == LevelBlockType.ERASE)
+                erase();
+            else {
+                for(LevelBlock b : level.getLevelBlocks())
+                    if (b.isActive())
+                        if (brushRect.intersects(b.getHitbox()))
+                            return;
+
+                level.addLevelBlock(levelBlockType, (int) x, (int) y);
+            }
+    }
+
+    private void erase() {
+        Rectangle2D.Float brushRect = new Rectangle2D.Float(x, y, width, height);
+
+        for(LevelBlock b : level.getLevelBlocks())
+            if (b.isActive())
+                if (brushRect.intersects(b.getHitbox()))
+                    b.setActive(false);
+
+    }
+
     public void move(int dir) {
         switch (dir) {
             case UP -> {
-                if (y - brushStepX >= 0)
+                if (y - brushStepY >= 0)
                     y -= brushStepY;
             }
             case DOWN -> {
-                if (y + height + brushStepX <= GAME_HEIGHT)
+                if (y + height + brushStepY <= GAME_HEIGHT)
                     y += brushStepY;
             }
             case LEFT -> {
@@ -85,12 +116,12 @@ public class Brush {
     }
 
     public void draw(Graphics g) {
-        if (levelBlockType == null) {
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawRect((int) x, (int) y, width, height);
-        } else {
+        if (levelBlockType != null) {
             g.drawImage(BLOCK_IMAGES.get(levelBlockType), (int)x, (int)y, width, height, null);
         }
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawRect((int) x, (int) y, width, height);
     }
 
     public boolean isLeft() {
@@ -143,5 +174,29 @@ public class Brush {
 
     public void setBrushStepY(float brushStepY) {
         this.brushStepY = brushStepY;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

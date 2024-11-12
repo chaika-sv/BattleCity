@@ -53,7 +53,7 @@ public class Projectile {
     }
 
     private void checkIntersectWithLevelBlock() {
-        for (LevelBlock levelBlock : playing.getLevelManager().getLevelBlocks()) {
+        for (LevelBlock levelBlock : playing.getLevelManager().getCurrentLevel().getLevelBlocks()) {
             if (levelBlock.isActive())
                 if (hitbox.intersects(levelBlock.getHitbox())) {
                     if (levelBlock.hitByProjectile()) {
@@ -112,7 +112,7 @@ public class Projectile {
         explosionHitbox = new Rectangle2D.Float(explX, explY, explW, explH);
 
         // Destroy all blocks that were affected by the explosion hitbox
-        for (LevelBlock levelBlock : playing.getLevelManager().getLevelBlocks())
+        for (LevelBlock levelBlock : playing.getLevelManager().getCurrentLevel().getLevelBlocks())
             if (levelBlock.isActive())
                 if (explosionHitbox.intersects(levelBlock.getHitbox()))
                     levelBlock.hitByProjectile();
