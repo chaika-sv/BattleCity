@@ -2,12 +2,14 @@ package levels;
 
 import main.Game;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 
 import static utils.Constants.LevelConstants.*;
 
-public class Level {
+public class Level implements Serializable {
 
     private int index;
     private ArrayList<LevelBlock> levelBlocks;
@@ -20,6 +22,20 @@ public class Level {
 
         switch (index) {
             case 1 -> {
+
+                String fileName = "1";
+
+                try {
+                    FileInputStream fis = new FileInputStream(LEVEL_DIR + "/" + fileName);
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    Level loadedLevel = (Level) ois.readObject();
+                    copyLevel(loadedLevel);
+                    ois.close();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                /*
                 addLevelBlock(LevelBlockType.BRICK_BIG, 300, 300);
                 addLevelBlock(LevelBlockType.BRICK_BIG, 500, 500);
                 addLevelBlock(LevelBlockType.RIVER3_BIG, 600, 600);
@@ -27,12 +43,18 @@ public class Level {
                 addLevelBlock(LevelBlockType.GRASS_BIG, 600, 300);
                 addLevelBlock(LevelBlockType.ICE_BIG, 600, 200);
                 addLevelBlock(LevelBlockType.ICE_BIG, 664, 200);
+                 */
             }
             case 2 -> levelBlocks.add(new LevelBlock(LevelBlockType.METAL_BIG, 100, 100));
             case 3 -> levelBlocks.add(new LevelBlock(LevelBlockType.BRICK_HALF_SMALL, 500, 500));
         }
 
 
+    }
+
+    public void copyLevel(Level levelToCopy) {
+        this.index = levelToCopy.index;
+        this.levelBlocks = levelToCopy.levelBlocks;
     }
 
     public void addLevelBlock(LevelBlockType type, int x, int y) {

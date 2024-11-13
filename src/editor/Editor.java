@@ -18,12 +18,13 @@ public class Editor implements Runnable{
 
     public Editor() {
 
-        editing = new Editing(this);
-
         editorPanel = new EditorPanel(this);
+        editing = new Editing(this, editorPanel);
+
         editorWindow = new EditorWindow(editorPanel);
         editorPanel.setFocusable(true);
         editorPanel.requestFocus();           // to listen inputs
+
 
         Gamestate.state = Gamestate.EDITOR;
 

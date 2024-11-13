@@ -68,6 +68,8 @@ public class Constants {
         public static final int DRAW_ALL_LEVEL = 0;
         public static final int DRAW_LEVEL_WO_GRASS = 1;
         public static final int DRAW_GRASS = 2;
+        public static final String LEVEL_DIR = "res/levels";
+
     }
 
 

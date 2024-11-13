@@ -4,12 +4,13 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 import static levels.LevelBlockType.*;
 import static utils.Constants.DEBUG_MODE;
 import static utils.LoadSave.BLOCK_IMAGES;
 
-public class LevelBlock {
+public class LevelBlock implements Serializable {
 
     private LevelBlockType drawType;
     private LevelBlockType type;
