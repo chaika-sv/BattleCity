@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 import static utils.Constants.LevelConstants.*;
+import static utils.LoadSave.LoadLevelFromFile;
 
 public class Level implements Serializable {
 
@@ -20,36 +21,17 @@ public class Level implements Serializable {
 
         levelBlocks = new ArrayList<>();
 
-        switch (index) {
-            case 1 -> {
+        LoadLevelFromFile(String.valueOf(index), this);
 
-                String fileName = "1";
-
-                try {
-                    FileInputStream fis = new FileInputStream(LEVEL_DIR + "/" + fileName);
-                    ObjectInputStream ois = new ObjectInputStream(fis);
-                    Level loadedLevel = (Level) ois.readObject();
-                    copyLevel(loadedLevel);
-                    ois.close();
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                /*
-                addLevelBlock(LevelBlockType.BRICK_BIG, 300, 300);
-                addLevelBlock(LevelBlockType.BRICK_BIG, 500, 500);
-                addLevelBlock(LevelBlockType.RIVER3_BIG, 600, 600);
-                addLevelBlock(LevelBlockType.METAL_BIG, 700, 600);
-                addLevelBlock(LevelBlockType.GRASS_BIG, 600, 300);
-                addLevelBlock(LevelBlockType.ICE_BIG, 600, 200);
-                addLevelBlock(LevelBlockType.ICE_BIG, 664, 200);
-                 */
-            }
-            case 2 -> levelBlocks.add(new LevelBlock(LevelBlockType.METAL_BIG, 100, 100));
-            case 3 -> levelBlocks.add(new LevelBlock(LevelBlockType.BRICK_HALF_SMALL, 500, 500));
-        }
-
-
+        /*
+        addLevelBlock(LevelBlockType.BRICK_BIG, 300, 300);
+        addLevelBlock(LevelBlockType.BRICK_BIG, 500, 500);
+        addLevelBlock(LevelBlockType.RIVER3_BIG, 600, 600);
+        addLevelBlock(LevelBlockType.METAL_BIG, 700, 600);
+        addLevelBlock(LevelBlockType.GRASS_BIG, 600, 300);
+        addLevelBlock(LevelBlockType.ICE_BIG, 600, 200);
+        addLevelBlock(LevelBlockType.ICE_BIG, 664, 200);
+        */
     }
 
     public void copyLevel(Level levelToCopy) {

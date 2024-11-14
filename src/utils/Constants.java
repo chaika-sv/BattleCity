@@ -2,12 +2,17 @@ package utils;
 
 import main.Game;
 
+import static main.Game.TILES_IN_HEIGHT;
+import static main.Game.TILES_SIZE;
+
 public class Constants {
 
     public static final boolean DEBUG_MODE = false;
     public static final float ANI_SPEED = 25;
 
-
+    public static class MovementConstants {
+        public static final int TANK_FRONT_AREA = 5;
+    }
 
     public static class DirConstants {
         public static final int LEFT = 0;
@@ -69,7 +74,14 @@ public class Constants {
         public static final int DRAW_LEVEL_WO_GRASS = 1;
         public static final int DRAW_GRASS = 2;
         public static final String LEVEL_DIR = "res/levels";
-
+        public static final int PLAYER_SPAWN_X = 5 * TILES_SIZE;
+        public static final int PLAYER_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
+        public static final int ENEMY_SPAWN_X_1 = 0;
+        public static final int ENEMY_SPAWN_Y_1 = 0;
+        public static final int ENEMY_SPAWN_X_2 = 8 * TILES_SIZE;
+        public static final int ENEMY_SPAWN_Y_2 = 0;
+        public static final int ENEMY_SPAWN_X_3 = 14 * TILES_SIZE;
+        public static final int ENEMY_SPAWN_Y_3 = 0;
     }
 
 

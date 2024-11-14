@@ -18,6 +18,8 @@ import java.io.*;
 import static main.Game.*;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.LevelConstants.*;
+import static utils.LoadSave.LoadLevelFromFile;
+import static utils.LoadSave.SaveLevelToFile;
 
 public class Editing  extends State implements Statemethods {
 
@@ -67,54 +69,32 @@ public class Editing  extends State implements Statemethods {
         }
     }
 
+    /**
+     * Show file open dialog and load level from the selected file
+     */
     private void loadLevelFromFile() {
-
-        File file;
-        String fileName = "";
-
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(LEVEL_DIR));
         if (fileChooser.showOpenDialog(editorPanel) == JFileChooser.APPROVE_OPTION) {
-            file = fileChooser.getSelectedFile();
-            fileName = file.getName();
+            File file = fileChooser.getSelectedFile();
+            LoadLevelFromFile(file.getName(), level);
         }
 
-        if (!fileName.equals("")) {
-            try {
-                FileInputStream fis = new FileInputStream(LEVEL_DIR + "/" + fileName);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                Level loadedLevel = (Level) ois.readObject();
-                level.copyLevel(loadedLevel);
-                ois.close();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
+    /**
+     * Show save file dialog and save file to selected dialog
+     */
     private void saveLevelToFile() {
-
-        File file;
-        String fileName = "";
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(LEVEL_DIR));
         if (fileChooser.showSaveDialog(editorPanel) == JFileChooser.APPROVE_OPTION) {
-            file = fileChooser.getSelectedFile();
-            fileName = file.getName();
+            File file = fileChooser.getSelectedFile();
+            SaveLevelToFile(file.getName(), level);
         }
 
-        if (!fileName.equals("")) {
-            try {
-                FileOutputStream fos = new FileOutputStream(LEVEL_DIR + "/" + fileName);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(level);
-                oos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void applyToBrush(LevelBlock b) {

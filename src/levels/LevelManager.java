@@ -36,10 +36,7 @@ public class LevelManager {
     }
 
     private void loadAllLevels() {
-        // todo: load levels from somewhere
         levels.add(new Level(1));
-        levels.add(new Level(2));
-        levels.add(new Level(3));
     }
 
     public void loadNextLevel() {

@@ -100,7 +100,7 @@ public class Projectile {
         // If projectile's direction up or down then increase width
         if (dir == UP || dir == DOWN) {
             explX -= 32 * Game.SCALE;
-            explW = 70 * Game.SCALE;
+            explW = 64 * Game.SCALE;
         }
 
         // If projectile's direction left or right then increase height

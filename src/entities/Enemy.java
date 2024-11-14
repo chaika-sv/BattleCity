@@ -17,6 +17,7 @@ public class Enemy extends Tank{
         super(tankType, x, y, width, height, playing);
         this.down = true;
         this.attacking = true;
+        this.curDir = DOWN;
 
         rand = new Random();
     }

@@ -1,17 +1,18 @@
 package utils;
 
+import levels.Level;
 import levels.LevelBlockType;
 import objects.TemporaryObjectType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DirConstants.*;
+import static utils.Constants.LevelConstants.LEVEL_DIR;
 import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankTypeConstants.*;
 import static utils.Constants.TempObjectsConstants.*;
@@ -44,6 +45,33 @@ public class LoadSave {
             }
         }
         return img;
+    }
+
+    public static void LoadLevelFromFile(String fileName, Level level) {
+        if (!fileName.equals("")) {
+            try {
+                FileInputStream fis = new FileInputStream(LEVEL_DIR + "/" + fileName);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                Level loadedLevel = (Level) ois.readObject();
+                level.copyLevel(loadedLevel);
+                ois.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void SaveLevelToFile(String fileName, Level level) {
+        if (!fileName.equals("")) {
+            try {
+                FileOutputStream fos = new FileOutputStream(LEVEL_DIR + "/" + fileName);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(level);
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void LoadTankImages() {

@@ -46,6 +46,7 @@ public class EditorSpace {
         sampleLevelBlocks.add(new LevelBlock(LevelBlockType.METAL_HALF, curLeft, curTop));
         curLeft += LevelBlockType.METAL_HALF.getWidth() + leftOffset;
         sampleLevelBlocks.add(new LevelBlock(LevelBlockType.METAL_SMALL, curLeft, curTop));
+        curTop += LevelBlockType.METAL_HALF.getHeight() + topOffset;
 
         curLeft = GAME_WIDTH + leftOffset;
         sampleLevelBlocks.add(new LevelBlock(LevelBlockType.RIVER1_BIG, curLeft, curTop));

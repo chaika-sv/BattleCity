@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static main.Game.TILES_DEFAULT_SIZE;
+import static utils.Constants.LevelConstants.*;
 
 public class EnemyManager {
 
@@ -16,7 +17,9 @@ public class EnemyManager {
     public EnemyManager(Playing playing) {
         this.playing = playing;
 
-        enemies.add(new Enemy(TankType.T_HEAVY,  100, 100, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
+        enemies.add(new Enemy(TankType.T_BASE,  ENEMY_SPAWN_X_1, ENEMY_SPAWN_Y_1, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
+        enemies.add(new Enemy(TankType.T_BASE,  ENEMY_SPAWN_X_2, ENEMY_SPAWN_Y_2, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
+        enemies.add(new Enemy(TankType.T_BASE,  ENEMY_SPAWN_X_3, ENEMY_SPAWN_Y_3, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), playing ));
     }
 
     public void update() {

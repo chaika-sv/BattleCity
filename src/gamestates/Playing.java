@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import static main.Game.TILES_DEFAULT_SIZE;
+import static utils.Constants.LevelConstants.*;
 import static utils.LoadSave.LoadTankImages;
 
 public class Playing extends State implements Statemethods{
@@ -39,7 +40,7 @@ public class Playing extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player = new Player(TankType.T_FAST, 200, 200, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
+        player = new Player(TankType.T_BASE, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
     }
 
     private void loadNextLevel() {

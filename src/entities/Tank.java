@@ -15,6 +15,7 @@ import static utils.Constants.ANI_SPEED;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.DirConstants.RIGHT;
+import static utils.Constants.MovementConstants.TANK_FRONT_AREA;
 import static utils.Constants.ProjectileConstants.PROJECTILE_HEIGHT;
 import static utils.Constants.ProjectileConstants.PROJECTILE_WIDTH;
 import static utils.Constants.TankStateConstants.*;
@@ -107,25 +108,32 @@ public abstract class Tank {
         float xSpeed = 0;
         float ySpeed = 0;
 
+        float xFrontArea = 0;
+        float yFrontArea = 0;
+
         if (left) {
             xSpeed -= driveSpeed;
+            xFrontArea = -TANK_FRONT_AREA;
             curDir = LEFT;
             moving = true;
         } else if (right) {
             xSpeed += driveSpeed;
+            xFrontArea = TANK_FRONT_AREA;
             curDir = RIGHT;
             moving = true;
         } else if (up) {
             ySpeed -= driveSpeed;
+            yFrontArea = -TANK_FRONT_AREA;
             curDir = UP;
             moving = true;
         } else if (down) {
             ySpeed += driveSpeed;
+            yFrontArea = TANK_FRONT_AREA;
             curDir = DOWN;
             moving = true;
         }
 
-        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y + ySpeed, hitbox.width, hitbox.height, levelManager.getCurrentLevel().getLevelBlocks())) {
+        if (CanMoveHere(hitbox.x + xSpeed + xFrontArea, hitbox.y + ySpeed + yFrontArea, hitbox.width, hitbox.height, levelManager.getCurrentLevel().getLevelBlocks())) {
             hitbox.x += xSpeed;
             hitbox.y += ySpeed;
 
