@@ -34,6 +34,12 @@ public class EnemyManager {
                 e.draw(g);
     }
 
+    public void resetAll() {
+        for (Enemy e : enemies)
+            if (e.isActive())
+                e.setActive(false);
+    }
+
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }

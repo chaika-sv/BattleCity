@@ -10,7 +10,6 @@ import static utils.Constants.TankStateConstants.*;
 
 public class Enemy extends Tank{
 
-    private boolean active = true;
     private Random rand;
 
     public Enemy(TankType tankType, float x, float y, int width, int height, Playing playing) {
@@ -22,20 +21,6 @@ public class Enemy extends Tank{
         rand = new Random();
     }
 
-    /**
-     * Projectile hit the enemy
-     * @param damageValue how many health to decrease
-     * @return true if the enemy was destroyed by the projectile
-     */
-    public boolean hitByProjectile(int damageValue) {
-        currentHealth -= damageValue;
-        if (currentHealth <= 0) {
-            active = false;
-            return true;
-        }
-
-        return false;
-    }
 
     @Override
     public void update() {
@@ -90,11 +75,4 @@ public class Enemy extends Tank{
         right = false;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 }

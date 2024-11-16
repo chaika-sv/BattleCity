@@ -21,6 +21,14 @@ public class Constants {
         public static final int DOWN = 3;
     }
 
+    public static class TankColorConstants {
+        public static final int PLAYER_YELLOW = 0;
+        public static final int ENEMY_GRAY = 1;
+        public static final int PLAYER_GREEN = 2;
+        public static final int ENEMY_RED = 3;
+    }
+
+
     public static class TankStateConstants {
         public static final int IDLE = 0;
         public static final int MOVING = 1;

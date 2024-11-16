@@ -15,9 +15,12 @@ import static utils.Constants.ANI_SPEED;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.DirConstants.RIGHT;
+import static utils.Constants.LevelConstants.PLAYER_SPAWN_X;
+import static utils.Constants.LevelConstants.PLAYER_SPAWN_Y;
 import static utils.Constants.MovementConstants.TANK_FRONT_AREA;
 import static utils.Constants.ProjectileConstants.PROJECTILE_HEIGHT;
 import static utils.Constants.ProjectileConstants.PROJECTILE_WIDTH;
+import static utils.Constants.TankColorConstants.*;
 import static utils.Constants.TankStateConstants.*;
 import static utils.Constants.TankTypeConstants.*;
 import static utils.HelpMethods.CanMoveHere;
@@ -29,6 +32,8 @@ public abstract class Tank {
     protected Playing playing;
     protected LevelManager levelManager;
     protected ObjectManager objectManager;
+
+    protected boolean active = true;
 
     protected boolean left, right, up, down;
     protected boolean moving = false, attacking = false;
@@ -97,7 +102,12 @@ public abstract class Tank {
         updateAnimationTick();
         setAnimation();
 
-        if (attacking && currentTime - lastShootTimeMS > shootDelayMS)
+        // Enemy is attacking all the time by times
+        // Player is attacking only when attacking bool is true (button pressed)
+        if (
+                ((this instanceof Player && attacking) || (this instanceof Enemy)) &&
+                        currentTime - lastShootTimeMS > shootDelayMS
+        )
             shoot();
     }
 
@@ -165,13 +175,38 @@ public abstract class Tank {
     }
 
 
+    /**
+     * Projectile hit the tank
+     * @param damageValue how many health to decrease
+     * @return true if the tank was destroyed by the projectile
+     */
+    public boolean hitByProjectile(int damageValue) {
+        currentHealth -= damageValue;
+        if (currentHealth <= 0) {
+            active = false;
+            if (this instanceof Player) {
+                // If it was player who was killed then game over
+                playing.setGameOver(true);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+
     protected void initHitbox(int offsetX, int offsetY, int width, int height) {
         hitbox = new Rectangle2D.Float(x + offsetX, y + offsetY, (int) (width * Game.SCALE), (int) (height * Game.SCALE));
     }
 
     public void draw(Graphics g) {
 
-        g.drawImage(TANK_IMAGES[tankType.getId()] [curDir] [state == IDLE || state == ATTACK ? 0 : aniIndex],
+        int tankColor = PLAYER_YELLOW;
+
+        if (this instanceof Enemy)
+            tankColor = ENEMY_GRAY;
+
+        g.drawImage(TANK_IMAGES[tankColor][tankType.getId()] [curDir] [state == IDLE || state == ATTACK ? 0 : aniIndex],
                 (int) (x),
                 (int) (y),
                 width,
@@ -265,7 +300,6 @@ public abstract class Tank {
      * Reset everything for the player to be ready to start the game again
      */
     public void resetAll() {
-        // todo: rework the method
         up = false;
         down = false;
         left = false;
@@ -273,7 +307,11 @@ public abstract class Tank {
         attacking = false;
         moving = false;
         state = IDLE;
+        curDir = UP;
         currentHealth = maxHealth;
+        tankType = TankType.T_BASE;
+        x = PLAYER_SPAWN_X;
+        y = PLAYER_SPAWN_Y;
     }
 
     /**
@@ -334,5 +372,13 @@ public abstract class Tank {
 
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

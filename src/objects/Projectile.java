@@ -5,6 +5,7 @@ import entities.Player;
 import entities.Tank;
 import gamestates.Playing;
 import levels.LevelBlock;
+import levels.LevelBlockType;
 import main.Game;
 
 import java.awt.*;
@@ -50,6 +51,20 @@ public class Projectile {
 
         checkIntersectWithLevelBlock();
         checkIntersectWithTanks();
+        checkIntersectWithAnotherProjectile();
+    }
+
+    private void checkIntersectWithAnotherProjectile() {
+        for (Projectile p : playing.getObjectManager().getProjectiles())
+            // It's not current projectile
+            if (p != this)
+                if (p.isActive())
+                    if (hitbox.intersects(p.getHitbox())) {
+                        // Destroy current projectile with explosion
+                        destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
+                        // Another projectile just set inactive (we don't need two explosions)
+                        p.setActive(false);
+                    }
     }
 
     private void checkIntersectWithLevelBlock() {
@@ -61,6 +76,9 @@ public class Projectile {
                         destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
                         // Check if the explosion should destroy any other neighbor blocks
                         checkExplosionIntersect();
+                        // If base was destroyed then game over
+                        if (levelBlock.getType() == LevelBlockType.BASE)
+                            playing.setGameOver(true);
                         return;
                     }
                     // Otherwise it keeps moving (it's grass, river or ice)
@@ -70,22 +88,36 @@ public class Projectile {
 
     private void checkIntersectWithTanks() {
         if (tank instanceof Player) {
+
+            // check if player's projectile hit one of the enemies
             for (Enemy enemy : playing.getEnemyManager().getEnemies())
-                if (enemy.isActive())
+                if (enemy.isActive()) {
                     if (hitbox.intersects(enemy.getHitbox())) {
-                        if (enemy.hitByProjectile(1)) {
-                            destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
-                        } else {
-                            destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
-                        }
+                        hitTank(enemy);
                         return;
                     }
-
+                }
 
         } else if (tank instanceof Enemy) {
-            // todo: check if enemy projectile hit player and apply some damage
+
+            // check if enemy's projectile hit player
+            if (playing.getPlayer().isActive())
+                if (hitbox.intersects(playing.getPlayer().getHitbox()))
+                    hitTank(playing.getPlayer());
+
         }
     }
+
+    private void hitTank(Tank tank) {
+        if (hitbox.intersects(tank.getHitbox())) {
+            if (tank.hitByProjectile(1)) {
+                destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
+            } else {
+                destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
+            }
+        }
+    }
+
 
     /**
      * Check if exposition affects any other blocks
@@ -145,5 +177,9 @@ public class Projectile {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Rectangle2D.Float getHitbox() {
+        return hitbox;
     }
 }

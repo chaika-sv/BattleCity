@@ -6,6 +6,7 @@ import entities.TankType;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
+import ui.GameOverOverlay;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -21,6 +22,7 @@ public class Playing extends State implements Statemethods{
     private LevelManager levelManager;
     private ObjectManager objectManager;
     private EnemyManager enemyManager;
+    private GameOverOverlay gameOverOverlay;
 
     private boolean gameOver = false;
 
@@ -41,6 +43,7 @@ public class Playing extends State implements Statemethods{
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
         player = new Player(TankType.T_BASE, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
+        gameOverOverlay = new GameOverOverlay(this);
     }
 
     private void loadNextLevel() {
@@ -50,15 +53,28 @@ public class Playing extends State implements Statemethods{
 
 
 
-    private void resetAll() {
+    public void resetAll() {
         player.resetAll();
+        objectManager.resetAll();
+        enemyManager.resetAll();
+    }
+
+    public void startCurrentLevelAgain() {
+        // todo: load current level
     }
 
     @Override
     public void update() {
-        objectManager.update();
-        player.update();
-        enemyManager.update();
+
+        if (gameOver) {
+            gameOverOverlay.update();
+        } else {
+            // Still playing
+            objectManager.update();
+            if (player.isActive())
+                player.update();
+            enemyManager.update();
+        }
     }
 
     @Override
@@ -69,9 +85,14 @@ public class Playing extends State implements Statemethods{
 
         levelManager.draw(g);
         objectManager.draw(g);
-        player.draw(g);
+        if (player.isActive())
+            player.draw(g);
         enemyManager.draw(g);
         levelManager.drawAfterPlayer(g);
+
+        if (gameOver) {
+            gameOverOverlay.draw(g);
+        }
     }
 
     @Override
@@ -97,7 +118,7 @@ public class Playing extends State implements Statemethods{
     @Override
     public void keyPressed(KeyEvent e) {
         if (gameOver) {
-            //gameOverOverlay.keyPressed(e);
+            gameOverOverlay.keyPressed(e);
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A -> player.setLeft(true);
@@ -135,5 +156,17 @@ public class Playing extends State implements Statemethods{
 
     public EnemyManager getEnemyManager() {
         return enemyManager;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

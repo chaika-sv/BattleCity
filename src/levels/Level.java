@@ -21,7 +21,8 @@ public class Level implements Serializable {
 
         levelBlocks = new ArrayList<>();
 
-        LoadLevelFromFile(String.valueOf(index), this);
+        if (index > 0)
+            LoadLevelFromFile(String.valueOf(index), this);
 
         /*
         addLevelBlock(LevelBlockType.BRICK_BIG, 300, 300);
@@ -40,10 +41,34 @@ public class Level implements Serializable {
     }
 
     public void addLevelBlock(LevelBlockType type, int x, int y) {
-        if (type == LevelBlockType.BRICK_BIG) {
+        if (type == LevelBlockType.BRICK_BIG || type == LevelBlockType.BRICK_SMALL || type == LevelBlockType.BRICK_HALF
+                 || type == LevelBlockType.BRICK_LITTLE1 || type == LevelBlockType.BRICK_LITTLE2
+        ) {
 
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
+            int brickLenX = 0;
+            int brickLenY = 0;
+
+            switch (type) {
+                case BRICK_BIG -> {
+                    brickLenX = 4;
+                    brickLenY = 4;
+                }
+                case BRICK_SMALL -> {
+                    brickLenX = 2;
+                    brickLenY = 2;
+                }
+                case BRICK_HALF -> {
+                    brickLenX = 4;
+                    brickLenY = 2;
+                }
+                case BRICK_LITTLE1, BRICK_LITTLE2 -> {
+                    brickLenX = 1;
+                    brickLenY = 1;
+                }
+            }
+
+            for (int i = 0; i < brickLenX; i++)
+                for (int j = 0; j < brickLenY; j++)
 
                     if ((i + j) % 2 == 0)
                         levelBlocks.add(

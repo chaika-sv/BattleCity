@@ -70,6 +70,10 @@ public class LevelBlock implements Serializable {
                 // If river, grass or ice then don't do anything with the level block and let the projectile move through it
                 return false;
             }
+            case BASE -> {
+                drawType = BASE_DOWN;
+                return true;
+            }
         }
 
         return true;
