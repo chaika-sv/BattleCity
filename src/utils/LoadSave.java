@@ -54,7 +54,7 @@ public class LoadSave {
                 FileInputStream fis = new FileInputStream(LEVEL_DIR + "/" + fileName);
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 Level loadedLevel = (Level) ois.readObject();
-                level.copyLevel(loadedLevel);
+                level.cloneLevel(loadedLevel);
                 ois.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -82,12 +82,12 @@ public class LoadSave {
         int colorOffsetY = 0;
 
         // 0 - tank color (4 colors)
-        // 1 - tank types (4 types)
+        // 0 - tank types (4 types)
         // 2 - direction (4 directions)
         // 3 - animation (2 ani indexes)
         TANK_IMAGES = new BufferedImage[4][4][4][2];
 
-        // 1 - tank types (4 types)
+        // 0 - tank types (4 types)
         // 2 - direction (4 directions)
         // 3 - x, y
         TANK_HITBOX_OFFSETS = new int[4][4][2];

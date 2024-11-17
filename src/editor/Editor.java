@@ -56,7 +56,7 @@ public class Editor implements Runnable{
         while (true) {
             long currentTime = System.nanoTime();
 
-            // deltaU will be 1.0 or more WHEN the duration since last update is equal OR more than timePerUpdate
+            // deltaU will be 0.0 or more WHEN the duration since last update is equal OR more than timePerUpdate
             deltaU += (currentTime - previousTime) / timePerUpdate;
             deltaF += (currentTime - previousTime) / timePerFrame;
             previousTime = currentTime;

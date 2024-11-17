@@ -157,7 +157,6 @@ public abstract class Tank {
 
     }
 
-
     /**
      * When move hitbox we need to move sprite that we are drawing
      */
@@ -310,8 +309,9 @@ public abstract class Tank {
         curDir = UP;
         currentHealth = maxHealth;
         tankType = TankType.T_BASE;
-        x = PLAYER_SPAWN_X;
-        y = PLAYER_SPAWN_Y;
+        hitbox.x = PLAYER_SPAWN_X;
+        hitbox.y = PLAYER_SPAWN_Y;
+        //syncHitboxWithSprite();
     }
 
     /**

@@ -51,6 +51,17 @@ public class LevelBlock implements Serializable {
         initHitbox();
     }
 
+    public LevelBlock(LevelBlock blockToCopy) {
+        this.drawType = blockToCopy.drawType;
+        this.type = blockToCopy.type;
+        this.x = blockToCopy.x;
+        this.y = blockToCopy.y;
+        this.width = blockToCopy.width;
+        this.height = blockToCopy.height;
+        this.hitbox = blockToCopy.hitbox;
+        this.active = blockToCopy.active;
+    }
+
     /**
      * The level block was hit by some projectile
      * @return true if the projectile should be destroyed

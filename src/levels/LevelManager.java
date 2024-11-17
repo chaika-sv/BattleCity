@@ -1,15 +1,10 @@
 package levels;
 
 import main.Game;
-import utils.LoadSave;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.LevelConstants.*;
 import static utils.LoadSave.LoadBlockImages;
 
@@ -18,29 +13,55 @@ public class LevelManager {
     private Game game;
 
     private ArrayList<Level> levels;
+    private Level currentLevel;
 
-    private int currentLevelIndex = 0;
+    private int currentLevelIndex;
 
     public LevelManager(Game game) {
         this.game = game;
         loadLevelSprites();
 
         levels = new ArrayList<>();
+        // Load levels from files to the levels list
         loadAllLevels();
-
-        currentLevelIndex = -1;
     }
 
+    /**
+     * Bricks, grass, etc
+     */
     private void loadLevelSprites() {
         LoadBlockImages();
     }
 
+    /**
+     * Load levels from files to array list
+     */
     private void loadAllLevels() {
-        levels.add(new Level(1));
+        for (int i = 0; i < LEVELS_COUNT; i++)
+            levels.add(new Level(i));
     }
 
+    /**
+     * Start first level
+     */
+    public void loadFirstLevel() {
+        currentLevelIndex = 0;
+        currentLevel = new Level(currentLevelIndex);
+    }
+
+    /**
+     * Increment level index and then get source level from levels (as it was loaded from the file) and clone to current level
+     */
     public void loadNextLevel() {
         currentLevelIndex++;
+        currentLevel.cloneLevel(levels.get(currentLevelIndex));
+    }
+
+    /**
+     * Get source level from levels (as it was loaded from the file) and clone to current level
+     */
+    public void reloadCurrentLevel() {
+        currentLevel.cloneLevel(levels.get(currentLevelIndex));
     }
 
     /**
@@ -48,7 +69,7 @@ public class LevelManager {
      * Everything without grass
      */
     public void draw(Graphics g) {
-        getCurrentLevel().draw(g, DRAW_LEVEL_WO_GRASS);
+        currentLevel.draw(g, DRAW_LEVEL_WO_GRASS);
     }
 
     /**
@@ -56,10 +77,10 @@ public class LevelManager {
      * The blocks need to be drawn on top of the player
      */
     public void drawAfterPlayer(Graphics g) {
-        getCurrentLevel().draw(g, DRAW_GRASS);
+        currentLevel.draw(g, DRAW_GRASS);
     }
 
     public Level getCurrentLevel() {
-        return levels.get(currentLevelIndex);
+        return currentLevel;
     }
 }

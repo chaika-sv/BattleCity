@@ -132,13 +132,13 @@ public class Projectile {
         // If projectile's direction up or down then increase width
         if (dir == UP || dir == DOWN) {
             explX -= 32 * Game.SCALE;
-            explW = 64 * Game.SCALE;
+            explW = 63 * Game.SCALE;
         }
 
         // If projectile's direction left or right then increase height
         if (dir == LEFT || dir == RIGHT) {
             explY -= 32 * Game.SCALE;
-            explH = 70 * Game.SCALE;
+            explH = 63 * Game.SCALE;
         }
 
         explosionHitbox = new Rectangle2D.Float(explX, explY, explW, explH);

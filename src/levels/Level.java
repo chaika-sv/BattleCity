@@ -2,7 +2,6 @@ package levels;
 
 import main.Game;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -21,23 +20,36 @@ public class Level implements Serializable {
 
         levelBlocks = new ArrayList<>();
 
-        if (index > 0)
+        if (index >= 0)
+            // Filename is level number 0, 1, ... without extension (in res/levels)
             LoadLevelFromFile(String.valueOf(index), this);
 
-        /*
-        addLevelBlock(LevelBlockType.BRICK_BIG, 300, 300);
-        addLevelBlock(LevelBlockType.BRICK_BIG, 500, 500);
-        addLevelBlock(LevelBlockType.RIVER3_BIG, 600, 600);
-        addLevelBlock(LevelBlockType.METAL_BIG, 700, 600);
-        addLevelBlock(LevelBlockType.GRASS_BIG, 600, 300);
-        addLevelBlock(LevelBlockType.ICE_BIG, 600, 200);
-        addLevelBlock(LevelBlockType.ICE_BIG, 664, 200);
-        */
     }
 
-    public void copyLevel(Level levelToCopy) {
+    /**
+     * Clone constructor
+     */
+    public Level(Level levelToCopy) {
         this.index = levelToCopy.index;
-        this.levelBlocks = levelToCopy.levelBlocks;
+
+        ArrayList<LevelBlock> levelBlocksClone = new ArrayList<>(levelToCopy.levelBlocks.size());
+
+        for (LevelBlock block : levelToCopy.levelBlocks)
+            levelBlocksClone.add(new LevelBlock(block));
+
+        this.levelBlocks = levelBlocksClone;
+    }
+
+    public void cloneLevel(Level levelToCopy) {
+        this.index = levelToCopy.index;
+
+        ArrayList<LevelBlock> levelBlocksClone = new ArrayList<>(levelToCopy.levelBlocks.size());
+
+        for (LevelBlock block : levelToCopy.levelBlocks)
+            levelBlocksClone.add(new LevelBlock(block));
+
+        this.levelBlocks = levelBlocksClone;
+
     }
 
     public void addLevelBlock(LevelBlockType type, int x, int y) {

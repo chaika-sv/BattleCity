@@ -78,6 +78,7 @@ public class Constants {
     }
 
     public static class LevelConstants {
+        public static final int LEVELS_COUNT = 1;
         public static final int DRAW_ALL_LEVEL = 0;
         public static final int DRAW_LEVEL_WO_GRASS = 1;
         public static final int DRAW_GRASS = 2;

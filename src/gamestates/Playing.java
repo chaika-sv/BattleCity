@@ -31,7 +31,7 @@ public class Playing extends State implements Statemethods{
         loadImages();
         initClasses();
 
-        loadNextLevel();
+        startGame();
     }
 
     private void loadImages() {
@@ -46,9 +46,9 @@ public class Playing extends State implements Statemethods{
         gameOverOverlay = new GameOverOverlay(this);
     }
 
-    private void loadNextLevel() {
-        resetAll();
-        levelManager.loadNextLevel();
+    private void startGame() {
+        resetAll();     // just in case
+        levelManager.loadFirstLevel();
     }
 
 
@@ -60,7 +60,7 @@ public class Playing extends State implements Statemethods{
     }
 
     public void startCurrentLevelAgain() {
-        // todo: load current level
+        levelManager.reloadCurrentLevel();
     }
 
     @Override
