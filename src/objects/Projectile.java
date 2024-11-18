@@ -49,9 +49,20 @@ public class Projectile {
             case RIGHT -> hitbox.x += speed;
         }
 
+        checkLevelEdge();
         checkIntersectWithLevelBlock();
         checkIntersectWithTanks();
         checkIntersectWithAnotherProjectile();
+    }
+
+    private void checkLevelEdge() {
+        if (hitbox.x < 0 || hitbox.y < 0
+                || hitbox.x + hitbox.width > Game.GAME_WIDTH
+                || hitbox.y + hitbox.height > Game.GAME_HEIGHT
+        ) {
+            // Destroy current projectile with explosion
+            destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
+        }
     }
 
     private void checkIntersectWithAnotherProjectile() {

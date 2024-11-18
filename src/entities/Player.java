@@ -9,5 +9,9 @@ public class Player extends Tank{
         super(tankType, x, y, width, height, playing);
     }
 
-
+    @Override
+    public void resetAll() {
+        super.resetAll();
+        active = true;
+    }
 }
