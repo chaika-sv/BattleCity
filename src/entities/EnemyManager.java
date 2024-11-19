@@ -68,13 +68,24 @@ public class EnemyManager {
                         }
                     }
 
-                    enemies.add(new Enemy(TankType.T_BASE, spawnX, spawnY, (int) (TILES_DEFAULT_SIZE * Game.SCALE), (int) (TILES_DEFAULT_SIZE * Game.SCALE), playing));
+                    playing.getObjectManager().createEnemySpawn(spawnX, spawnY);
                     curLevelEnemyCount++;
 
                     lastSpawnDelayMS = System.currentTimeMillis();
                 }
             }
         }
+    }
+
+
+    public void spawnNewEnemy(int x, int y) {
+        // todo: select enemy type
+        TankType tankType = TankType.T_BASE;
+        enemies.add(new Enemy(tankType, x, y, playing));
+    }
+
+    public void spawnNewEnemy(TankType tankType, int x, int y) {
+        enemies.add(new Enemy(tankType, x, y, playing));
     }
 
     public void update() {

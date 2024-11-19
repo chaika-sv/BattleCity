@@ -1,5 +1,6 @@
 package objects;
 
+import entities.TankType;
 import gamestates.Playing;
 
 import java.awt.*;
@@ -11,13 +12,14 @@ public class TemporaryObject {
 
     Playing playing;
     private TemporaryObjectType type;
-    private float x, y;
+    private int x, y;
     private int width, height;
     private boolean active = true;
     private int aniTick, aniIndex;
     private int spritesNumber;
+    private int repeatingTimes;
 
-    public TemporaryObject(float x, float y, TemporaryObjectType type, Playing playing) {
+    public TemporaryObject(int x, int y, TemporaryObjectType type, Playing playing) {
         this.playing = playing;
         this.x = x;
         this.y = y;
@@ -25,6 +27,7 @@ public class TemporaryObject {
         this.width = type.getWidth();
         this.height = type.getHeight();
         this.spritesNumber = type.getSpritesNumber();
+        this.repeatingTimes = type.getRepeatingTimes();
     }
 
     public void update() {
@@ -40,13 +43,22 @@ public class TemporaryObject {
         if (aniTick >= ANI_SPEED) {
             aniTick = 0;
             aniIndex++;
-            if (aniIndex == spritesNumber)
-                active = false;
+            if (aniIndex == spritesNumber) {
+                repeatingTimes--;
+                if (repeatingTimes == 0) {
+                    active = false;
+                    if (type == TemporaryObjectType.TO_SPAWN)
+                        // Enemy type will be determine in enemy manager
+                        playing.getEnemyManager().spawnNewEnemy(x, y);
+                }
+                else
+                    aniIndex = 0;
+            }
         }
     }
 
     public void draw(Graphics g) {
-        g.drawImage(TEMP_OBJECTS_IMAGES[type.getId()][aniIndex], (int)x, (int)y, width, height, null);
+        g.drawImage(TEMP_OBJECTS_IMAGES[type.getId()][aniIndex], x, y, width, height, null);
     }
 
     public boolean isActive() {
@@ -55,5 +67,25 @@ public class TemporaryObject {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public TemporaryObjectType getType() {
+        return type;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

@@ -4,6 +4,7 @@ import gamestates.Playing;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
+import objects.TemporaryObject;
 import utils.LoadSave;
 
 import java.awt.*;
@@ -32,6 +33,7 @@ public abstract class Tank {
     protected Playing playing;
     protected LevelManager levelManager;
     protected ObjectManager objectManager;
+    protected TemporaryObject shield;
 
     protected boolean active = true;
 
@@ -69,7 +71,7 @@ public abstract class Tank {
     protected BufferedImage[][] animationsH;
 
 
-    public Tank(TankType tankType, float x, float y, int width, int height, Playing playing) {
+    public Tank(TankType tankType, float x, float y, Playing playing) {
 
         this.playing = playing;
         this.levelManager = playing.getLevelManager();
@@ -77,8 +79,8 @@ public abstract class Tank {
 
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = (int) (TILES_DEFAULT_SIZE * Game.SCALE);
+        this.height = (int) (TILES_DEFAULT_SIZE * Game.SCALE);
 
         // Like health, speed, points for selected tank type
         applyTankCharacteristics(tankType);
@@ -149,6 +151,7 @@ public abstract class Tank {
 
             applyHitboxOffset();
             syncHitboxWithSprite();
+            syncShieldWithSprite();
 
             meetObstacle = false;
         } else {
@@ -163,6 +166,16 @@ public abstract class Tank {
     protected void syncHitboxWithSprite() {
         x = hitbox.x - hitboxXOffset;
         y = hitbox.y - hitboxYOffset;
+    }
+
+    /**
+     * When move player we need to move shield
+     */
+    protected void syncShieldWithSprite() {
+        if (shield != null) {
+            shield.setX((int) x);
+            shield.setY((int) y);
+        }
     }
 
     protected void applyTankCharacteristics(TankType tankType) {
@@ -295,6 +308,13 @@ public abstract class Tank {
         lastShootTimeMS = System.currentTimeMillis();
     }
 
+    public boolean hasShield() {
+        if (shield != null)
+            return shield.isActive();
+
+        return false;
+    }
+
     /**
      * Reset everything for the player to be ready to start the game again
      */
@@ -380,5 +400,13 @@ public abstract class Tank {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public TemporaryObject getShield() {
+        return shield;
+    }
+
+    public void setShield(TemporaryObject shield) {
+        this.shield = shield;
     }
 }

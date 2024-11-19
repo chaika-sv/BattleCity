@@ -24,8 +24,7 @@ public class LoadSave {
 
     public static Map<LevelBlockType, BufferedImage> BLOCK_IMAGES;
     public static Map<Integer, BufferedImage> PROJECTILE_IMAGES;
-    public static BufferedImage[][] TEMP_OBJECTS_IMAGES;
-    public static BufferedImage[] BIG_EXPLOSION_IMAGES;
+    public static BufferedImage[][] TEMP_OBJECTS_IMAGES;    // small explosion, big explosion, enemy spawn
     public static BufferedImage[][][][] TANK_IMAGES;      // dim0: color, dim1: tank type, dim2: direction, dim3: animation
     public static int[][][] TANK_HITBOX_OFFSETS;      // dim1: tank type, dim2: direction, dim3: x, y
 
@@ -237,11 +236,12 @@ public class LoadSave {
         PROJECTILE_IMAGES.put(DOWN, img.getSubimage(1384, 408, PROJECTILE_DEFAULT_WIDTH, PROJECTILE_DEFAULT_HEIGHT));
     }
 
-    public static void LoadExplosionImages() {
+    public static void LoadTempObjectsImages() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
 
-        TEMP_OBJECTS_IMAGES = new BufferedImage[4][3];
+        TEMP_OBJECTS_IMAGES = new BufferedImage[4][4];
 
+        // Small explosion
         for (int i = 0; i < TemporaryObjectType.TO_SMALL_EXPLOSION.getSpritesNumber(); i++)
             TEMP_OBJECTS_IMAGES[SMALL_EXPLOSION][i] = img.getSubimage(
                     1052 + TemporaryObjectType.TO_SMALL_EXPLOSION.getWidth() * i ,
@@ -249,6 +249,7 @@ public class LoadSave {
                     TemporaryObjectType.TO_SMALL_EXPLOSION.getWidth(),
                     TemporaryObjectType.TO_SMALL_EXPLOSION.getHeight());
 
+        // Big explosion
         for (int i = 0; i < TemporaryObjectType.TO_BIG_EXPLOSION.getSpritesNumber(); i++)
             TEMP_OBJECTS_IMAGES[BIG_EXPLOSION][i] = img.getSubimage(
                     1244 + TemporaryObjectType.TO_BIG_EXPLOSION.getWidth() * i ,
@@ -256,6 +257,21 @@ public class LoadSave {
                     TemporaryObjectType.TO_BIG_EXPLOSION.getWidth(),
                     TemporaryObjectType.TO_BIG_EXPLOSION.getHeight());
 
+        // Enemy spawn
+        for (int i = 0; i < TemporaryObjectType.TO_SPAWN.getSpritesNumber(); i++)
+            TEMP_OBJECTS_IMAGES[SPAWN][i] = img.getSubimage(
+                    1052 + TemporaryObjectType.TO_SPAWN.getWidth() * i ,
+                    382,
+                    TemporaryObjectType.TO_SPAWN.getWidth(),
+                    TemporaryObjectType.TO_SPAWN.getHeight());
+
+        // Shield
+        for (int i = 0; i < TemporaryObjectType.TO_SHIELD.getSpritesNumber(); i++)
+            TEMP_OBJECTS_IMAGES[SHIELD][i] = img.getSubimage(
+                    1052 + TemporaryObjectType.TO_SHIELD.getWidth() * i ,
+                    576,
+                    TemporaryObjectType.TO_SHIELD.getWidth(),
+                    TemporaryObjectType.TO_SHIELD.getHeight());
     }
 
 }

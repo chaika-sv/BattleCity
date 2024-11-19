@@ -5,8 +5,8 @@ import gamestates.Playing;
 
 public class Player extends Tank{
 
-    public Player(TankType tankType, float x, float y, int width, int height, Playing playing) {
-        super(tankType, x, y, width, height, playing);
+    public Player(TankType tankType, float x, float y, Playing playing) {
+        super(tankType, x, y, playing);
     }
 
     @Override

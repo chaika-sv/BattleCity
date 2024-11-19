@@ -1,6 +1,8 @@
 package objects;
 
+import entities.Player;
 import entities.Tank;
+import entities.TankType;
 import gamestates.Playing;
 
 import java.awt.*;
@@ -21,25 +23,47 @@ public class ObjectManager {
 
     private void loadObjectSprites() {
         LoadProjectileImages();
-        LoadExplosionImages();
+        LoadTempObjectsImages();
     }
 
+    public void createEnemySpawn(int x, int y) {
+        temporaryObjects.add(new TemporaryObject(x, y, TemporaryObjectType.TO_SPAWN, playing));
+    }
+
+    public void createShield(Tank tank) {
+        TemporaryObject shield = new TemporaryObject((int)tank.getHitbox().getX(), (int)tank.getHitbox().getY(), TemporaryObjectType.TO_SHIELD, playing);
+        temporaryObjects.add(shield);
+        tank.setShield(shield);
+    }
+
+    /**
+     * Create projectile
+     * @param x projectile spawn x
+     * @param y projectile spawn y
+     * @param dir projectile direction
+     * @param speed projectile speed
+     * @param tank tank who shoot the projectile
+     */
     public void shootProjectile(int x, int y, int dir, float speed, Tank tank) {
         projectiles.add(new Projectile(x, y, dir, speed, tank, playing));
     }
 
-    public void createExplosion(int x, int y, TemporaryObjectType type) {
-        temporaryObjects.add(new TemporaryObject(x, y, type, playing));
+    public void createExplosion(int x, int y, TemporaryObjectType explosionType) {
+        temporaryObjects.add(new TemporaryObject(x, y, explosionType, playing));
     }
 
     public void update() {
         updateProjectiles();
-        updateExplosions();
+        updateTemporaryObjects();
     }
 
     public void draw(Graphics g) {
         drawProjectiles(g);
-        drawExplosions(g);
+        drawTemporaryObjects(g);
+    }
+
+    public void drawAfterPlayer(Graphics g) {
+        drawShield(g);
     }
 
 
@@ -49,7 +73,10 @@ public class ObjectManager {
                 p.update();
     }
 
-    private void updateExplosions() {
+    /**
+     * Update explosions, spawns, etc
+     */
+    private void updateTemporaryObjects() {
         for (TemporaryObject e : temporaryObjects)
             if (e.isActive())
                 e.update();
@@ -65,14 +92,27 @@ public class ObjectManager {
                 p.draw(g);
     }
 
-    private void drawExplosions(Graphics g) {
+    /**
+     * Draw explosions, spawns, etc
+     */
+    private void drawTemporaryObjects(Graphics g) {
         // It's possible that new projectile can be created during the loop below
         // So we create a clone of the projectiles array and draw it
         ArrayList<TemporaryObject> tempTempObjects = new ArrayList<>(temporaryObjects);
 
         for (TemporaryObject e : tempTempObjects)
             if (e.isActive())
-                e.draw(g);
+                // Shield should be drawn after player
+                if (e.getType() != TemporaryObjectType.TO_SHIELD)
+                    e.draw(g);
+    }
+
+    private void drawShield(Graphics g) {
+        for (TemporaryObject e : temporaryObjects)
+            if (e.isActive())
+                // Shield should be drawn after player
+                if (e.getType() == TemporaryObjectType.TO_SHIELD)
+                    e.draw(g);
     }
 
     public void resetAll() {

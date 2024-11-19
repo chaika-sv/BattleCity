@@ -32,6 +32,7 @@ public class Playing extends State implements Statemethods{
         initClasses();
 
         startGame();
+
     }
 
     private void loadImages() {
@@ -42,13 +43,14 @@ public class Playing extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player = new Player(TankType.T_BASE, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE), this);
+        player = new Player(TankType.T_BASE, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
         gameOverOverlay = new GameOverOverlay(this);
     }
 
     private void startGame() {
         resetAll();     // just in case
         levelManager.loadFirstLevel();
+        getObjectManager().createShield(player);
     }
 
 
@@ -61,6 +63,7 @@ public class Playing extends State implements Statemethods{
 
     public void startCurrentLevelAgain() {
         levelManager.reloadCurrentLevel();
+        getObjectManager().createShield(player);
     }
 
     @Override
@@ -85,9 +88,12 @@ public class Playing extends State implements Statemethods{
 
         levelManager.draw(g);
         objectManager.draw(g);
+
         if (player.isActive())
             player.draw(g);
+
         enemyManager.draw(g);
+        objectManager.drawAfterPlayer(g);
         levelManager.drawAfterPlayer(g);
 
         if (gameOver) {

@@ -102,31 +102,45 @@ public class Projectile {
 
             // check if player's projectile hit one of the enemies
             for (Enemy enemy : playing.getEnemyManager().getEnemies())
-                if (enemy.isActive()) {
-                    if (hitbox.intersects(enemy.getHitbox())) {
-                        hitTank(enemy);
+                if (enemy.isActive())
+                    if (checkHitTank(enemy))
                         return;
-                    }
-                }
+
 
         } else if (tank instanceof Enemy) {
 
             // check if enemy's projectile hit player
             if (playing.getPlayer().isActive())
-                if (hitbox.intersects(playing.getPlayer().getHitbox()))
-                    hitTank(playing.getPlayer());
+                checkHitTank(playing.getPlayer());
 
         }
     }
 
-    private void hitTank(Tank tank) {
+
+    /**
+     * Check if the projectile hit the tank and if it does then destroy the projectile
+     * @param tank tank to check with the projectile
+     * @return true if the projectile hit the tank
+     */
+    private boolean checkHitTank(Tank tank) {
         if (hitbox.intersects(tank.getHitbox())) {
-            if (tank.hitByProjectile(1)) {
-                destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
-            } else {
-                destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
-            }
+
+            if (tank.hasShield())
+                // If the tank has shield then just deactivate the projectile w/o any explosion
+                active = false;
+            else
+                // Damage the tank
+                if (tank.hitByProjectile(1)) {
+                    // If the tank was killed then destroy the projectile with big explosion
+                    destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
+                } else {
+                    // If the tank was just injured then destroy the projectile with small explosion
+                    destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
+                }
+
+            return true;
         }
+        return false;
     }
 
 
