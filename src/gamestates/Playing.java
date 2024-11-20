@@ -1,6 +1,7 @@
 package gamestates;
 
 import entities.EnemyManager;
+import entities.EnemySettings;
 import entities.Player;
 import entities.TankType;
 import levels.LevelManager;
@@ -14,6 +15,7 @@ import java.awt.event.MouseEvent;
 
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.LevelConstants.*;
+import static utils.LoadSave.ENEMY_SETTINGS;
 import static utils.LoadSave.LoadTankImages;
 
 public class Playing extends State implements Statemethods{
@@ -50,20 +52,22 @@ public class Playing extends State implements Statemethods{
     private void startGame() {
         resetAll();     // just in case
         levelManager.loadFirstLevel();
+
         getObjectManager().createShield(player);
+        enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
+    public void startCurrentLevelAgain() {
+        levelManager.reloadCurrentLevel();
 
+        getObjectManager().createShield(player);
+        enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
+    }
 
     public void resetAll() {
         player.resetAll();
         objectManager.resetAll();
         enemyManager.resetAll();
-    }
-
-    public void startCurrentLevelAgain() {
-        levelManager.reloadCurrentLevel();
-        getObjectManager().createShield(player);
     }
 
     @Override

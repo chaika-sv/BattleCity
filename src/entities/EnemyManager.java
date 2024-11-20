@@ -6,6 +6,8 @@ import objects.TemporaryObject;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static main.Game.TILES_DEFAULT_SIZE;
@@ -17,13 +19,28 @@ public class EnemyManager {
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private long lastSpawnDelayMS;
     private int curLevelEnemyCount;
+    private EnemySettings enemySettings;
 
+    private int maxEnemyCount;
+    private int maxActiveEnemyCount;
+    private Map<TankType, Integer> tanksCount;
 
     private Random rand;
 
     public EnemyManager(Playing playing) {
         this.playing = playing;
         rand = new Random();
+        tanksCount = new LinkedHashMap<>();
+    }
+
+    public void applyEnemySettings(EnemySettings enemySettings) {
+        this.maxActiveEnemyCount = enemySettings.getActiveTanksCount();
+
+        maxEnemyCount = 0;
+        for(Map.Entry<TankType, Integer> entry : enemySettings.getTanksCount().entrySet()) {
+            this.tanksCount.put(entry.getKey(), entry.getValue());
+            maxEnemyCount += entry.getValue();
+        }
     }
 
     public void generateEnemies() {
@@ -35,15 +52,15 @@ public class EnemyManager {
                 currentEnemyCount++;
 
         // No more active enemies and no more enemies to generate
-        if (currentEnemyCount == 0 && curLevelEnemyCount >= MAX_ENEMY_CNT)
+        if (currentEnemyCount == 0 && curLevelEnemyCount >= maxEnemyCount)
             // todo: level completed
             System.out.println("Level completed");
 
         // We haven't already generated all enemies for the level
-        if (curLevelEnemyCount < MAX_ENEMY_CNT) {
+        if (curLevelEnemyCount < maxEnemyCount) {
 
-            // We should have no more than MAX_ACTIVE_ENEMY_CNT active enemies at the same time
-            if (currentEnemyCount < MAX_ACTIVE_ENEMY_CNT) {
+            // We should have no more than maxActiveEnemyCount active enemies at the same time
+            if (currentEnemyCount < maxActiveEnemyCount) {
 
                 long currentTime = System.currentTimeMillis();
 
@@ -70,6 +87,7 @@ public class EnemyManager {
 
                     playing.getObjectManager().createEnemySpawn(spawnX, spawnY);
                     curLevelEnemyCount++;
+                    System.out.println(curLevelEnemyCount);
 
                     lastSpawnDelayMS = System.currentTimeMillis();
                 }
@@ -118,4 +136,5 @@ public class EnemyManager {
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
+
 }

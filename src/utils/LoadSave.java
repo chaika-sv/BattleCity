@@ -1,5 +1,7 @@
 package utils;
 
+import entities.EnemySettings;
+import entities.TankType;
 import levels.Level;
 import levels.LevelBlockType;
 import objects.TemporaryObjectType;
@@ -10,6 +12,7 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static entities.TankType.*;
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.LevelConstants.LEVEL_DIR;
@@ -27,6 +30,7 @@ public class LoadSave {
     public static BufferedImage[][] TEMP_OBJECTS_IMAGES;    // small explosion, big explosion, enemy spawn
     public static BufferedImage[][][][] TANK_IMAGES;      // dim0: color, dim1: tank type, dim2: direction, dim3: animation
     public static int[][][] TANK_HITBOX_OFFSETS;      // dim1: tank type, dim2: direction, dim3: x, y
+    public static Map<Integer, EnemySettings> ENEMY_SETTINGS;
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -45,6 +49,17 @@ public class LoadSave {
             }
         }
         return img;
+    }
+
+    public static void SetEnemySettings() {
+        ENEMY_SETTINGS = new LinkedHashMap<>();
+
+        Map<TankType, Integer> level0 = new LinkedHashMap<>();
+        level0.put(T_BASE, 4);
+        level0.put(T_FAST, 2);
+        level0.put(T_POWER, 1);
+        level0.put(T_HEAVY, 1);
+        ENEMY_SETTINGS.put(0, new EnemySettings(level0, 4));
     }
 
     public static void LoadLevelFromFile(String fileName, Level level) {

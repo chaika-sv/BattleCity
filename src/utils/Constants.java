@@ -30,7 +30,8 @@ public class Constants {
         public static final int ENEMY_SPAWN_X_2 = 8 * TILES_SIZE;
         public static final int ENEMY_SPAWN_Y_2 = 0;
         public static final int ENEMY_SPAWN_X_3 = 14 * TILES_SIZE;
-        public static final int ENEMY_SPAWN_Y_3 = 0;    }
+        public static final int ENEMY_SPAWN_Y_3 = 0;
+    }
 
     public static class TankColorConstants {
         public static final int PLAYER_YELLOW = 0;
@@ -66,7 +67,6 @@ public class Constants {
 
         public static final int PROJECTILE_WIDTH = (int)(Game.SCALE * PROJECTILE_DEFAULT_WIDTH * 0.75f);
         public static final int PROJECTILE_HEIGHT = (int)(Game.SCALE * PROJECTILE_DEFAULT_HEIGHT * 0.75f);
-        public static final float PROJECTILE_SPEED = 1.5f * Game.SCALE;
     }
 
     public static class TempObjectsConstants {
@@ -86,6 +86,9 @@ public class Constants {
 
         public static final int BIG_EXPLOSION_WIDTH = (int)(Game.SCALE * BIG_EXPLOSION_DEFAULT_WIDTH);
         public static final int BIG_EXPLOSION_HEIGHT = (int)(Game.SCALE * BIG_EXPLOSION_DEFAULT_HEIGHT);
+
+        public static final int SHIELD_OFFSET_X = (int)(Game.SCALE * (-2));
+        public static final int SHIELD_OFFSET_Y = (int)(Game.SCALE * (-2));
     }
 
     public static class LevelConstants {

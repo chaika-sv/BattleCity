@@ -24,6 +24,8 @@ import static utils.Constants.ProjectileConstants.PROJECTILE_WIDTH;
 import static utils.Constants.TankColorConstants.*;
 import static utils.Constants.TankStateConstants.*;
 import static utils.Constants.TankTypeConstants.*;
+import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_X;
+import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_Y;
 import static utils.HelpMethods.CanMoveHere;
 import static utils.LoadSave.TANK_HITBOX_OFFSETS;
 import static utils.LoadSave.TANK_IMAGES;
@@ -173,8 +175,8 @@ public abstract class Tank {
      */
     protected void syncShieldWithSprite() {
         if (shield != null) {
-            shield.setX((int) x);
-            shield.setY((int) y);
+            shield.setX((int) x + SHIELD_OFFSET_X);
+            shield.setY((int) y + SHIELD_OFFSET_Y);
         }
     }
 

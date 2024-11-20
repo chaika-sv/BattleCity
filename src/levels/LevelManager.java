@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import static utils.Constants.LevelConstants.*;
 import static utils.LoadSave.LoadBlockImages;
+import static utils.LoadSave.SetEnemySettings;
 
 public class LevelManager {
 
@@ -24,6 +25,9 @@ public class LevelManager {
         levels = new ArrayList<>();
         // Load levels from files to the levels list
         loadAllLevels();
+
+        // For each level set number of enemies (maybe we need to load it from file or somehow else)
+        SetEnemySettings();
     }
 
     /**
@@ -82,5 +86,9 @@ public class LevelManager {
 
     public Level getCurrentLevel() {
         return currentLevel;
+    }
+
+    public int getCurrentLevelIndex() {
+        return currentLevelIndex;
     }
 }
