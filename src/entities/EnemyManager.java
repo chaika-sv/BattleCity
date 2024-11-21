@@ -97,8 +97,20 @@ public class EnemyManager {
 
 
     public void spawnNewEnemy(int x, int y) {
-        // todo: select enemy type
-        TankType tankType = TankType.T_BASE;
+
+        TankType tankType;
+        tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+
+        while(!tanksCount.containsKey(tankType) || tanksCount.get(tankType) == 0) {
+            tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+        }
+
+
+        tanksCount.computeIfPresent(tankType, (k, v) -> v - 1);
+
+        for(Map.Entry<TankType, Integer> entry : tanksCount.entrySet())
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+
         enemies.add(new Enemy(tankType, x, y, playing));
     }
 
@@ -108,7 +120,7 @@ public class EnemyManager {
 
     public void update() {
         if (!playing.isGameOver())
-            generateEnemies();
+            //generateEnemies();        // todo: debug
 
         for (Enemy e : enemies)
             if (e.isActive())

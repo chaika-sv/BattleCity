@@ -15,6 +15,7 @@ import java.util.Map;
 import static entities.TankType.*;
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DirConstants.*;
+import static utils.Constants.LevelConstants.DRAW_GRASS;
 import static utils.Constants.LevelConstants.LEVEL_DIR;
 import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankColorConstants.*;
@@ -94,6 +95,9 @@ public class LoadSave {
 
         int colorOffsetX = 0;
         int colorOffsetY = 0;
+        int addOffsetX = 0;
+        int addOffsetY = 0;
+        int size = TILES_DEFAULT_SIZE;
 
         // 0 - tank color (4 colors)
         // 0 - tank types (4 types)
@@ -109,33 +113,39 @@ public class LoadSave {
         for (int i = 0; i < 4; i++) {
 
             switch (i) {
-                case PLAYER_YELLOW -> { colorOffsetX = 0;     colorOffsetY = 0; }
-                case ENEMY_GRAY -> { colorOffsetX = 520;     colorOffsetY = 0; }
-                case PLAYER_GREEN -> { colorOffsetX = 0;     colorOffsetY = 520; }
-                case ENEMY_RED -> { colorOffsetX = 520;     colorOffsetY = 520; }
+                case PLAYER_YELLOW -> { colorOffsetX = 0;     colorOffsetY = 0;     addOffsetY = 0; }
+                case ENEMY_GRAY -> { colorOffsetX = 520;     colorOffsetY = 0;    addOffsetY = 0; }
+                case PLAYER_GREEN -> { colorOffsetX = 0;     colorOffsetY = 520;     addOffsetY = 4; }
+                case ENEMY_RED -> { colorOffsetX = 520;     colorOffsetY = 520;     addOffsetY = 4; }
             }
-            
-            TANK_IMAGES[i][BASE][UP][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 0, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][BASE][UP][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 1, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            TANK_IMAGES[i][BASE][UP][0] = img.getSubimage(colorOffsetX, colorOffsetY + addOffsetY, size, size);
+            TANK_IMAGES[i][BASE][UP][1] = img.getSubimage(colorOffsetX + size,colorOffsetY + addOffsetY, size, size);
             TANK_HITBOX_OFFSETS[BASE][UP][0] = 4;
             TANK_HITBOX_OFFSETS[BASE][UP][1] = 8;
-    
-            TANK_IMAGES[i][BASE][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][BASE][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            TANK_IMAGES[i][BASE][LEFT][0] = img.getSubimage(colorOffsetX + size * 2,colorOffsetY + addOffsetY, size, size);
+            TANK_IMAGES[i][BASE][LEFT][1] = img.getSubimage(colorOffsetX + size * 3 + addOffsetX, colorOffsetY + addOffsetY,size, size);
             TANK_HITBOX_OFFSETS[BASE][LEFT][0] = 8;
             TANK_HITBOX_OFFSETS[BASE][LEFT][1] = 4;
-    
-            TANK_IMAGES[i][BASE][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][BASE][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            TANK_IMAGES[i][BASE][DOWN][0] = img.getSubimage(colorOffsetX + size * 4 + addOffsetX, colorOffsetY + addOffsetY, size, size);
+            TANK_IMAGES[i][BASE][DOWN][1] = img.getSubimage(colorOffsetX + size * 5 + addOffsetX, colorOffsetY + addOffsetY,
+                    size, size);
             TANK_HITBOX_OFFSETS[BASE][DOWN][0] = 4;
             TANK_HITBOX_OFFSETS[BASE][DOWN][1] = 4;
-    
-            TANK_IMAGES[i][BASE][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][BASE][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8, colorOffsetY + 0, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            TANK_IMAGES[i][BASE][RIGHT][0] = img.getSubimage(colorOffsetX + size * 6 + addOffsetX, colorOffsetY + addOffsetY, size, size);
+            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 8 : 0;
+            TANK_IMAGES[i][BASE][RIGHT][1] = img.getSubimage(colorOffsetX + size * 7 + addOffsetX, colorOffsetY + addOffsetY, size, size);
             TANK_HITBOX_OFFSETS[BASE][RIGHT][0] = 4;
             TANK_HITBOX_OFFSETS[BASE][RIGHT][1] = 4;
-    
-    
+
+
+
     
             TANK_IMAGES[i][FAST][UP][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 0, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_IMAGES[i][FAST][UP][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 1, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
@@ -143,17 +153,17 @@ public class LoadSave {
             TANK_HITBOX_OFFSETS[FAST][UP][1] = 0;
     
             TANK_IMAGES[i][FAST][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][FAST][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4   - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[FAST][LEFT][0] = 0;
             TANK_HITBOX_OFFSETS[FAST][LEFT][1] = 4;
     
-            TANK_IMAGES[i][FAST][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][FAST][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4   - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][FAST][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4   - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[FAST][DOWN][0] = 0;
             TANK_HITBOX_OFFSETS[FAST][DOWN][1] = 4;
     
-            TANK_IMAGES[i][FAST][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][FAST][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4      - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][FAST][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8      - 8, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[FAST][RIGHT][0] = 4;
             TANK_HITBOX_OFFSETS[FAST][RIGHT][1] = 0;
     
@@ -165,17 +175,17 @@ public class LoadSave {
             TANK_HITBOX_OFFSETS[POWER][UP][1] = 0;
     
             TANK_IMAGES[i][POWER][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][POWER][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4      - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[POWER][LEFT][0] = 0;
             TANK_HITBOX_OFFSETS[POWER][LEFT][1] = 0;
     
-            TANK_IMAGES[i][POWER][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][POWER][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4      - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][POWER][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4      - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[POWER][DOWN][0] = 0;
             TANK_HITBOX_OFFSETS[POWER][DOWN][1] = 4;
     
-            TANK_IMAGES[i][POWER][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][POWER][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4     - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][POWER][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8     - 8, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[POWER][RIGHT][0] = 4;
             TANK_HITBOX_OFFSETS[POWER][RIGHT][1] = 0;
     
@@ -187,17 +197,17 @@ public class LoadSave {
             TANK_HITBOX_OFFSETS[HEAVY][UP][1] = 2;
     
             TANK_IMAGES[i][HEAVY][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][HEAVY][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4      - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[HEAVY][LEFT][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][LEFT][1] = 2;
     
-            TANK_IMAGES[i][HEAVY][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][HEAVY][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4      - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][HEAVY][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4      - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[HEAVY][DOWN][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][DOWN][1] = 2;
     
-            TANK_IMAGES[i][HEAVY][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][HEAVY][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4     - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            TANK_IMAGES[i][HEAVY][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8     - 8, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
             TANK_HITBOX_OFFSETS[HEAVY][RIGHT][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][RIGHT][1] = 2;
         }

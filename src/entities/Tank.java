@@ -44,6 +44,7 @@ public abstract class Tank {
 
 
     protected float x, y;
+    protected float tankScale;
     protected int width, height;
     protected int lastCoordinate = 0;
     protected int moveInOneDir = 0;
@@ -79,13 +80,14 @@ public abstract class Tank {
         this.levelManager = playing.getLevelManager();
         this.objectManager = playing.getObjectManager();
 
+        applyTankCharacteristics(tankType);
+
         this.x = x;
         this.y = y;
-        this.width = (int) (TILES_DEFAULT_SIZE * Game.SCALE);
-        this.height = (int) (TILES_DEFAULT_SIZE * Game.SCALE);
+        this.width = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
+        this.height = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
 
         // Like health, speed, points for selected tank type
-        applyTankCharacteristics(tankType);
         this.currentHealth = maxHealth;
 
         // Number of pixels (x and y) from top-left corner of sprite image to actual tank picture
@@ -185,7 +187,8 @@ public abstract class Tank {
         this.maxHealth = tankType.getMaxHealth();
         this.driveSpeed = tankType.getDriveSpeed() * Game.SCALE;
         this.projectileSpeed = tankType.getProjectileSpeed();
-        this.shootDelayMS = (long)(tankType.getShootDelayMS() * Game.SCALE);
+        this.shootDelayMS = tankType.getShootDelayMS();
+        this.tankScale = tankType.getTankScale() * Game.SCALE;
     }
 
 
@@ -215,7 +218,7 @@ public abstract class Tank {
 
     public void draw(Graphics g) {
 
-        int tankColor = PLAYER_YELLOW;
+        int tankColor = PLAYER_YELLOW;//PLAYER_YELLOW;
 
         if (this instanceof Enemy)
             tankColor = ENEMY_GRAY;
@@ -330,10 +333,10 @@ public abstract class Tank {
         state = IDLE;
         curDir = UP;
         currentHealth = maxHealth;
-        tankType = TankType.T_BASE;
+        //tankType = TankType.T_FAST;
         hitbox.x = PLAYER_SPAWN_X;
         hitbox.y = PLAYER_SPAWN_Y;
-        //syncHitboxWithSprite();
+        syncHitboxWithSprite();
     }
 
     /**

@@ -53,7 +53,7 @@ public class Playing extends State implements Statemethods{
         resetAll();     // just in case
         levelManager.loadFirstLevel();
 
-        getObjectManager().createShield(player);
+        //getObjectManager().createShield(player);      // todo: debug
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
