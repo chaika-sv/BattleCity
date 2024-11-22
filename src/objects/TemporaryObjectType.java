@@ -6,8 +6,8 @@ public enum TemporaryObjectType {
 
     TO_SMALL_EXPLOSION(SMALL_EXPLOSION, 64, 64, true, 1, 3),
     TO_BIG_EXPLOSION(BIG_EXPLOSION, 128, 128, true, 1, 2),
-    TO_SPAWN(SPAWN, 64, 64, true, 10, 4),
-    TO_SHIELD(SHIELD, 64, 64, true, 30, 2);
+    TO_SPAWN(SPAWN, 64, 64, true, 5, 4),
+    TO_SHIELD(SHIELD, 64, 64, true, 20, 2);
 
     private final int id;
     private final int width;

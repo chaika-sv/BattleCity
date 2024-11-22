@@ -56,10 +56,10 @@ public class LoadSave {
         ENEMY_SETTINGS = new LinkedHashMap<>();
 
         Map<TankType, Integer> level0 = new LinkedHashMap<>();
-        level0.put(T_BASE, 4);
-        level0.put(T_FAST, 2);
-        level0.put(T_POWER, 1);
-        level0.put(T_HEAVY, 1);
+        level0.put(T_BASE, 1);
+        level0.put(T_FAST, 0);
+        level0.put(T_POWER, 0);
+        level0.put(T_HEAVY, 0);
         ENEMY_SETTINGS.put(0, new EnemySettings(level0, 4));
     }
 
@@ -93,11 +93,11 @@ public class LoadSave {
     public static void LoadTankImages() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
 
-        int colorOffsetX = 0;
-        int colorOffsetY = 0;
-        int addOffsetX = 0;
-        int addOffsetY = 0;
-        int size = TILES_DEFAULT_SIZE;
+        int cX = 0;
+        int cY = 0;
+        int aX = 0;
+        int aY = 0;
+        int s = TILES_DEFAULT_SIZE;
 
         // 0 - tank color (4 colors)
         // 0 - tank types (4 types)
@@ -113,101 +113,126 @@ public class LoadSave {
         for (int i = 0; i < 4; i++) {
 
             switch (i) {
-                case PLAYER_YELLOW -> { colorOffsetX = 0;     colorOffsetY = 0;     addOffsetY = 0; }
-                case ENEMY_GRAY -> { colorOffsetX = 520;     colorOffsetY = 0;    addOffsetY = 0; }
-                case PLAYER_GREEN -> { colorOffsetX = 0;     colorOffsetY = 520;     addOffsetY = 4; }
-                case ENEMY_RED -> { colorOffsetX = 520;     colorOffsetY = 520;     addOffsetY = 4; }
+                case PLAYER_YELLOW -> { cX = 0;     cY = 0;     aY = 0; }
+                case ENEMY_GRAY -> { cX = 520;     cY = 0;    aY = 0; }
+                case PLAYER_GREEN -> { cX = 0;     cY = 520;     aY = 4; }
+                case ENEMY_RED -> { cX = 520;     cY = 520;     aY = 4; }
             }
 
-            TANK_IMAGES[i][BASE][UP][0] = img.getSubimage(colorOffsetX, colorOffsetY + addOffsetY, size, size);
-            TANK_IMAGES[i][BASE][UP][1] = img.getSubimage(colorOffsetX + size,colorOffsetY + addOffsetY, size, size);
+
+            aX = 0;
+            TANK_IMAGES[i][BASE][UP][0] = img.getSubimage(cX, cY + aY, s, s);
+            TANK_IMAGES[i][BASE][UP][1] = img.getSubimage(cX + s,cY + aY, s, s);
             TANK_HITBOX_OFFSETS[BASE][UP][0] = 4;
             TANK_HITBOX_OFFSETS[BASE][UP][1] = 8;
 
-            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
-            TANK_IMAGES[i][BASE][LEFT][0] = img.getSubimage(colorOffsetX + size * 2,colorOffsetY + addOffsetY, size, size);
-            TANK_IMAGES[i][BASE][LEFT][1] = img.getSubimage(colorOffsetX + size * 3 + addOffsetX, colorOffsetY + addOffsetY,size, size);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            TANK_IMAGES[i][BASE][LEFT][0] = img.getSubimage(cX + s * 2,cY + aY, s, s);
+            TANK_IMAGES[i][BASE][LEFT][1] = img.getSubimage(cX + s * 3 + aX, cY + aY,s, s);
             TANK_HITBOX_OFFSETS[BASE][LEFT][0] = 8;
             TANK_HITBOX_OFFSETS[BASE][LEFT][1] = 4;
 
-            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
-            TANK_IMAGES[i][BASE][DOWN][0] = img.getSubimage(colorOffsetX + size * 4 + addOffsetX, colorOffsetY + addOffsetY, size, size);
-            TANK_IMAGES[i][BASE][DOWN][1] = img.getSubimage(colorOffsetX + size * 5 + addOffsetX, colorOffsetY + addOffsetY,
-                    size, size);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            TANK_IMAGES[i][BASE][DOWN][0] = img.getSubimage(cX + s * 4 + aX, cY + aY, s, s);
+            TANK_IMAGES[i][BASE][DOWN][1] = img.getSubimage(cX + s * 5 + aX, cY + aY, s, s);
             TANK_HITBOX_OFFSETS[BASE][DOWN][0] = 4;
             TANK_HITBOX_OFFSETS[BASE][DOWN][1] = 4;
 
-            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
-            TANK_IMAGES[i][BASE][RIGHT][0] = img.getSubimage(colorOffsetX + size * 6 + addOffsetX, colorOffsetY + addOffsetY, size, size);
-            addOffsetX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 8 : 0;
-            TANK_IMAGES[i][BASE][RIGHT][1] = img.getSubimage(colorOffsetX + size * 7 + addOffsetX, colorOffsetY + addOffsetY, size, size);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            TANK_IMAGES[i][BASE][RIGHT][0] = img.getSubimage(cX + s * 6 + aX, cY + aY, s, s);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 8 : 0;
+            TANK_IMAGES[i][BASE][RIGHT][1] = img.getSubimage(cX + s * 7 + aX, cY + aY, s, s);
             TANK_HITBOX_OFFSETS[BASE][RIGHT][0] = 4;
             TANK_HITBOX_OFFSETS[BASE][RIGHT][1] = 4;
 
 
 
-    
-            TANK_IMAGES[i][FAST][UP][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 0, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][UP][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 1, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][FAST][UP][0] = img.getSubimage(cX, cY + aY + 328, s, s);
+            TANK_IMAGES[i][FAST][UP][1] = img.getSubimage(cX + s, cY + aY + 328, s, s);
             TANK_HITBOX_OFFSETS[FAST][UP][0] = 0;
             TANK_HITBOX_OFFSETS[FAST][UP][1] = 0;
-    
-            TANK_IMAGES[i][FAST][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4   - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][FAST][LEFT][0] = img.getSubimage(cX + s * 2, cY + aY + 328, s, s);
+            TANK_IMAGES[i][FAST][LEFT][1] = img.getSubimage(cX + s * 3 + aX, cY + + aY + 328, s, s);
             TANK_HITBOX_OFFSETS[FAST][LEFT][0] = 0;
             TANK_HITBOX_OFFSETS[FAST][LEFT][1] = 4;
-    
-            TANK_IMAGES[i][FAST][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4   - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4   - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][FAST][DOWN][0] = img.getSubimage(cX + s * 4 + aX, cY + aY + 328, s, s);
+            TANK_IMAGES[i][FAST][DOWN][1] = img.getSubimage(cX + s * 5 + aX, cY + aY + 328, s, s);
             TANK_HITBOX_OFFSETS[FAST][DOWN][0] = 0;
             TANK_HITBOX_OFFSETS[FAST][DOWN][1] = 4;
-    
-            TANK_IMAGES[i][FAST][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4      - 4, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][FAST][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8      - 8, colorOffsetY + 328, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][FAST][RIGHT][0] = img.getSubimage(cX + s * 6 + aX, cY + aY + 328, s, s);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 8 : 0;
+            TANK_IMAGES[i][FAST][RIGHT][1] = img.getSubimage(cX + s * 7 + aX, cY + aY + 328, s, s);
             TANK_HITBOX_OFFSETS[FAST][RIGHT][0] = 4;
             TANK_HITBOX_OFFSETS[FAST][RIGHT][1] = 0;
-    
-    
-    
-            TANK_IMAGES[i][POWER][UP][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 0, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][UP][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 1, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+
+
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][POWER][UP][0] = img.getSubimage(cX, cY + aY + 132, s, s);
+            TANK_IMAGES[i][POWER][UP][1] = img.getSubimage(cX + s, cY + aY + 132, s, s);
             TANK_HITBOX_OFFSETS[POWER][UP][0] = 0;
             TANK_HITBOX_OFFSETS[POWER][UP][1] = 0;
-    
-            TANK_IMAGES[i][POWER][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4      - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][POWER][LEFT][0] = img.getSubimage(cX + s * 2, cY + aY + 132, s, s);
+            TANK_IMAGES[i][POWER][LEFT][1] = img.getSubimage(cX + s * 3 + aX, cY + aY + 132, s, s);
             TANK_HITBOX_OFFSETS[POWER][LEFT][0] = 0;
             TANK_HITBOX_OFFSETS[POWER][LEFT][1] = 0;
-    
-            TANK_IMAGES[i][POWER][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4      - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4      - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][POWER][DOWN][0] = img.getSubimage(cX + s * 4 + aX, cY + aY + 132, s, s);
+            TANK_IMAGES[i][POWER][DOWN][1] = img.getSubimage(cX + s * 5 + aX, cY + aY + 132, s, s);
             TANK_HITBOX_OFFSETS[POWER][DOWN][0] = 0;
             TANK_HITBOX_OFFSETS[POWER][DOWN][1] = 4;
-    
-            TANK_IMAGES[i][POWER][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4     - 4, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][POWER][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8     - 8, colorOffsetY + 132, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][POWER][RIGHT][0] = img.getSubimage(cX + s * 6 + aX, cY + aY + 132, s, s);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 8 : 0;
+            TANK_IMAGES[i][POWER][RIGHT][1] = img.getSubimage(cX + s * 7 + aX, cY + aY + 132, s, s);
             TANK_HITBOX_OFFSETS[POWER][RIGHT][0] = 4;
             TANK_HITBOX_OFFSETS[POWER][RIGHT][1] = 0;
-    
-    
-    
-            TANK_IMAGES[i][HEAVY][UP][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 0, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][UP][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 1, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+
+
+            aX = 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][HEAVY][UP][0] = img.getSubimage(cX, cY + aY + 458, s, s);
+            TANK_IMAGES[i][HEAVY][UP][1] = img.getSubimage(cX + s, cY + aY + 458, s, s);
             TANK_HITBOX_OFFSETS[HEAVY][UP][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][UP][1] = 2;
-    
-            TANK_IMAGES[i][HEAVY][LEFT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 2, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][LEFT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 3 + 4      - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][HEAVY][LEFT][0] = img.getSubimage(cX + s * 2, cY + aY + 458, s, s);
+            TANK_IMAGES[i][HEAVY][LEFT][1] = img.getSubimage(cX + s * 3 + aX, cY + aY + 458, s, s);
             TANK_HITBOX_OFFSETS[HEAVY][LEFT][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][LEFT][1] = 2;
-    
-            TANK_IMAGES[i][HEAVY][DOWN][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 4 + 4      - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][DOWN][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 5 + 4      - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][HEAVY][DOWN][0] = img.getSubimage(cX + s * 4 + aX, cY + aY + 458, s, s);
+            TANK_IMAGES[i][HEAVY][DOWN][1] = img.getSubimage(cX + s * 5 + aX, cY + aY + 458, s, s);
             TANK_HITBOX_OFFSETS[HEAVY][DOWN][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][DOWN][1] = 2;
-    
-            TANK_IMAGES[i][HEAVY][RIGHT][0] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 6 + 4     - 4, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
-            TANK_IMAGES[i][HEAVY][RIGHT][1] = img.getSubimage(colorOffsetX + TILES_DEFAULT_SIZE * 7 + 8     - 8, colorOffsetY + 458, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 4 : 0;
+            aY = (i == PLAYER_GREEN || i == ENEMY_RED) ? 4 : 0;;
+            TANK_IMAGES[i][HEAVY][RIGHT][0] = img.getSubimage(cX + s * 6 + aX, cY + aY + 458, s, s);
+            aX = (i == PLAYER_YELLOW || i == PLAYER_GREEN) ? 8 : 0;
+            TANK_IMAGES[i][HEAVY][RIGHT][1] = img.getSubimage(cX + s * 7 + aX, cY + aY + 458, s, s);
             TANK_HITBOX_OFFSETS[HEAVY][RIGHT][0] = 0;
             TANK_HITBOX_OFFSETS[HEAVY][RIGHT][1] = 2;
         }

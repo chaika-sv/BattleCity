@@ -1,6 +1,8 @@
 package entities;
 
 import gamestates.Playing;
+import levels.LevelBlock;
+import levels.LevelBlockType;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
@@ -10,7 +12,9 @@ import utils.LoadSave;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import static levels.LevelBlockType.*;
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.ANI_SPEED;
 import static utils.Constants.DEBUG_MODE;
@@ -26,7 +30,6 @@ import static utils.Constants.TankStateConstants.*;
 import static utils.Constants.TankTypeConstants.*;
 import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_X;
 import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_Y;
-import static utils.HelpMethods.CanMoveHere;
 import static utils.LoadSave.TANK_HITBOX_OFFSETS;
 import static utils.LoadSave.TANK_IMAGES;
 
@@ -105,10 +108,11 @@ public abstract class Tank {
         long currentTime = System.currentTimeMillis();
 
         updatePosition();
+
         updateAnimationTick();
         setAnimation();
 
-        // Enemy is attacking all the time by times
+        // Enemy is attacking all the time
         // Player is attacking only when attacking bool is true (button pressed)
         if (
                 ((this instanceof Player && attacking) || (this instanceof Enemy)) &&
@@ -149,19 +153,62 @@ public abstract class Tank {
             moving = true;
         }
 
-        if (CanMoveHere(hitbox.x + xSpeed + xFrontArea, hitbox.y + ySpeed + yFrontArea, hitbox.width, hitbox.height, levelManager.getCurrentLevel().getLevelBlocks())) {
-            hitbox.x += xSpeed;
-            hitbox.y += ySpeed;
 
-            applyHitboxOffset();
-            syncHitboxWithSprite();
-            syncShieldWithSprite();
+        if (hitbox.x + xSpeed + xFrontArea < 0 || hitbox.y + ySpeed + yFrontArea < 0
+                || hitbox.x + xSpeed + xFrontArea > Game.GAME_WIDTH - hitbox.width || hitbox.y + ySpeed + yFrontArea > Game.GAME_HEIGHT - hitbox.height) {
 
-            meetObstacle = false;
-        } else {
+            // Screen edge
             meetObstacle = true;
+
+        } else {
+
+            // Return level block type in front of the tank (if exists)
+            LevelBlockType blockType = canMoveHere(
+                    hitbox.x + xSpeed + xFrontArea,
+                    hitbox.y + ySpeed + yFrontArea
+            );
+
+            if (blockType == null || blockType == GRASS || blockType == ICE) {
+
+                // Can move
+                meetObstacle = false;
+
+                // So move
+                hitbox.x += xSpeed;
+                hitbox.y += ySpeed;
+
+                applyHitboxOffset();
+                syncHitboxWithSprite();
+                syncShieldWithSprite();
+
+                // todo: set something for ice
+
+            } else if (blockType == BRICK || blockType == METAL || blockType == RIVER) {
+                // Cannot move
+                meetObstacle = true;
+            }
+
         }
 
+    }
+
+    /**
+     * Return level block type in front of the tank (if exists)
+     * @param x possible new x tank's coordinate
+     * @param y possible new y tank's coordinate
+     * @return level block type on the new possible position (if exists)
+     */
+    private LevelBlockType canMoveHere(float x, float y) {
+
+        // New possible hitbox to be checked
+        Rectangle2D.Float possibleHitbox = new Rectangle2D.Float(x, y, hitbox.width, hitbox.height);
+
+        for (LevelBlock block : levelManager.getCurrentLevel().getLevelBlocks())
+            if (block.isActive())
+                if (possibleHitbox.intersects(block.getHitbox()))
+                    return block.getType();
+
+        return null;
     }
 
     /**
@@ -218,7 +265,7 @@ public abstract class Tank {
 
     public void draw(Graphics g) {
 
-        int tankColor = PLAYER_YELLOW;//PLAYER_YELLOW;
+        int tankColor = PLAYER_YELLOW;
 
         if (this instanceof Enemy)
             tankColor = ENEMY_GRAY;

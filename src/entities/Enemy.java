@@ -1,16 +1,20 @@
 package entities;
 
 import gamestates.Playing;
-import main.Game;
 
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
+import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DirConstants.*;
-import static utils.Constants.TankStateConstants.*;
+import static utils.Constants.EnemyConstants.*;
 
 public class Enemy extends Tank{
 
     private Random rand;
+    private Rectangle2D.Float searchBox;
+    private boolean seePlayer = false;
 
     public Enemy(TankType tankType, float x, float y, Playing playing) {
         super(tankType, x, y, playing);
@@ -19,15 +23,24 @@ public class Enemy extends Tank{
         this.curDir = DOWN;
 
         rand = new Random();
+
+        initSearchBox();
+    }
+
+    private void initSearchBox() {
+        searchBox = new Rectangle2D.Float(x - (SEARCH_BOX_WIDTH - width) / 2f, y - (SEARCH_BOX_HEIGHT - height) / 2f, SEARCH_BOX_WIDTH, SEARCH_BOX_HEIGHT);
     }
 
 
     @Override
-    public void update() {
-        super.update();
+    public void updatePosition() {
+        super.updatePosition();
+
+        updateSearchBox();
 
         if (meetObstacle)
-            changeDir();
+            if (!seePlayer)
+                changeDirRandomly();
 
         if (curDir == UP || curDir == DOWN)
             moveInOneDir = (int)(lastCoordinate - hitbox.y);
@@ -35,11 +48,46 @@ public class Enemy extends Tank{
             moveInOneDir = (int)(lastCoordinate - hitbox.x);
 
         if (moveInOneDir >= curChangeDirDistance)
-            changeDir();
+            changeDirRandomly();
 
     }
 
-    private void changeDir() {
+    /**
+     * When move hitbox we need to move sprite that we are drawing
+     */
+    protected void updateSearchBox() {
+
+        searchBox.x = x - (SEARCH_BOX_WIDTH - width) / 2f;
+        searchBox.y = y - (SEARCH_BOX_HEIGHT - height) / 2f;
+
+        Rectangle2D.Float playerHitbox = playing.getPlayer().getHitbox();
+
+        if (searchBox.intersects(playerHitbox)) {
+            seePlayer = true;
+            resetDir();
+
+            if (Math.abs(playerHitbox.x - hitbox.x) > TILES_DEFAULT_SIZE) {
+
+                if (playerHitbox.x < hitbox.x)
+                    left = true;
+                else if (playerHitbox.x > hitbox.x)
+                    right = true;
+
+            } else if (Math.abs(playerHitbox.y - hitbox.y) > TILES_DEFAULT_SIZE) {
+
+                if (playerHitbox.y < hitbox.y)
+                    up = true;
+                else if (playerHitbox.y > hitbox.y)
+                    down = true;
+
+            }
+        } else {
+            seePlayer = false;
+        }
+
+    }
+
+    private void changeDirRandomly() {
 
         // Reset current direction
         resetDir();
@@ -75,4 +123,20 @@ public class Enemy extends Tank{
         right = false;
     }
 
+
+
+    @Override
+    public void draw(Graphics g) {
+        super.draw(g);
+        //if (DEBUG_MODE)
+            drawSearchBox(g);
+    }
+
+    /**
+     * Draw it just for debugging
+     */
+    protected void drawSearchBox(Graphics g) {
+        g.setColor(Color.GREEN);
+        g.drawRect((int)searchBox.x, (int)searchBox.y, (int)searchBox.width, (int)searchBox.height);
+    }
 }

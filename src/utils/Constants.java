@@ -7,7 +7,7 @@ import static main.Game.TILES_SIZE;
 
 public class Constants {
 
-    public static final boolean DEBUG_MODE = true;
+    public static final boolean DEBUG_MODE = false;
     public static final float ANI_SPEED = 25;
 
     public static class MovementConstants {
@@ -31,6 +31,8 @@ public class Constants {
         public static final int ENEMY_SPAWN_Y_2 = 0;
         public static final int ENEMY_SPAWN_X_3 = 14 * TILES_SIZE;
         public static final int ENEMY_SPAWN_Y_3 = 0;
+        public static final int SEARCH_BOX_WIDTH = (int)(10 * TILES_SIZE * Game.SCALE);
+        public static final int SEARCH_BOX_HEIGHT = (int)(10 * TILES_SIZE * Game.SCALE);
     }
 
     public static class TankColorConstants {
