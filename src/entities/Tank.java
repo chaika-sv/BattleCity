@@ -68,6 +68,7 @@ public abstract class Tank {
     protected int currentHealth;
     protected int curDir;
     protected boolean meetObstacle = false;
+    protected LevelBlockType obstacleType;
 
     protected int hitboxXOffset;
     protected int hitboxYOffset;
@@ -153,63 +154,61 @@ public abstract class Tank {
             moving = true;
         }
 
+        // Check if tank still can move in the direction then move
+        if (canMoveHere(hitbox.x + xSpeed + xFrontArea, hitbox.y + ySpeed + yFrontArea)) {
+            hitbox.x += xSpeed;
+            hitbox.y += ySpeed;
 
-        if (hitbox.x + xSpeed + xFrontArea < 0 || hitbox.y + ySpeed + yFrontArea < 0
-                || hitbox.x + xSpeed + xFrontArea > Game.GAME_WIDTH - hitbox.width || hitbox.y + ySpeed + yFrontArea > Game.GAME_HEIGHT - hitbox.height) {
-
-            // Screen edge
-            meetObstacle = true;
-
-        } else {
-
-            // Return level block type in front of the tank (if exists)
-            LevelBlockType blockType = canMoveHere(
-                    hitbox.x + xSpeed + xFrontArea,
-                    hitbox.y + ySpeed + yFrontArea
-            );
-
-            if (blockType == null || blockType == GRASS || blockType == ICE) {
-
-                // Can move
-                meetObstacle = false;
-
-                // So move
-                hitbox.x += xSpeed;
-                hitbox.y += ySpeed;
-
-                applyHitboxOffset();
-                syncHitboxWithSprite();
-                syncShieldWithSprite();
-
-                // todo: set something for ice
-
-            } else if (blockType == BRICK || blockType == METAL || blockType == RIVER) {
-                // Cannot move
-                meetObstacle = true;
-            }
-
+            applyHitboxOffset();
+            syncHitboxWithSprite();
+            syncShieldWithSprite();
         }
 
     }
 
     /**
-     * Return level block type in front of the tank (if exists)
+     * Return true if tank can move here. The method also set meetObstacle and obstacleType
      * @param x possible new x tank's coordinate
      * @param y possible new y tank's coordinate
-     * @return level block type on the new possible position (if exists)
+     * @return true if tank can move here
      */
-    private LevelBlockType canMoveHere(float x, float y) {
+    private boolean canMoveHere(float x, float y) {
+
+        if (x < 0 || y < 0 || x > Game.GAME_WIDTH - hitbox.width || y > Game.GAME_HEIGHT - hitbox.height) {
+            obstacleType = SCREEN_EDGE;
+            meetObstacle = true;
+            return false;
+        }
 
         // New possible hitbox to be checked
-        Rectangle2D.Float possibleHitbox = new Rectangle2D.Float(x, y, hitbox.width, hitbox.height);
+        Rectangle2D.Float newHitbox = new Rectangle2D.Float(x, y, hitbox.width, hitbox.height);
 
         for (LevelBlock block : levelManager.getCurrentLevel().getLevelBlocks())
             if (block.isActive())
-                if (possibleHitbox.intersects(block.getHitbox()))
-                    return block.getType();
+                if (newHitbox.intersects(block.getHitbox())) {
+                    obstacleType = block.getType();
 
-        return null;
+                    switch (block.getType()) {
+                        case BRICK, METAL, RIVER -> {
+                            // If brick, metal or river then cannot move
+                            meetObstacle = true;
+                            return false;
+                        }
+                        case GRASS, ICE -> {
+                            // Grass or ice then can move
+                            // todo: set something for ice
+                            meetObstacle = false;
+                            return true;
+                        }
+                    }
+                }
+
+        meetObstacle = false;
+        obstacleType = null;
+        return true;
     }
+
+
 
     /**
      * When move hitbox we need to move sprite that we are drawing

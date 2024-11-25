@@ -11,7 +11,7 @@ public class Constants {
     public static final float ANI_SPEED = 25;
 
     public static class MovementConstants {
-        public static final int TANK_FRONT_AREA = 5;
+        public static final int TANK_FRONT_AREA = 3;
     }
 
     public static class DirConstants {
@@ -33,6 +33,7 @@ public class Constants {
         public static final int ENEMY_SPAWN_Y_3 = 0;
         public static final int SEARCH_BOX_WIDTH = (int)(10 * TILES_SIZE * Game.SCALE);
         public static final int SEARCH_BOX_HEIGHT = (int)(10 * TILES_SIZE * Game.SCALE);
+        public static final long CHANGE_DIR_DELAY_MS = 2000;
     }
 
     public static class TankColorConstants {

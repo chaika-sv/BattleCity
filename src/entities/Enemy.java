@@ -1,12 +1,15 @@
 package entities;
 
 import gamestates.Playing;
+import levels.LevelBlockType;
+import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 import static main.Game.TILES_DEFAULT_SIZE;
+import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.EnemyConstants.*;
 
@@ -15,6 +18,13 @@ public class Enemy extends Tank{
     private Random rand;
     private Rectangle2D.Float searchBox;
     private boolean seePlayer = false;
+    private boolean moveToPlayer = false;
+    private boolean pDirUp = false;
+    private boolean pDirDown = false;
+    private boolean pDirLeft = false;
+    private boolean pDirRight = false;
+    private String lastCase = "";
+    private long lastChangeDirTimeMS;
 
     public Enemy(TankType tankType, float x, float y, Playing playing) {
         super(tankType, x, y, playing);
@@ -36,61 +46,228 @@ public class Enemy extends Tank{
     public void updatePosition() {
         super.updatePosition();
 
-        updateSearchBox();
+        long currentTime = System.currentTimeMillis();
 
-        if (meetObstacle)
-            if (!seePlayer)
+        seePlayer = false;
+        // Update the search box position and determine direction to player
+        seePlayer = updateSearchBox();
+
+        /*
+          Four cases:
+          1) No obstacle and doesn't see player
+          2) No obstacle and see player
+          3) Meet obstacle and doesn't see player
+          4) Meet obstacle and see player
+         */
+
+        // Case #1 - Just keep moving and if it's time to change direction then change it randomly
+        if (!meetObstacle && !seePlayer) {
+
+            // Calculate distance moving in one direction
+            if (curDir == UP || curDir == DOWN)
+                moveInOneDir = (int) (lastCoordinate - hitbox.y);
+            else if (curDir == LEFT || curDir == RIGHT)
+                moveInOneDir = (int) (lastCoordinate - hitbox.x);
+
+            // It's time to change direction
+            if (moveInOneDir >= curChangeDirDistance)
                 changeDirRandomly();
 
-        if (curDir == UP || curDir == DOWN)
-            moveInOneDir = (int)(lastCoordinate - hitbox.y);
-        else if (curDir == LEFT || curDir == RIGHT)
-            moveInOneDir = (int)(lastCoordinate - hitbox.x);
+            lastCase = "#1";
 
-        if (moveInOneDir >= curChangeDirDistance)
+            return;
+        }
+
+        // Case #2 - Start moving to the player's direction
+        if (!meetObstacle && seePlayer) {
+
+            lastCase = "#2";
+
+            // Check if enemy needs to change direction
+            if (!moveToPlayer || !isCurDirActual()) {
+
+                lastCase = "#2.1";
+
+                if (pDirUp)
+                    setDirection(UP);
+                else if (pDirDown)
+                    setDirection(DOWN);
+                else if (pDirLeft)
+                    setDirection(LEFT);
+                else if (pDirRight)
+                    setDirection(RIGHT);
+
+                moveToPlayer = true;
+            }
+        }
+
+        // Case #3 - Change position randomly
+        if (meetObstacle && !seePlayer) {
+            // todo: if it's a brick then try to hit it sometimes
             changeDirRandomly();
+            lastCase = "#3";
+        }
+
+        // Case #4 - Try to go around the obstacle in the player's direction or may be hit it
+        if (meetObstacle && seePlayer) {
+
+            // Need the timer to avoid fast rotation
+            if (currentTime - lastChangeDirTimeMS > CHANGE_DIR_DELAY_MS) {
+
+                if (!setAlternativeDirection()) {
+                    lastCase = "#4.1";
+                    // If alternative direction hasn't been set then change direction randomly
+                    // todo: if it's brick then just hit it
+                    //changeDirRandomly();
+                    //moveToPlayer = false;
+                } else {
+                    lastCase = "#4.2";
+                    moveToPlayer = true;
+                }
+
+                lastChangeDirTimeMS = System.currentTimeMillis();
+            }
+        }
 
     }
 
     /**
-     * When move hitbox we need to move sprite that we are drawing
+     * Check if enemy still needs to move in the current direction (the player is still here)
+     * @return true if current direction still actual
      */
-    protected void updateSearchBox() {
+    private boolean isCurDirActual() {
 
+        switch (curDir) {
+            case UP -> { return pDirUp; }
+            case DOWN -> { return pDirDown; }
+            case LEFT -> { return pDirLeft; }
+            case RIGHT -> { return pDirRight; }
+        }
+
+        return false;
+    }
+
+    private void setDirection(int direction) {
+
+        resetDir();
+
+        curDir = direction;
+
+        switch (direction) {
+            case UP -> up = true;
+            case DOWN -> down = true;
+            case LEFT -> left = true;
+            case RIGHT -> right = true;
+        }
+    }
+
+    /**
+     * If there is any other alternative direction to reach the player then set it
+     * @return true if alternative direction was set
+     */
+    private boolean setAlternativeDirection() {
+
+        int oldDir = curDir;
+
+        switch (curDir) {
+            case UP -> {
+                if (pDirRight)
+                    setDirection(RIGHT);
+                else if (pDirLeft)
+                    setDirection(LEFT);
+                else if (pDirDown)
+                    setDirection(DOWN);
+            }
+            case DOWN -> {
+                if (pDirRight)
+                    setDirection(RIGHT);
+                else if (pDirLeft)
+                    setDirection(LEFT);
+                else if (pDirUp)
+                    setDirection(UP);
+            }
+            case LEFT -> {
+                if (pDirRight)
+                    setDirection(RIGHT);
+                else if (pDirDown)
+                    setDirection(DOWN);
+                else if (pDirUp)
+                    setDirection(UP);
+            }
+            case RIGHT -> {
+                if (pDirLeft)
+                    setDirection(LEFT);
+                else if (pDirDown)
+                    setDirection(DOWN);
+                else if (pDirUp)
+                    setDirection(UP);
+            }
+        }
+
+        return oldDir != curDir;
+    }
+
+
+    /**
+     * When move enemy hitbox we need to move his search box with him
+     * If the search box intersects player's search box (found the player) then we set player direction booleans
+     * @return true if found the player
+     */
+    protected boolean updateSearchBox() {
+
+        // Move the search box along with the tank
         searchBox.x = x - (SEARCH_BOX_WIDTH - width) / 2f;
         searchBox.y = y - (SEARCH_BOX_HEIGHT - height) / 2f;
 
         Rectangle2D.Float playerHitbox = playing.getPlayer().getHitbox();
 
-        if (searchBox.intersects(playerHitbox)) {
-            seePlayer = true;
-            resetDir();
+        resetPlayerDirectionBooleans();
 
-            if (Math.abs(playerHitbox.x - hitbox.x) > TILES_DEFAULT_SIZE) {
+        // If the search box intersects player's search box (found the player)
+        if (searchBox.intersects(playerHitbox)) {
+
+            // Set booleans that point where is the player
+
+            if (Math.abs(playerHitbox.x - hitbox.x) > TILES_DEFAULT_SIZE / 3f) {
 
                 if (playerHitbox.x < hitbox.x)
-                    left = true;
+                    pDirLeft = true;
                 else if (playerHitbox.x > hitbox.x)
-                    right = true;
-
-            } else if (Math.abs(playerHitbox.y - hitbox.y) > TILES_DEFAULT_SIZE) {
-
-                if (playerHitbox.y < hitbox.y)
-                    up = true;
-                else if (playerHitbox.y > hitbox.y)
-                    down = true;
+                    pDirRight = true;
 
             }
+
+            if (Math.abs(playerHitbox.y - hitbox.y) > TILES_DEFAULT_SIZE / 3f) {
+
+                if (playerHitbox.y < hitbox.y)
+                    pDirUp = true;
+                else if (playerHitbox.y > hitbox.y)
+                    pDirDown = true;
+
+            }
+
+            return true;
+
         } else {
-            seePlayer = false;
+            moveToPlayer = false;
+            return false;
         }
 
     }
 
-    private void changeDirRandomly() {
+    private void resetPlayerDirectionBooleans() {
+        pDirUp = false;
+        pDirDown = false;
+        pDirLeft = false;
+        pDirRight = false;
+    }
 
-        // Reset current direction
-        resetDir();
+
+    /**
+     * Change tank direction randomly (not equal current dir)
+     * Also randomly set distance that the tank will be moving in the direction
+     */
+    private void changeDirRandomly() {
 
         // Select next direction randomly
         int nextDir = rand.nextInt(4);
@@ -99,20 +276,15 @@ public class Enemy extends Tank{
         while (nextDir == curDir)
             nextDir = rand.nextInt(4);
 
-        curDir = nextDir;
+        setDirection(nextDir);
 
-        switch(curDir) {
-            case UP -> up = true;
-            case DOWN -> down = true;
-            case LEFT -> left = true;
-            case RIGHT -> right = true;
-        }
-
+        // Save last coordinate in this direction
         if (curDir == UP || curDir == DOWN)
             lastCoordinate = (int) hitbox.y;
         else if (curDir == LEFT || curDir == RIGHT)
             lastCoordinate = (int)hitbox.x;
 
+        // Just random distance to move in the current direction
         curChangeDirDistance = rand.nextInt(5) * 100;
     }
 
@@ -128,7 +300,7 @@ public class Enemy extends Tank{
     @Override
     public void draw(Graphics g) {
         super.draw(g);
-        //if (DEBUG_MODE)
+        if (DEBUG_MODE)
             drawSearchBox(g);
     }
 
@@ -138,5 +310,15 @@ public class Enemy extends Tank{
     protected void drawSearchBox(Graphics g) {
         g.setColor(Color.GREEN);
         g.drawRect((int)searchBox.x, (int)searchBox.y, (int)searchBox.width, (int)searchBox.height);
+
+        String searchMsg;
+        if (!seePlayer)
+            searchMsg = "Can't see; " + lastCase;
+        else
+            searchMsg = (pDirUp ? "U" : "") + (pDirDown ? "D" : "") + (pDirLeft ? "L" : "") + (pDirRight ? "R" : "") + "; " + lastCase;
+
+        g.setColor(Color.WHITE);
+        g.drawString(searchMsg, (int)(hitbox.x - 5), (hitbox.y - 5 > 0) ? (int)(hitbox.y - 5) : (int)(hitbox.y + hitbox.height + 10));
+
     }
 }

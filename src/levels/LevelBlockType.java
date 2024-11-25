@@ -2,6 +2,7 @@ package levels;
 
 public enum LevelBlockType {
 
+    SCREEN_EDGE(0, 64, 64),
     BRICK(1, 64, 64),
     BRICK_BIG(10, 64, 64),
     BRICK_HALF(11, 64, 32),
