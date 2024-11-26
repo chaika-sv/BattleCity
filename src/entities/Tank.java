@@ -460,4 +460,8 @@ public abstract class Tank {
     public void setShield(TemporaryObject shield) {
         this.shield = shield;
     }
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
 }

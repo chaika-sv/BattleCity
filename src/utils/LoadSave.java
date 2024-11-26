@@ -33,6 +33,12 @@ public class LoadSave {
     public static int[][][] TANK_HITBOX_OFFSETS;      // dim1: tank type, dim2: direction, dim3: x, y
     public static Map<Integer, EnemySettings> ENEMY_SETTINGS;
 
+    public static BufferedImage firstPlayerInfoImg;
+    public static BufferedImage secondPlayerInfoImg;
+    public static BufferedImage playerTankInfoImg;
+    public static BufferedImage enemyTankInfoImg;
+    public static BufferedImage flagInfoImg;
+
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
@@ -56,12 +62,13 @@ public class LoadSave {
         ENEMY_SETTINGS = new LinkedHashMap<>();
 
         Map<TankType, Integer> level0 = new LinkedHashMap<>();
-        level0.put(T_BASE, 1);
+        level0.put(T_BASE, 7);
         level0.put(T_FAST, 0);
         level0.put(T_POWER, 0);
         level0.put(T_HEAVY, 0);
         ENEMY_SETTINGS.put(0, new EnemySettings(level0, 4));
     }
+
 
     public static void LoadLevelFromFile(String fileName, Level level) {
         if (!fileName.equals("")) {
@@ -89,6 +96,16 @@ public class LoadSave {
             }
         }
     }
+
+    public static void LoadInfoPanelImages() {
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        firstPlayerInfoImg = img.getSubimage(1534, 544, 64, 32);
+        secondPlayerInfoImg = img.getSubimage(1534, 640, 64, 32);
+        playerTankInfoImg = img.getSubimage(1534, 672, 32, 32);
+        enemyTankInfoImg = img.getSubimage(1310, 770, 32, 32);
+        flagInfoImg = img.getSubimage(1532, 734, 64, 64);
+    }
+
 
     public static void LoadTankImages() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);

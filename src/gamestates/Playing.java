@@ -8,6 +8,7 @@ import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
 import ui.GameOverOverlay;
+import ui.InfoPanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -25,6 +26,7 @@ public class Playing extends State implements Statemethods{
     private ObjectManager objectManager;
     private EnemyManager enemyManager;
     private GameOverOverlay gameOverOverlay;
+    private InfoPanel infoPanel;
 
     private boolean gameOver = false;
 
@@ -45,8 +47,9 @@ public class Playing extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player = new Player(TankType.T_BASE, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
+        player = new Player(TankType.T_BASE_PLAYER, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
         gameOverOverlay = new GameOverOverlay(this);
+        infoPanel = new InfoPanel(this);
     }
 
     private void startGame() {
@@ -89,6 +92,8 @@ public class Playing extends State implements Statemethods{
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
+
+        infoPanel.draw(g);
 
         levelManager.draw(g);
         objectManager.draw(g);
@@ -179,4 +184,6 @@ public class Playing extends State implements Statemethods{
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
+
+
 }

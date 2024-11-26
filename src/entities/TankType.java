@@ -3,6 +3,7 @@ package entities;
 import static utils.Constants.TankTypeConstants.*;
 
 public enum TankType {
+    T_BASE_PLAYER(BASE,             100, 5, 1.0f, 1.2f, 500, 52, 1.0f),
     T_BASE(BASE,                    100, 1, 1.0f, 1.2f, 1000, 52, 1.0f),
     T_FAST(FAST,                    200, 1, 1.3f, 3.2f, 500, 52, 0.9f),
     T_POWER(POWER,                  300, 1, 1.2f, 3.0f, 500, 52, 0.9f),

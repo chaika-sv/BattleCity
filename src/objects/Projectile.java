@@ -133,6 +133,7 @@ public class Projectile {
                 if (tank.hitByProjectile(1)) {
                     // If the tank was killed then destroy the projectile with big explosion
                     destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
+                    playing.getEnemyManager().decreasedEnemiesTiKillCount();
                 } else {
                     // If the tank was just injured then destroy the projectile with small explosion
                     destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);

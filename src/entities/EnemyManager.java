@@ -18,11 +18,11 @@ public class EnemyManager {
     private Playing playing;
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private long lastSpawnDelayMS;
-    private int curLevelEnemyCount;
-    private EnemySettings enemySettings;
+    private int curLevelEnemyCount;                 // Current enemies number
 
-    private int maxEnemyCount;
-    private int maxActiveEnemyCount;
+    private int maxEnemyCount;                      // Max number of enemies in the level (all types)
+    private int maxActiveEnemyCount;                // Max number of enemies on the screen (at the same time)
+    private int enemiesToKillCount;                 // Number of enemies left to kill in the level
     private Map<TankType, Integer> tanksCount;
 
     private Random rand;
@@ -41,6 +41,8 @@ public class EnemyManager {
             this.tanksCount.put(entry.getKey(), entry.getValue());
             maxEnemyCount += entry.getValue();
         }
+
+        enemiesToKillCount = maxEnemyCount;
     }
 
     public void generateEnemies() {
@@ -114,6 +116,10 @@ public class EnemyManager {
         enemies.add(new Enemy(tankType, x, y, playing));
     }
 
+    public void decreasedEnemiesTiKillCount() {
+        enemiesToKillCount--;
+    }
+
     public void spawnNewEnemy(TankType tankType, int x, int y) {
         enemies.add(new Enemy(tankType, x, y, playing));
     }
@@ -149,4 +155,7 @@ public class EnemyManager {
         return enemies;
     }
 
+    public int getEnemiesToKillCount() {
+        return enemiesToKillCount;
+    }
 }

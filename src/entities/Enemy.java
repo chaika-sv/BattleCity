@@ -228,7 +228,7 @@ public class Enemy extends Tank{
 
             // Set booleans that point where is the player
 
-            if (Math.abs(playerHitbox.x - hitbox.x) > TILES_DEFAULT_SIZE / 3f) {
+            if (Math.abs(playerHitbox.x - hitbox.x) > TILES_DEFAULT_SIZE / 4f) {
 
                 if (playerHitbox.x < hitbox.x)
                     pDirLeft = true;
@@ -237,7 +237,7 @@ public class Enemy extends Tank{
 
             }
 
-            if (Math.abs(playerHitbox.y - hitbox.y) > TILES_DEFAULT_SIZE / 3f) {
+            if (Math.abs(playerHitbox.y - hitbox.y) > TILES_DEFAULT_SIZE / 4f) {
 
                 if (playerHitbox.y < hitbox.y)
                     pDirUp = true;
