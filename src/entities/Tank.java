@@ -62,6 +62,7 @@ public abstract class Tank {
     protected float driveSpeed;
     protected float projectileSpeed;
     protected long shootDelayMS;
+    protected int points;
 
     // Current indicators
     protected long lastShootTimeMS;
@@ -84,6 +85,7 @@ public abstract class Tank {
         this.levelManager = playing.getLevelManager();
         this.objectManager = playing.getObjectManager();
 
+        // Like health, speed, points for selected tank type
         applyTankCharacteristics(tankType);
 
         this.x = x;
@@ -91,7 +93,6 @@ public abstract class Tank {
         this.width = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
         this.height = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
 
-        // Like health, speed, points for selected tank type
         this.currentHealth = maxHealth;
 
         // Number of pixels (x and y) from top-left corner of sprite image to actual tank picture
@@ -203,6 +204,22 @@ public abstract class Tank {
                     }
                 }
 
+        // Tank shouldn't intersects with e vnemies
+        for (Enemy enemy : playing.getEnemyManager().getEnemies())
+            if (enemy.isActive() && this != enemy)
+                if (newHitbox.intersects(enemy.getHitbox())) {
+                    obstacleType = TANK;
+                    return false;
+                }
+
+        // If it's an enemy then it shouldn't intersects with player
+        if (this instanceof Enemy) {
+            if (newHitbox.intersects(playing.getPlayer().getHitbox())) {
+                obstacleType = TANK;
+                return false;
+            }
+        }
+
         meetObstacle = false;
         obstacleType = null;
         return true;
@@ -235,6 +252,7 @@ public abstract class Tank {
         this.projectileSpeed = tankType.getProjectileSpeed();
         this.shootDelayMS = tankType.getShootDelayMS();
         this.tankScale = tankType.getTankScale() * Game.SCALE;
+        this.points = tankType.getPoints();
     }
 
 
@@ -463,5 +481,9 @@ public abstract class Tank {
 
     public int getCurrentHealth() {
         return currentHealth;
+    }
+
+    public int getPoints() {
+        return points;
     }
 }

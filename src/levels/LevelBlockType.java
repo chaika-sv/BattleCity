@@ -33,7 +33,8 @@ public enum LevelBlockType {
     CONTROLS(70, 64, 64),
     ERASE(71, 64, 64),
     SAVE(71, 64, 64),
-    OPEN(72, 64, 64);
+    OPEN(72, 64, 64),
+    TANK(100, 64, 64);
 
     private final int id;
     private final int width;

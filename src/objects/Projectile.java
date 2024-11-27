@@ -119,21 +119,25 @@ public class Projectile {
 
     /**
      * Check if the projectile hit the tank and if it does then destroy the projectile
-     * @param tank tank to check with the projectile
+     * @param damagedTank tank to check with the projectile
      * @return true if the projectile hit the tank
      */
-    private boolean checkHitTank(Tank tank) {
-        if (hitbox.intersects(tank.getHitbox())) {
+    private boolean checkHitTank(Tank damagedTank) {
+        if (hitbox.intersects(damagedTank.getHitbox())) {
 
-            if (tank.hasShield())
+            if (damagedTank.hasShield())
                 // If the tank has shield then just deactivate the projectile w/o any explosion
                 active = false;
             else
                 // Damage the tank
-                if (tank.hitByProjectile(1)) {
+                if (damagedTank.hitByProjectile(1)) {
                     // If the tank was killed then destroy the projectile with big explosion
                     destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
                     playing.getEnemyManager().decreasedEnemiesTiKillCount();
+
+                    // Add points to player if it was player's projectile
+                    if (tank instanceof Player)
+                        ((Player)tank).addPoints(damagedTank.getPoints());
                 } else {
                     // If the tank was just injured then destroy the projectile with small explosion
                     destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);

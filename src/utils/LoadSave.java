@@ -5,6 +5,7 @@ import entities.TankType;
 import levels.Level;
 import levels.LevelBlockType;
 import objects.TemporaryObjectType;
+import ui.MenuItemType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,8 +15,8 @@ import java.util.Map;
 
 import static entities.TankType.*;
 import static main.Game.TILES_DEFAULT_SIZE;
+import static ui.MenuItemType.*;
 import static utils.Constants.DirConstants.*;
-import static utils.Constants.LevelConstants.DRAW_GRASS;
 import static utils.Constants.LevelConstants.LEVEL_DIR;
 import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankColorConstants.*;
@@ -33,11 +34,21 @@ public class LoadSave {
     public static int[][][] TANK_HITBOX_OFFSETS;      // dim1: tank type, dim2: direction, dim3: x, y
     public static Map<Integer, EnemySettings> ENEMY_SETTINGS;
 
-    public static BufferedImage firstPlayerInfoImg;
-    public static BufferedImage secondPlayerInfoImg;
-    public static BufferedImage playerTankInfoImg;
-    public static BufferedImage enemyTankInfoImg;
-    public static BufferedImage flagInfoImg;
+    public static BufferedImage[] NUMBER_IMAGES;
+    public static BufferedImage FIRST_PLAYER_INFO_IMG;
+    public static BufferedImage SECOND_PLAYER_INFO_IMG;
+    public static BufferedImage PLAYER_TANK_CNT_IMG;
+    public static BufferedImage ENEMY_TANK_CNT_IMG;
+    public static BufferedImage STAGE_NUM_IMG;
+    public static BufferedImage PAUSE_IMG;
+    public static BufferedImage STAGE_IMG;
+    public static BufferedImage GAME_OVER_IMG;
+    public static Map<Integer, BufferedImage> POINTS_IMAGES;
+
+    public static BufferedImage RESTART_BTN;
+    public static BufferedImage MENU_BTN;
+    public static BufferedImage EXIT_BTN;
+    public static Map<MenuItemType, BufferedImage> MENU_ITEM_IMAGES;
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -63,9 +74,9 @@ public class LoadSave {
 
         Map<TankType, Integer> level0 = new LinkedHashMap<>();
         level0.put(T_BASE, 7);
-        level0.put(T_FAST, 0);
-        level0.put(T_POWER, 0);
-        level0.put(T_HEAVY, 0);
+        level0.put(T_FAST, 1);
+        level0.put(T_POWER, 1);
+        level0.put(T_HEAVY, 1);
         ENEMY_SETTINGS.put(0, new EnemySettings(level0, 4));
     }
 
@@ -99,11 +110,36 @@ public class LoadSave {
 
     public static void LoadInfoPanelImages() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
-        firstPlayerInfoImg = img.getSubimage(1534, 544, 64, 32);
-        secondPlayerInfoImg = img.getSubimage(1534, 640, 64, 32);
-        playerTankInfoImg = img.getSubimage(1534, 672, 32, 32);
-        enemyTankInfoImg = img.getSubimage(1310, 770, 32, 32);
-        flagInfoImg = img.getSubimage(1532, 734, 64, 64);
+        FIRST_PLAYER_INFO_IMG = img.getSubimage(1534, 544, 64, 32);
+        SECOND_PLAYER_INFO_IMG = img.getSubimage(1534, 640, 64, 32);
+        PLAYER_TANK_CNT_IMG = img.getSubimage(1534, 672, 32, 32);
+        ENEMY_TANK_CNT_IMG = img.getSubimage(1310, 770, 32, 32);
+        STAGE_NUM_IMG = img.getSubimage(1532, 734, 64, 64);
+
+        NUMBER_IMAGES = new BufferedImage[10];
+
+        // 0..9
+        for (int i = 0; i < 5; i++) {
+            NUMBER_IMAGES[i] = img.getSubimage(1342 + i * 32, 734, 32, 32);
+            NUMBER_IMAGES[i + 5] = img.getSubimage(1342 + i * 32, 766, 32, 32);
+        }
+
+        PAUSE_IMG = img.getSubimage(1182, 702, 160, 32);
+        GAME_OVER_IMG = img.getSubimage(1182, 734, 128, 64);
+        STAGE_IMG = img.getSubimage(1342, 702, 160, 32);
+
+        POINTS_IMAGES = new LinkedHashMap<>();
+        POINTS_IMAGES.put(100, img.getSubimage(1182, 654, 64, 32));
+        POINTS_IMAGES.put(200, img.getSubimage(1246, 654, 64, 32));
+        POINTS_IMAGES.put(300, img.getSubimage(1310, 654, 64, 32));
+        POINTS_IMAGES.put(400, img.getSubimage(1374, 654, 64, 32));
+        POINTS_IMAGES.put(500, img.getSubimage(1438, 654, 64, 32));
+
+        MENU_ITEM_IMAGES = new LinkedHashMap<>();
+        MENU_ITEM_IMAGES.put(MI_RESTART, img.getSubimage(1182, 832, MI_RESTART.getWidth(), MI_RESTART.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_MAIN_MENU, img.getSubimage(1182, 864, MI_MAIN_MENU.getWidth(), MI_RESTART.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_EXIT_GAME, img.getSubimage(1182, 896, MI_EXIT_GAME.getWidth(), MI_RESTART.getHeight()));
+
     }
 
 
