@@ -1,5 +1,6 @@
 package entities;
 
+import gamestates.Gamestate;
 import gamestates.Playing;
 import levels.LevelBlock;
 import levels.LevelBlockType;
@@ -268,6 +269,7 @@ public abstract class Tank {
             if (this instanceof Player) {
                 // If it was player who was killed then game over
                 playing.setGameOver(true);
+                Gamestate.state = Gamestate.GAMEOVER;
             }
             return true;
         }

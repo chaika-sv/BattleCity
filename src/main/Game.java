@@ -102,7 +102,7 @@ public class Game implements Runnable{
     public void update() {
 
         switch (Gamestate.state) {
-            case PLAYING -> {
+            case PLAYING, GAMEOVER -> {
                 playing.update();
             }
             case MENU -> {
@@ -121,7 +121,7 @@ public class Game implements Runnable{
     public void draw(Graphics g) {
 
         switch (Gamestate.state) {
-            case PLAYING -> {
+            case PLAYING, GAMEOVER -> {
                 playing.draw(g);
             }
             case MENU -> {

@@ -3,6 +3,7 @@ package objects;
 import entities.Enemy;
 import entities.Player;
 import entities.Tank;
+import gamestates.Gamestate;
 import gamestates.Playing;
 import levels.LevelBlock;
 import levels.LevelBlockType;
@@ -88,8 +89,10 @@ public class Projectile {
                         // Check if the explosion should destroy any other neighbor blocks
                         checkExplosionIntersect();
                         // If base was destroyed then game over
-                        if (levelBlock.getType() == LevelBlockType.BASE)
+                        if (levelBlock.getType() == LevelBlockType.BASE) {
                             playing.setGameOver(true);
+                            Gamestate.state = Gamestate.GAMEOVER;
+                        }
                         return;
                     }
                     // Otherwise it keeps moving (it's grass, river or ice)

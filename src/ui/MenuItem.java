@@ -23,5 +23,15 @@ public class MenuItem {
         g.drawImage(MENU_ITEM_IMAGES.get(type), x, y, width, height, null);
     }
 
+    public int getX() {
+        return x;
+    }
 
+    public int getY() {
+        return y;
+    }
+
+    public MenuItemType getType() {
+        return type;
+    }
 }

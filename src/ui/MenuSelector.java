@@ -1,5 +1,7 @@
 package ui;
 
+import entities.TankType;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -12,12 +14,14 @@ public class MenuSelector {
 
     private int x, y, width, height;
     private BufferedImage img;
+    private MenuItem selectedItem;
 
-    public MenuSelector(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    public MenuSelector(MenuItem selectedItem) {
+        this.x = selectedItem.getX() - 50;
+        this.y = selectedItem.getY();
+        this.width = (int) (TankType.T_BASE.getHitboxSize() * 0.7f);
+        this.height = (int) (TankType.T_BASE.getHitboxSize() * 0.7f);
+        this.selectedItem = selectedItem;
         img = TANK_IMAGES[PLAYER_YELLOW][BASE][RIGHT][0];
     }
 
@@ -25,6 +29,13 @@ public class MenuSelector {
         g.drawImage(img, x, y, width, height, null);
     }
 
+    public MenuItem getSelectedItem() {
+        return selectedItem;
+    }
 
-
+    public void setSelectedItem(MenuItem selectedItem) {
+        this.selectedItem = selectedItem;
+        this.x = selectedItem.getX() - 50;
+        this.y = selectedItem.getY();
+    }
 }

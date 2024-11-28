@@ -141,6 +141,7 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_W -> player.setUp(true);
                 case KeyEvent.VK_S -> player.setDown(true);
                 case KeyEvent.VK_SPACE -> player.setAttacking(true);
+                //case KeyEvent.VK_ESCAPE -> { /* pause overlay*/ };
             }
         }
 
@@ -185,5 +186,7 @@ public class Playing extends State implements Statemethods{
         this.gameOver = gameOver;
     }
 
-
+    public GameOverOverlay getGameOverOverlay() {
+        return gameOverOverlay;
+    }
 }
