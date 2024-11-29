@@ -10,6 +10,7 @@ public class MenuItem {
     private MenuItemType type;
     private Rectangle2D.Float hitbox;
     private int x, y, width, height;
+    private boolean active;
 
     public MenuItem(MenuItemType type, int x, int y) {
         this.type = type;
@@ -17,6 +18,7 @@ public class MenuItem {
         this.y = y;
         this.width = type.getWidth();
         this.height = type.getHeight();
+        this.active = true;
     }
 
     public void draw(Graphics g) {
@@ -33,5 +35,13 @@ public class MenuItem {
 
     public MenuItemType getType() {
         return type;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -125,7 +125,7 @@ public class EnemyManager {
     }
 
     public void update() {
-        if (!playing.isGameOver())
+        if (!playing.isGameOver() || !playing.isPause())
             generateEnemies();
 
         for (Enemy e : enemies)

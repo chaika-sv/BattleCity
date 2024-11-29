@@ -1,20 +1,18 @@
 package gamestates;
 
 import entities.EnemyManager;
-import entities.EnemySettings;
 import entities.Player;
 import entities.TankType;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
-import ui.GameOverOverlay;
+import ui.GameOverPauseOverlay;
 import ui.InfoPanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.LevelConstants.*;
 import static utils.LoadSave.ENEMY_SETTINGS;
 import static utils.LoadSave.LoadTankImages;
@@ -25,10 +23,11 @@ public class Playing extends State implements Statemethods{
     private LevelManager levelManager;
     private ObjectManager objectManager;
     private EnemyManager enemyManager;
-    private GameOverOverlay gameOverOverlay;
+    private GameOverPauseOverlay gameOverPauseOverlay;
     private InfoPanel infoPanel;
 
     private boolean gameOver = false;
+    private boolean pause = false;
 
     public Playing(Game game) {
         super(game);
@@ -48,7 +47,7 @@ public class Playing extends State implements Statemethods{
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
         player = new Player(TankType.T_BASE_PLAYER, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
-        gameOverOverlay = new GameOverOverlay(this);
+        gameOverPauseOverlay = new GameOverPauseOverlay(this);
         infoPanel = new InfoPanel(this);
     }
 
@@ -60,24 +59,46 @@ public class Playing extends State implements Statemethods{
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
-    public void startCurrentLevelAgain() {
+    private void startCurrentLevelAgain() {
         levelManager.reloadCurrentLevel();
 
         getObjectManager().createShield(player);
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
-    public void resetAll() {
+    public void restartLevel() {
+        resetAll();
+        startCurrentLevelAgain();
+        setGameOver(false);
+        setPause(false);
+        Gamestate.state = Gamestate.PLAYING;
+    }
+
+    public void pauseGame() {
+        setPause(true);
+        Gamestate.state = Gamestate.PAUSE;
+    }
+
+    public void resumeToGameAfterPause() {
+        setPause(false);
+        Gamestate.state = Gamestate.PLAYING;
+    }
+
+
+    private void resetAll() {
         player.resetAll();
         objectManager.resetAll();
         enemyManager.resetAll();
     }
 
+
+
+
     @Override
     public void update() {
 
-        if (gameOver) {
-            gameOverOverlay.update();
+        if (gameOver || pause) {
+            gameOverPauseOverlay.update();
         } else {
             // Still playing
             objectManager.update();
@@ -105,8 +126,8 @@ public class Playing extends State implements Statemethods{
         objectManager.drawAfterPlayer(g);
         levelManager.drawAfterPlayer(g);
 
-        if (gameOver) {
-            gameOverOverlay.draw(g);
+        if (gameOver || pause) {
+            gameOverPauseOverlay.draw(g);
         }
     }
 
@@ -132,8 +153,8 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (gameOver) {
-            gameOverOverlay.keyPressed(e);
+        if (gameOver || pause) {
+            gameOverPauseOverlay.keyPressed(e);
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A -> player.setLeft(true);
@@ -141,7 +162,7 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_W -> player.setUp(true);
                 case KeyEvent.VK_S -> player.setDown(true);
                 case KeyEvent.VK_SPACE -> player.setAttacking(true);
-                //case KeyEvent.VK_ESCAPE -> { /* pause overlay*/ };
+                case KeyEvent.VK_ESCAPE -> pauseGame();
             }
         }
 
@@ -149,7 +170,7 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (gameOver) {
+        if (gameOver || pause) {
             //gameOverOverlay.keyPressed(e);
         } else {
             switch (e.getKeyCode()) {
@@ -186,7 +207,15 @@ public class Playing extends State implements Statemethods{
         this.gameOver = gameOver;
     }
 
-    public GameOverOverlay getGameOverOverlay() {
-        return gameOverOverlay;
+    public boolean isPause() {
+        return pause;
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
+    }
+
+    public GameOverPauseOverlay getGameOverOverlay() {
+        return gameOverPauseOverlay;
     }
 }

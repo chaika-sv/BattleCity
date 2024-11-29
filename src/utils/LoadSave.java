@@ -137,8 +137,9 @@ public class LoadSave {
 
         MENU_ITEM_IMAGES = new LinkedHashMap<>();
         MENU_ITEM_IMAGES.put(MI_RESTART, img.getSubimage(1182, 832, MI_RESTART.getWidth(), MI_RESTART.getHeight()));
-        MENU_ITEM_IMAGES.put(MI_MAIN_MENU, img.getSubimage(1182, 864, MI_MAIN_MENU.getWidth(), MI_RESTART.getHeight()));
-        MENU_ITEM_IMAGES.put(MI_EXIT_GAME, img.getSubimage(1182, 896, MI_EXIT_GAME.getWidth(), MI_RESTART.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_MAIN_MENU, img.getSubimage(1182, 864, MI_MAIN_MENU.getWidth(), MI_MAIN_MENU.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_EXIT_GAME, img.getSubimage(1182, 896, MI_EXIT_GAME.getWidth(), MI_EXIT_GAME.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_RESUME, img.getSubimage(1182, 928, MI_RESUME.getWidth(), MI_RESUME.getHeight()));
 
     }
 
