@@ -110,7 +110,7 @@ public class GameOverPauseOverlay {
         switch (menuItems.get(curSelectorIndex).getType()) {
             case MI_RESUME -> playing.resumeToGameAfterPause();
             case MI_RESTART -> playing.restartLevel();
-            case MI_MAIN_MENU -> {}
+            case MI_MAIN_MENU -> playing.goToMainMenu();
             case MI_EXIT_GAME -> System.exit(0);
         }
     }

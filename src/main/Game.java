@@ -1,6 +1,8 @@
 package main;
 
+import editor.Editor;
 import gamestates.Gamestate;
+import gamestates.Menu;
 import gamestates.Playing;
 
 import java.awt.*;
@@ -15,6 +17,8 @@ public class Game implements Runnable{
     private final int UPS_SET = 200;        // updates per second
 
     private Playing playing;
+    private Menu menu;
+    private Editor editor;
 
     public final static int TILES_DEFAULT_SIZE = 64;
     public final static float SCALE = 1.0f;
@@ -24,6 +28,7 @@ public class Game implements Runnable{
     public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
     public final static int INFO_WIDTH = TILES_SIZE * 2;
+    public final static int FULL_GAME_WIDTH = GAME_WIDTH + INFO_WIDTH;
 
 
     public Game() {
@@ -41,6 +46,8 @@ public class Game implements Runnable{
 
     private void initClasses() {
         playing = new Playing(this);
+        menu = new Menu(this, playing);
+        //editor = new Editor();
     }
 
     private void startGameLoop() {
@@ -106,7 +113,7 @@ public class Game implements Runnable{
                 playing.update();
             }
             case MENU -> {
-                //menu.update();
+                menu.update();
             }
             case OPTIONS -> {
                 //gameOptions.update();
@@ -125,7 +132,7 @@ public class Game implements Runnable{
                 playing.draw(g);
             }
             case MENU -> {
-                //menu.draw(g);
+                menu.draw(g);
             }
             case OPTIONS -> {
                 //gameOptions.draw(g);
@@ -140,5 +147,9 @@ public class Game implements Runnable{
 
     public Playing getPlaying() {
         return playing;
+    }
+
+    public Menu getMenu() {
+        return menu;
     }
 }

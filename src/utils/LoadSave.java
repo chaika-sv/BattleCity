@@ -26,6 +26,8 @@ import static utils.Constants.TempObjectsConstants.*;
 public class LoadSave {
 
     public static final String MAIN_SPRITE = "sprite.png";
+    public static final String LOGO_IMG = "logo.png";
+    public static final String COPYRIGHT_IMG = "copyright.png";
 
     public static Map<LevelBlockType, BufferedImage> BLOCK_IMAGES;
     public static Map<Integer, BufferedImage> PROJECTILE_IMAGES;
@@ -45,9 +47,6 @@ public class LoadSave {
     public static BufferedImage GAME_OVER_IMG;
     public static Map<Integer, BufferedImage> POINTS_IMAGES;
 
-    public static BufferedImage RESTART_BTN;
-    public static BufferedImage MENU_BTN;
-    public static BufferedImage EXIT_BTN;
     public static Map<MenuItemType, BufferedImage> MENU_ITEM_IMAGES;
 
 
@@ -140,6 +139,10 @@ public class LoadSave {
         MENU_ITEM_IMAGES.put(MI_MAIN_MENU, img.getSubimage(1182, 864, MI_MAIN_MENU.getWidth(), MI_MAIN_MENU.getHeight()));
         MENU_ITEM_IMAGES.put(MI_EXIT_GAME, img.getSubimage(1182, 896, MI_EXIT_GAME.getWidth(), MI_EXIT_GAME.getHeight()));
         MENU_ITEM_IMAGES.put(MI_RESUME, img.getSubimage(1182, 928, MI_RESUME.getWidth(), MI_RESUME.getHeight()));
+
+        MENU_ITEM_IMAGES.put(MI_1_PLAYER, img.getSubimage(1182, 960, MI_1_PLAYER.getWidth(), MI_1_PLAYER.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_2_PLAYERS, img.getSubimage(1182, 992, MI_2_PLAYERS.getWidth(), MI_2_PLAYERS.getHeight()));
+        MENU_ITEM_IMAGES.put(MI_EDITOR, img.getSubimage(1278, 864, MI_EDITOR.getWidth(), MI_EDITOR.getHeight()));
 
     }
 

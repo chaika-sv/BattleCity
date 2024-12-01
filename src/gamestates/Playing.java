@@ -33,9 +33,6 @@ public class Playing extends State implements Statemethods{
         super(game);
         loadImages();
         initClasses();
-
-        startGame();
-
     }
 
     private void loadImages() {
@@ -51,8 +48,8 @@ public class Playing extends State implements Statemethods{
         infoPanel = new InfoPanel(this);
     }
 
-    private void startGame() {
-        resetAll();     // just in case
+    public void startGame() {
+        resetAll();
         levelManager.loadFirstLevel();
 
         getObjectManager().createShield(player);
@@ -82,6 +79,13 @@ public class Playing extends State implements Statemethods{
     public void resumeToGameAfterPause() {
         setPause(false);
         Gamestate.state = Gamestate.PLAYING;
+    }
+
+    public void goToMainMenu() {
+        resetAll();
+        setPause(false);
+        setGameOver(false);
+        Gamestate.state = Gamestate.MENU;
     }
 
 
