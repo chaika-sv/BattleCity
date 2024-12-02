@@ -479,6 +479,7 @@ public abstract class Tank {
 
     public void setShield(TemporaryObject shield) {
         this.shield = shield;
+        syncShieldWithSprite();
     }
 
     public int getCurrentHealth() {

@@ -104,10 +104,7 @@ public class Menu extends State implements Statemethods{
      */
     private void selectItem() {
         switch (menuItems.get(curSelectorIndex).getType()) {
-            case MI_1_PLAYER -> {
-                playing.startGame();
-                Gamestate.state = Gamestate.PLAYING;
-            }
+            case MI_1_PLAYER -> playing.startGameWithStartLevelOverlay();
             case MI_2_PLAYERS -> {}
             case MI_EDITOR -> Gamestate.state = Gamestate.EDITOR;
             case MI_EXIT_GAME -> System.exit(0);

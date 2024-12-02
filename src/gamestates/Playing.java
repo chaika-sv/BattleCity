@@ -8,6 +8,7 @@ import main.Game;
 import objects.ObjectManager;
 import ui.GameOverPauseOverlay;
 import ui.InfoPanel;
+import ui.StartLevelOverlay;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,10 +25,12 @@ public class Playing extends State implements Statemethods{
     private ObjectManager objectManager;
     private EnemyManager enemyManager;
     private GameOverPauseOverlay gameOverPauseOverlay;
+    private StartLevelOverlay startLevelOverlay;
     private InfoPanel infoPanel;
 
     private boolean gameOver = false;
     private boolean pause = false;
+    private boolean startLevel = false;
 
     public Playing(Game game) {
         super(game);
@@ -45,15 +48,41 @@ public class Playing extends State implements Statemethods{
         enemyManager = new EnemyManager(this);
         player = new Player(TankType.T_BASE_PLAYER, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
         gameOverPauseOverlay = new GameOverPauseOverlay(this);
+        startLevelOverlay = new StartLevelOverlay(this);
         infoPanel = new InfoPanel(this);
     }
 
-    public void startGame() {
+
+    public void startGameWithStartLevelOverlay() {
+        // We are starting the game ...
+        startGame();
+        // ... but for now pause everything and show the Start Level overlay
+        Gamestate.state = Gamestate.STARTLEVEL;
+        setStartLevel(true);
+    }
+
+    private void startGame() {
         resetAll();
         levelManager.loadFirstLevel();
 
         getObjectManager().createShield(player);
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
+    }
+
+    public void returnToGameFromStartLevelOverlay() {
+        Gamestate.state = Gamestate.PLAYING;
+        setStartLevel(false);
+    }
+
+
+
+
+    public void restartLevel() {
+        resetAll();
+        startCurrentLevelAgain();
+        setGameOver(false);
+        setPause(false);
+        Gamestate.state = Gamestate.PLAYING;
     }
 
     private void startCurrentLevelAgain() {
@@ -63,13 +92,8 @@ public class Playing extends State implements Statemethods{
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
-    public void restartLevel() {
-        resetAll();
-        startCurrentLevelAgain();
-        setGameOver(false);
-        setPause(false);
-        Gamestate.state = Gamestate.PLAYING;
-    }
+
+
 
     public void pauseGame() {
         setPause(true);
@@ -80,6 +104,8 @@ public class Playing extends State implements Statemethods{
         setPause(false);
         Gamestate.state = Gamestate.PLAYING;
     }
+
+
 
     public void goToMainMenu() {
         resetAll();
@@ -103,6 +129,8 @@ public class Playing extends State implements Statemethods{
 
         if (gameOver || pause) {
             gameOverPauseOverlay.update();
+        } else if (startLevel) {
+            startLevelOverlay.update();
         } else {
             // Still playing
             objectManager.update();
@@ -132,6 +160,8 @@ public class Playing extends State implements Statemethods{
 
         if (gameOver || pause) {
             gameOverPauseOverlay.draw(g);
+        } else if (startLevel) {
+            startLevelOverlay.draw(g);
         }
     }
 
@@ -159,6 +189,8 @@ public class Playing extends State implements Statemethods{
     public void keyPressed(KeyEvent e) {
         if (gameOver || pause) {
             gameOverPauseOverlay.keyPressed(e);
+        } if (startLevel) {
+            startLevelOverlay.keyPressed(e);
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A -> player.setLeft(true);
@@ -175,7 +207,9 @@ public class Playing extends State implements Statemethods{
     @Override
     public void keyReleased(KeyEvent e) {
         if (gameOver || pause) {
-            //gameOverOverlay.keyPressed(e);
+            //gameOverOverlay.keyRelease(e);
+        } if (startLevel) {
+            //startLevelOverlay.keyRelease(e);
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A -> player.setLeft(false);
@@ -219,7 +253,19 @@ public class Playing extends State implements Statemethods{
         this.pause = pause;
     }
 
-    public GameOverPauseOverlay getGameOverOverlay() {
+    public GameOverPauseOverlay getGameOverPauseOverlay() {
         return gameOverPauseOverlay;
+    }
+
+    public boolean isStartLevel() {
+        return startLevel;
+    }
+
+    public StartLevelOverlay getStartLevelOverlay() {
+        return startLevelOverlay;
+    }
+
+    public void setStartLevel(boolean startLevel) {
+        this.startLevel = startLevel;
     }
 }

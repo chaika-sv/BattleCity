@@ -31,7 +31,10 @@ public class KeyboardInputs implements KeyListener {
                 gamePanel.getGame().getPlaying().keyPressed(e);
             }
             case GAMEOVER, PAUSE -> {
-                gamePanel.getGame().getPlaying().getGameOverOverlay().keyPressed(e);
+                gamePanel.getGame().getPlaying().getGameOverPauseOverlay().keyPressed(e);
+            }
+            case STARTLEVEL -> {
+                gamePanel.getGame().getPlaying().getStartLevelOverlay().keyPressed(e);
             }
             case MENU -> {
                 gamePanel.getGame().getMenu().keyPressed(e);
