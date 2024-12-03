@@ -89,10 +89,9 @@ public class Projectile {
                         // Check if the explosion should destroy any other neighbor blocks
                         checkExplosionIntersect();
                         // If base was destroyed then game over
-                        if (levelBlock.getType() == LevelBlockType.BASE) {
-                            playing.setGameOver(true);
-                            Gamestate.state = Gamestate.GAMEOVER;
-                        }
+                        if (levelBlock.getType() == LevelBlockType.BASE)
+                            playing.gameOver();;
+
                         return;
                     }
                     // Otherwise it keeps moving (it's grass, river or ice)

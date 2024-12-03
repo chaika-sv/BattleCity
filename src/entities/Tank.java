@@ -268,8 +268,7 @@ public abstract class Tank {
             active = false;
             if (this instanceof Player) {
                 // If it was player who was killed then game over
-                playing.setGameOver(true);
-                Gamestate.state = Gamestate.GAMEOVER;
+                playing.gameOver();
             }
             return true;
         }

@@ -1,6 +1,5 @@
 package ui;
 
-import entities.TankType;
 import gamestates.Gamestate;
 import gamestates.Playing;
 import main.Game;
@@ -16,9 +15,9 @@ import static utils.LoadSave.PAUSE_IMG;
 
 /**
  * The overlay is using for both Pause and Game over states
- * There are two different between these screens:
+ * There are two difference between these states:
  *  - title
- *  - Pause has the RESUME menu item
+ *  - Pause has the RESUME menu item while Game Over doesn't have it
  */
 public class GameOverPauseOverlay {
 
@@ -31,10 +30,10 @@ public class GameOverPauseOverlay {
     public GameOverPauseOverlay(Playing playing) {
         this.playing = playing;
         curSelectorIndex = 0;
-        initMenuItems();
+        initMenuItemsAndSelector();
     }
 
-    private void initMenuItems() {
+    private void initMenuItemsAndSelector() {
         menuItems = new ArrayList<>();
 
         // Show RESUME for pause only (we set it inactive in update() for game over)
@@ -48,7 +47,7 @@ public class GameOverPauseOverlay {
         menuSelector = new MenuSelector(menuItems.get(curSelectorIndex));
     }
 
-    public void update() {
+    public void setDefaultMenuItemSelected() {
         // For game over menu start with 1 (RESTART). RESUME is inactive in this case
         if (Gamestate.state == Gamestate.GAMEOVER) {
             menuItems.get(0).setActive(false);
@@ -60,11 +59,15 @@ public class GameOverPauseOverlay {
             minSelectorIndex = 0;
         }
 
-        // We need it in case when pause screen when open first and curSelectorIndex = 0 (game over don't have it)
-        if (curSelectorIndex < minSelectorIndex) {
+        // We need it in case when pause screen was opened first and curSelectorIndex = 0 (game over don't have it)
+        //if (curSelectorIndex < minSelectorIndex) {
             curSelectorIndex = minSelectorIndex;
             menuSelector.setSelectedItem(menuItems.get(curSelectorIndex));
-        }
+        //}
+    }
+
+    public void update() {
+
     }
 
     public void draw(Graphics g) {

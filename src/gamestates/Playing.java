@@ -98,6 +98,7 @@ public class Playing extends State implements Statemethods{
     public void pauseGame() {
         setPause(true);
         Gamestate.state = Gamestate.PAUSE;
+        gameOverPauseOverlay.setDefaultMenuItemSelected();
     }
 
     public void resumeToGameAfterPause() {
@@ -112,6 +113,12 @@ public class Playing extends State implements Statemethods{
         setPause(false);
         setGameOver(false);
         Gamestate.state = Gamestate.MENU;
+    }
+
+    public void gameOver() {
+        setGameOver(true);
+        Gamestate.state = Gamestate.GAMEOVER;
+        gameOverPauseOverlay.setDefaultMenuItemSelected();
     }
 
 

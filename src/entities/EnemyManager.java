@@ -5,6 +5,7 @@ import main.Game;
 import objects.TemporaryObject;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,6 +34,10 @@ public class EnemyManager {
         tanksCount = new LinkedHashMap<>();
     }
 
+    /**
+     * Apply enemy settings to the current level
+     * @param enemySettings that needs to be applied
+     */
     public void applyEnemySettings(EnemySettings enemySettings) {
         this.maxActiveEnemyCount = enemySettings.getActiveTanksCount();
 
@@ -45,6 +50,11 @@ public class EnemyManager {
         enemiesToKillCount = maxEnemyCount;
     }
 
+    /**
+     * The method actually doesn't generate new enemies.
+     * It generates new spawn points in one of three places.
+     * It also calculates enemies that still needs to be generated in the level.
+     */
     public void generateEnemies() {
 
         // Calculate active enemies count
@@ -89,7 +99,6 @@ public class EnemyManager {
 
                     playing.getObjectManager().createEnemySpawn(spawnX, spawnY);
                     curLevelEnemyCount++;
-                    System.out.println(curLevelEnemyCount);
 
                     lastSpawnDelayMS = System.currentTimeMillis();
                 }
@@ -98,22 +107,43 @@ public class EnemyManager {
     }
 
 
+    /**
+     * Spawn new enemy of random type
+     * @param x x coordinate to spawn
+     * @param y y coordinate to spawn
+     */
     public void spawnNewEnemy(int x, int y) {
 
-        TankType tankType;
-        tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+        Rectangle2D.Float possibleTank = new Rectangle2D.Float(x, y, TILES_DEFAULT_SIZE * Game.SCALE, TILES_DEFAULT_SIZE * Game.SCALE);
 
-        while(!tanksCount.containsKey(tankType) || tanksCount.get(tankType) == 0) {
+        boolean doNotSpawn = false;
+
+        // Check if new possible tank intersects any active enemy
+        for (Enemy enemy : enemies)
+            if (enemy.isActive())
+                if (enemy.hitbox.intersects(possibleTank))
+                    doNotSpawn = true;
+
+        // Check if new possible tank intersects player
+        if (playing.getPlayer().getHitbox().intersects(possibleTank))
+            doNotSpawn = true;
+
+        // Don't spawn new enemy if any possible collision
+        if (!doNotSpawn) {
+
+            TankType tankType;
             tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+
+            // Trying to randomly select next tank type (if still need to spawn tanks of the type)
+            while (!tanksCount.containsKey(tankType) || tanksCount.get(tankType) == 0)
+                tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+
+            // Decrease number of tanks of this type that still needs to be spawn
+            tanksCount.computeIfPresent(tankType, (k, v) -> v - 1);
+
+            // Create new enemy
+            enemies.add(new Enemy(tankType, x, y, playing));
         }
-
-
-        tanksCount.computeIfPresent(tankType, (k, v) -> v - 1);
-
-        for(Map.Entry<TankType, Integer> entry : tanksCount.entrySet())
-            System.out.println(entry.getKey() + "/" + entry.getValue());
-
-        enemies.add(new Enemy(tankType, x, y, playing));
     }
 
     public void decreasedEnemiesTiKillCount() {
