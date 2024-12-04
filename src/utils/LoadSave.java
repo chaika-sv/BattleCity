@@ -72,11 +72,25 @@ public class LoadSave {
         ENEMY_SETTINGS = new LinkedHashMap<>();
 
         Map<TankType, Integer> level0 = new LinkedHashMap<>();
-        level0.put(T_BASE, 7);
-        level0.put(T_FAST, 1);
-        level0.put(T_POWER, 1);
-        level0.put(T_HEAVY, 1);
+        level0.put(T_BASE, 1);
+        level0.put(T_FAST, 0);
+        level0.put(T_POWER, 0);
+        level0.put(T_HEAVY, 0);
         ENEMY_SETTINGS.put(0, new EnemySettings(level0, 4));
+
+        Map<TankType, Integer> level1 = new LinkedHashMap<>();
+        level1.put(T_BASE, 1);
+        level1.put(T_FAST, 0);
+        level1.put(T_POWER, 0);
+        level1.put(T_HEAVY, 0);
+        ENEMY_SETTINGS.put(1, new EnemySettings(level1, 4));
+
+        Map<TankType, Integer> level2 = new LinkedHashMap<>();
+        level2.put(T_BASE, 1);
+        level2.put(T_FAST, 0);
+        level2.put(T_POWER, 0);
+        level2.put(T_HEAVY, 0);
+        ENEMY_SETTINGS.put(2, new EnemySettings(level2, 4));
     }
 
 

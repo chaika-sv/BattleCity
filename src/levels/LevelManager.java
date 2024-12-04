@@ -49,7 +49,7 @@ public class LevelManager {
      * Start first level
      */
     public void loadFirstLevel() {
-        currentLevelIndex = 0;
+        currentLevelIndex = START_FROM_LEVEL;
         currentLevel = new Level(currentLevelIndex);
     }
 
@@ -59,6 +59,10 @@ public class LevelManager {
     public void loadNextLevel() {
         currentLevelIndex++;
         currentLevel.cloneLevel(levels.get(currentLevelIndex));
+    }
+
+    public boolean isLastLevel() {
+        return currentLevelIndex == levels.size() - 1;
     }
 
     /**

@@ -48,6 +48,7 @@ public class EnemyManager {
         }
 
         enemiesToKillCount = maxEnemyCount;
+        curLevelEnemyCount = 0;
     }
 
     /**
@@ -64,9 +65,9 @@ public class EnemyManager {
                 currentEnemyCount++;
 
         // No more active enemies and no more enemies to generate
-        //if (currentEnemyCount == 0 && curLevelEnemyCount >= maxEnemyCount)
-            // todo: level completed
-            //System.out.println("Level completed");
+        if (currentEnemyCount == 0 && curLevelEnemyCount >= maxEnemyCount)
+            playing.levelComplete();
+
 
         // We haven't already generated all enemies for the level
         if (curLevelEnemyCount < maxEnemyCount) {
@@ -98,7 +99,6 @@ public class EnemyManager {
                     }
 
                     playing.getObjectManager().createEnemySpawn(spawnX, spawnY);
-                    curLevelEnemyCount++;
 
                     lastSpawnDelayMS = System.currentTimeMillis();
                 }
@@ -143,6 +143,7 @@ public class EnemyManager {
 
             // Create new enemy
             enemies.add(new Enemy(tankType, x, y, playing));
+            curLevelEnemyCount++;
         }
     }
 

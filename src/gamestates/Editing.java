@@ -33,7 +33,7 @@ public class Editing  extends State implements Statemethods {
 
         this.editorPanel = editorPanel;
 
-        level = new Level(0);
+        level = new Level(-1);
         brush = new Brush(this, level, 0, 0, (int)(TILES_DEFAULT_SIZE * Game.SCALE), (int)(TILES_DEFAULT_SIZE * Game.SCALE));
         editorSpace = new EditorSpace(this);
 

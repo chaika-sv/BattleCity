@@ -200,7 +200,6 @@ public abstract class Tank {
                             // Grass or ice then can move
                             // todo: set something for ice
                             meetObstacle = false;
-                            return true;
                         }
                     }
                 }

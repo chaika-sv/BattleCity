@@ -93,6 +93,23 @@ public class Playing extends State implements Statemethods{
     }
 
 
+    public void levelComplete() {
+        if (levelManager.isLastLevel()) {
+            // todo: no more levels
+            goToMainMenu();
+        } else {
+            resetAll();
+            levelManager.loadNextLevel();
+
+            getObjectManager().createShield(player);
+            enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
+
+            // ... but for now pause everything and show the Start Level overlay
+            Gamestate.state = Gamestate.STARTLEVEL;
+            setStartLevel(true);
+
+        }
+    }
 
 
     public void pauseGame() {
