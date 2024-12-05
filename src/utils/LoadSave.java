@@ -18,6 +18,7 @@ import static main.Game.TILES_DEFAULT_SIZE;
 import static ui.MenuItemType.*;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.LevelConstants.LEVEL_DIR;
+import static utils.Constants.PowerUpConstants.*;
 import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankColorConstants.*;
 import static utils.Constants.TankTypeConstants.*;
@@ -48,6 +49,7 @@ public class LoadSave {
     public static Map<Integer, BufferedImage> POINTS_IMAGES;
 
     public static Map<MenuItemType, BufferedImage> MENU_ITEM_IMAGES;
+    public static BufferedImage[] POWER_UP_IMAGES;
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -71,26 +73,29 @@ public class LoadSave {
     public static void SetEnemySettings() {
         ENEMY_SETTINGS = new LinkedHashMap<>();
 
-        Map<TankType, Integer> level0 = new LinkedHashMap<>();
-        level0.put(T_BASE, 1);
-        level0.put(T_FAST, 0);
-        level0.put(T_POWER, 0);
-        level0.put(T_HEAVY, 0);
-        ENEMY_SETTINGS.put(0, new EnemySettings(level0, 4));
+        Map<TankType, Integer> settings = new LinkedHashMap<>();
 
-        Map<TankType, Integer> level1 = new LinkedHashMap<>();
-        level1.put(T_BASE, 1);
-        level1.put(T_FAST, 0);
-        level1.put(T_POWER, 0);
-        level1.put(T_HEAVY, 0);
-        ENEMY_SETTINGS.put(1, new EnemySettings(level1, 4));
+        ENEMY_SETTINGS.put(0, new EnemySettings(new LinkedHashMap<>() {{
+            put(T_BASE, 6);
+            put(T_FAST, 0);
+            put(T_POWER, 0);
+            put(T_HEAVY, 0);
+        }}, 4, 2));
 
-        Map<TankType, Integer> level2 = new LinkedHashMap<>();
-        level2.put(T_BASE, 1);
-        level2.put(T_FAST, 0);
-        level2.put(T_POWER, 0);
-        level2.put(T_HEAVY, 0);
-        ENEMY_SETTINGS.put(2, new EnemySettings(level2, 4));
+        ENEMY_SETTINGS.put(1, new EnemySettings(new LinkedHashMap<>() {{
+            put(T_BASE, 0);
+            put(T_FAST, 1);
+            put(T_POWER, 0);
+            put(T_HEAVY, 0);
+        }}, 4, 1));
+
+        ENEMY_SETTINGS.put(2, new EnemySettings(new LinkedHashMap<>() {{
+            put(T_BASE, 0);
+            put(T_FAST, 0);
+            put(T_POWER, 1);
+            put(T_HEAVY, 0);
+        }}, 4, 1));
+
     }
 
 
@@ -159,6 +164,21 @@ public class LoadSave {
         MENU_ITEM_IMAGES.put(MI_EDITOR, img.getSubimage(1278, 864, MI_EDITOR.getWidth(), MI_EDITOR.getHeight()));
 
     }
+
+
+
+    public static void loadPowerUpImages() {
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+
+        POWER_UP_IMAGES = new BufferedImage[7];
+
+        // Find all the power ups from 0 to 6 in PowerUpConstants
+        for (int i = 0; i < POWER_UP_IMAGES.length; i++)
+            POWER_UP_IMAGES[i] = img.getSubimage(1054 + i * TILES_DEFAULT_SIZE, 446, TILES_DEFAULT_SIZE, TILES_DEFAULT_SIZE);
+
+    }
+
+
 
 
     public static void LoadTankImages() {

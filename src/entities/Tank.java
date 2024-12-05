@@ -204,7 +204,7 @@ public abstract class Tank {
                     }
                 }
 
-        // Tank shouldn't intersects with e vnemies
+        // Any tank (player or enemy) shouldn't intersects with enemies
         for (Enemy enemy : playing.getEnemyManager().getEnemies())
             if (enemy.isActive() && this != enemy)
                 if (newHitbox.intersects(enemy.getHitbox())) {
@@ -212,7 +212,7 @@ public abstract class Tank {
                     return false;
                 }
 
-        // If it's an enemy then it shouldn't intersects with player
+        // If it's an enemy then it also shouldn't intersects with player
         if (this instanceof Enemy) {
             if (newHitbox.intersects(playing.getPlayer().getHitbox())) {
                 obstacleType = TANK;
@@ -273,6 +273,10 @@ public abstract class Tank {
         }
 
         return false;
+    }
+
+    public void addHealth(int value) {
+        currentHealth += value;
     }
 
 

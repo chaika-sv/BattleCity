@@ -1,13 +1,14 @@
 package objects;
 
-import entities.Player;
 import entities.Tank;
-import entities.TankType;
 import gamestates.Playing;
 
 import java.awt.*;
 import java.util.ArrayList;
 
+import static main.Game.TILES_IN_HEIGHT;
+import static main.Game.TILES_SIZE;
+import static utils.Constants.PowerUpConstants.*;
 import static utils.LoadSave.*;
 
 public class ObjectManager {
@@ -15,15 +16,19 @@ public class ObjectManager {
     private Playing playing;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private ArrayList<TemporaryObject> temporaryObjects = new ArrayList<>();
+    private ArrayList<PowerUp> powerUps = new ArrayList<>();
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadObjectSprites();
+
+        powerUps.add(new PowerUp(playing, PU_HEALTH, 3 * TILES_SIZE, (TILES_IN_HEIGHT - 1) * TILES_SIZE));
     }
 
     private void loadObjectSprites() {
         LoadProjectileImages();
         LoadTempObjectsImages();
+        loadPowerUpImages();
     }
 
     public void createEnemySpawn(int x, int y) {
@@ -55,6 +60,7 @@ public class ObjectManager {
     public void update() {
         updateProjectiles();
         updateTemporaryObjects();
+        updatePowerUps();
     }
 
     public void draw(Graphics g) {
@@ -64,6 +70,7 @@ public class ObjectManager {
 
     public void drawAfterPlayer(Graphics g) {
         drawShield(g);
+        drawPowerUps(g);
     }
 
 
@@ -80,6 +87,12 @@ public class ObjectManager {
         for (TemporaryObject e : temporaryObjects)
             if (e.isActive())
                 e.update();
+    }
+
+    private void updatePowerUps() {
+        for (PowerUp p : powerUps)
+            if (p.isActive())
+                p.update();
     }
 
     private void drawProjectiles(Graphics g) {
@@ -113,6 +126,12 @@ public class ObjectManager {
                 // Shield should be drawn after player
                 if (e.getType() == TemporaryObjectType.TO_SHIELD)
                     e.draw(g);
+    }
+
+    private void drawPowerUps(Graphics g) {
+        for (PowerUp p : powerUps)
+            if (p.isActive())
+                p.draw(g);
     }
 
     public void resetAll() {

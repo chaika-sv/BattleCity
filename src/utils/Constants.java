@@ -21,6 +21,17 @@ public class Constants {
         public static final int DOWN = 3;
     }
 
+    public static class PowerUpConstants {
+        public static final int PU_SHIELD = 0;
+        public static final int PU_CLOCK = 1;
+        public static final int PU_SHOVEL = 2;
+        public static final int PU_STAR = 3;
+        public static final int PU_GRENADE = 4;
+        public static final int PU_HEALTH = 5;
+        public static final int PU_GUN = 6;
+        public static final int POWER_UP_ACTIVE_TIME_MS = 10000;
+    }
+
     public static class EnemyConstants {
         public static final int ENEMY_SPAWN_DELAY_MS = 4000;
         public static final int MAX_ACTIVE_ENEMY_CNT = 2;
