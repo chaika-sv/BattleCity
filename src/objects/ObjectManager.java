@@ -22,7 +22,7 @@ public class ObjectManager {
         this.playing = playing;
         loadObjectSprites();
 
-        powerUps.add(new PowerUp(playing, PU_HEALTH, 3 * TILES_SIZE, (TILES_IN_HEIGHT - 1) * TILES_SIZE));
+        powerUps.add(new PowerUp(playing, PU_SHOVEL, 3 * TILES_SIZE, (TILES_IN_HEIGHT - 1) * TILES_SIZE));
     }
 
     private void loadObjectSprites() {

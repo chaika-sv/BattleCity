@@ -3,7 +3,6 @@ package objects;
 import entities.Enemy;
 import entities.Player;
 import entities.Tank;
-import gamestates.Gamestate;
 import gamestates.Playing;
 import levels.LevelBlock;
 import levels.LevelBlockType;
@@ -135,7 +134,7 @@ public class Projectile {
                 if (damagedTank.hitByProjectile(1)) {
                     // If the tank was killed then destroy the projectile with big explosion
                     destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
-                    playing.getEnemyManager().decreasedEnemiesTiKillCount();
+                    playing.getEnemyManager().decreasedEnemiesToKillCount();
 
                     // Add points to player if it was player's projectile
                     if (tank instanceof Player)

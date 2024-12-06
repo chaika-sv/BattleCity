@@ -2,7 +2,7 @@ package entities;
 
 import gamestates.Playing;
 import main.Game;
-import objects.TemporaryObject;
+import objects.TemporaryObjectType;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -147,7 +147,27 @@ public class EnemyManager {
         }
     }
 
-    public void decreasedEnemiesTiKillCount() {
+    public void blowUpAllEnemies() {
+        for (Enemy e : enemies)
+            if (e.isActive()) {
+
+                // Deactivate the enemy
+                e.setActive(false);
+
+                TemporaryObjectType bigExplosionType = TemporaryObjectType.TO_BIG_EXPLOSION;
+
+                // Set big explosion
+                playing.getObjectManager().createExplosion(
+                        (int)(e.getHitbox().getX() + e.getHitbox().getWidth() / 2 - bigExplosionType.getWidth() / 2),
+                        (int)(e.getHitbox().getY() + e.getHitbox().getHeight() / 2 - bigExplosionType.getHeight() / 2),
+                        bigExplosionType);
+
+                // Decrease number of enemies to kill
+                playing.getEnemyManager().decreasedEnemiesToKillCount();
+            }
+    }
+
+    public void decreasedEnemiesToKillCount() {
         enemiesToKillCount--;
     }
 
@@ -159,9 +179,10 @@ public class EnemyManager {
         if (!playing.isGameOver() || !playing.isPause() || !playing.isStartLevel())
             generateEnemies();
 
-        for (Enemy e : enemies)
-            if (e.isActive())
-                e.update();
+        if (!playing.isFreeze())
+            for (Enemy e : enemies)
+                if (e.isActive())
+                    e.update();
     }
 
     public void draw(Graphics g) {

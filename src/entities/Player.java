@@ -2,7 +2,7 @@ package entities;
 
 import gamestates.Playing;
 
-import static utils.Constants.PowerUpConstants.*;
+import static utils.Constants.TankTypeConstants.MAX_TANK_TYPE;
 
 
 public class Player extends Tank{
@@ -20,34 +20,12 @@ public class Player extends Tank{
         points = 0;
     }
 
-    public void applyPowerUp(int powerUpType) {
-
-        switch(powerUpType) {
-            case PU_SHIELD -> {
-                playing.getObjectManager().createShield(this);
-            }
-            case PU_CLOCK -> {
-
-            }
-            case PU_SHOVEL -> {
-
-            }
-            case PU_STAR -> {
-
-            }
-            case PU_GRENADE -> {
-
-            }
-            case PU_HEALTH -> {
-                addHealth(1);
-            }
-            case PU_GUN -> {
-
-            }
+    public void levelUp() {
+        if (tankType.getId() < MAX_TANK_TYPE) {
+            tankType = TankType.getTankTypeByCode(tankType.getId() + 1);
+            applyTankCharacteristics(tankType);
         }
-
     }
-
 
     public void addPoints(int v) {
         points += v;

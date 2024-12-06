@@ -3,6 +3,9 @@ package gamestates;
 import entities.EnemyManager;
 import entities.Player;
 import entities.TankType;
+import levels.Level;
+import levels.LevelBlock;
+import levels.LevelBlockType;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
@@ -13,8 +16,11 @@ import ui.StartLevelOverlay;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 
 import static utils.Constants.LevelConstants.*;
+import static utils.Constants.PowerUpConstants.FREEZE_TIME_MS;
+import static utils.Constants.PowerUpConstants.WALL_TIME_MS;
 import static utils.LoadSave.ENEMY_SETTINGS;
 import static utils.LoadSave.LoadTankImages;
 
@@ -31,6 +37,12 @@ public class Playing extends State implements Statemethods{
     private boolean gameOver = false;
     private boolean pause = false;
     private boolean startLevel = false;
+    private boolean freeze = false;
+    private boolean metalWall = false;
+
+    private long freezeStartTimeMS;
+    private long metalWallTimeMS;
+
 
     public Playing(Game game) {
         super(game);
@@ -146,6 +158,45 @@ public class Playing extends State implements Statemethods{
     }
 
 
+    public void freezeEnemies() {
+        freeze = true;
+        freezeStartTimeMS = System.currentTimeMillis();
+    }
+
+    public void throwGrenade() {
+        enemyManager.blowUpAllEnemies();
+    }
+
+
+    private void clearLevelBlocks(Level level, int x, int y, int width, int height) {
+        Rectangle2D.Float rect = new Rectangle2D.Float(x, y, width, height);
+
+        for(LevelBlock b : level.getLevelBlocks())
+            if (b.isActive())
+                if (rect.intersects(b.getHitbox()))
+                    b.setActive(false);
+    }
+
+    public void buildWallAroundBase(LevelBlockType blockType) {
+
+        if (blockType == LevelBlockType.METAL_SMALL)
+            metalWall = true;
+        else if (blockType == LevelBlockType.BRICK_SMALL)
+            metalWall = false;
+
+        metalWallTimeMS = System.currentTimeMillis();
+
+        Level currentLevel = levelManager.getCurrentLevel();
+
+        for(Point p : BASE_WALL_POINTS) {
+            // Clear brick blocks in place of metal block
+            clearLevelBlocks(currentLevel, p.x, p.y, blockType.getWidth(), blockType.getHeight());
+
+            // Add metal block
+            currentLevel.addLevelBlock(blockType, p.x, p.y);
+        }
+    }
+
 
 
     @Override
@@ -156,6 +207,15 @@ public class Playing extends State implements Statemethods{
         } else if (startLevel) {
             startLevelOverlay.update();
         } else {
+
+            long currentTime = System.currentTimeMillis();
+
+            if (freeze && currentTime - freezeStartTimeMS > FREEZE_TIME_MS)
+                freeze = false;
+
+            if (metalWall && currentTime - metalWallTimeMS > WALL_TIME_MS)
+                buildWallAroundBase(LevelBlockType.BRICK_SMALL);
+
             // Still playing
             objectManager.update();
             if (player.isActive())
@@ -291,5 +351,9 @@ public class Playing extends State implements Statemethods{
 
     public void setStartLevel(boolean startLevel) {
         this.startLevel = startLevel;
+    }
+
+    public boolean isFreeze() {
+        return freeze;
     }
 }

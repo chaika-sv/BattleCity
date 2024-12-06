@@ -2,6 +2,11 @@ package utils;
 
 import main.Game;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static main.Game.TILES_IN_HEIGHT;
 import static main.Game.TILES_SIZE;
 
@@ -23,13 +28,15 @@ public class Constants {
 
     public static class PowerUpConstants {
         public static final int PU_SHIELD = 0;
-        public static final int PU_CLOCK = 1;
+        public static final int PU_TIMER = 1;
         public static final int PU_SHOVEL = 2;
         public static final int PU_STAR = 3;
         public static final int PU_GRENADE = 4;
         public static final int PU_HEALTH = 5;
         public static final int PU_GUN = 6;
-        public static final int POWER_UP_ACTIVE_TIME_MS = 10000;
+        public static final int POWER_UP_ACTIVE_TIME_MS = 20000;
+        public static final int FREEZE_TIME_MS = 10000;
+        public static final int WALL_TIME_MS = 10000;
     }
 
     public static class EnemyConstants {
@@ -66,13 +73,15 @@ public class Constants {
         public static final int BASE = 0;
         public static final int FAST = 1;
         public static final int POWER = 2;
-
-        public static final int LONG_GUN = 8;
-        public static final int BIG_GUN = 4;
         public static final int HEAVY = 3;
+
+        public static final int BIG_GUN = 4;
         public static final int SUPER_FAST = 5;
         public static final int FAST_BIG_GUN = 6;
         public static final int SUPER_HEAVY = 7;
+        public static final int LONG_GUN = 8;
+
+        public static final int MAX_TANK_TYPE = 3;
     }
 
     public static class ProjectileConstants {
@@ -114,7 +123,18 @@ public class Constants {
         public static final String LEVEL_DIR = "res/levels";
         public static final int PLAYER_SPAWN_X = 5 * TILES_SIZE;
         public static final int PLAYER_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
-    }
+        public static final List<Point> BASE_WALL_POINTS = List.of(
+                new Point(416, 864),
+                new Point(416, 896),
+                new Point(416, 928),
 
+                new Point(448, 864),
+                new Point(480, 864),
+
+                new Point(512, 864),
+                new Point(512, 896),
+                new Point(512, 928)
+        );
+    }
 
 }

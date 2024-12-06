@@ -2,6 +2,7 @@ package objects;
 
 import entities.Player;
 import gamestates.Playing;
+import levels.LevelBlockType;
 import main.Game;
 
 import java.awt.*;
@@ -50,13 +51,44 @@ public class PowerUp {
 
         if (player.isActive())
             if (powerUpHitbox.intersects(player.getHitbox())) {
-                player.applyPowerUp(type);
+                applyPowerUp(type, player);
                 active = false;
             }
 
 
 
     }
+
+
+    private void applyPowerUp(int powerUpType, Player player) {
+
+        switch(powerUpType) {
+            case PU_SHIELD -> {
+                playing.getObjectManager().createShield(player);
+            }
+            case PU_TIMER -> {
+                playing.freezeEnemies();
+            }
+            case PU_SHOVEL -> {
+                playing.buildWallAroundBase(LevelBlockType.METAL_SMALL);
+            }
+            case PU_STAR -> {
+                player.levelUp();
+            }
+            case PU_GRENADE -> {
+                playing.throwGrenade();
+            }
+            case PU_HEALTH -> {
+                player.addHealth(1);
+            }
+            case PU_GUN -> {
+
+            }
+        }
+
+    }
+
+
 
     public void draw(Graphics g) {
         g.drawImage(POWER_UP_IMAGES[type], x, y, (int)(width * Game.SCALE), (int)(height * Game.SCALE), null);
