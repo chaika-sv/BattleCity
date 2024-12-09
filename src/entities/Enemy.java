@@ -12,6 +12,7 @@ import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.EnemyConstants.*;
+import static utils.Constants.TankColorConstants.*;
 
 public class Enemy extends Tank{
 
@@ -25,9 +26,15 @@ public class Enemy extends Tank{
     private boolean pDirRight = false;
     private String lastCase = "";
     private long lastChangeDirTimeMS;
+    private boolean withPowerUp;
 
-    public Enemy(TankType tankType, float x, float y, Playing playing) {
+    public Enemy(TankType tankType, float x, float y, boolean withPowerUp, Playing playing) {
         super(tankType, x, y, playing);
+
+        tankColor = ENEMY_GRAY;
+
+        this.withPowerUp = withPowerUp;
+
         this.down = true;
         this.attacking = true;
         this.curDir = DOWN;
@@ -299,6 +306,10 @@ public class Enemy extends Tank{
 
     @Override
     public void draw(Graphics g) {
+
+        if (withPowerUp)
+            tankColor = (aniIndex % 2) == 0 ? ENEMY_GRAY : ENEMY_RED;
+
         super.draw(g);
         if (DEBUG_MODE)
             drawSearchBox(g);
@@ -320,5 +331,9 @@ public class Enemy extends Tank{
         g.setColor(Color.WHITE);
         g.drawString(searchMsg, (int)(hitbox.x - 5), (hitbox.y - 5 > 0) ? (int)(hitbox.y - 5) : (int)(hitbox.y + hitbox.height + 10));
 
+    }
+
+    public boolean isWithPowerUp() {
+        return withPowerUp;
     }
 }

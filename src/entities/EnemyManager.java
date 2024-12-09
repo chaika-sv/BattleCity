@@ -6,10 +6,7 @@ import objects.TemporaryObjectType;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static main.Game.TILES_DEFAULT_SIZE;
 import static utils.Constants.EnemyConstants.*;
@@ -23,8 +20,10 @@ public class EnemyManager {
 
     private int maxEnemyCount;                      // Max number of enemies in the level (all types)
     private int maxActiveEnemyCount;                // Max number of enemies on the screen (at the same time)
+    private int powerUpsEnemyCount;                 // Max number of enemies with power ups
     private int enemiesToKillCount;                 // Number of enemies left to kill in the level
     private Map<TankType, Integer> tanksCount;
+    private Set<Integer> powerUpTanks;
 
     private Random rand;
 
@@ -40,6 +39,7 @@ public class EnemyManager {
      */
     public void applyEnemySettings(EnemySettings enemySettings) {
         this.maxActiveEnemyCount = enemySettings.getActiveTanksCount();
+        this.powerUpsEnemyCount = enemySettings.getPowerUpTanksCount();
 
         maxEnemyCount = 0;
         for(Map.Entry<TankType, Integer> entry : enemySettings.getTanksCount().entrySet()) {
@@ -49,6 +49,16 @@ public class EnemyManager {
 
         enemiesToKillCount = maxEnemyCount;
         curLevelEnemyCount = 0;
+
+        powerUpTanks = new HashSet<>();
+        int nextPowerUpNumber;
+
+        // Randomly select numbers for tanks with power ups
+        for (int i = 0; i < powerUpsEnemyCount; i++) {
+            nextPowerUpNumber = rand.nextInt(maxEnemyCount);
+            powerUpTanks.add(nextPowerUpNumber);
+        }
+
     }
 
     /**
@@ -142,7 +152,7 @@ public class EnemyManager {
             tanksCount.computeIfPresent(tankType, (k, v) -> v - 1);
 
             // Create new enemy
-            enemies.add(new Enemy(tankType, x, y, playing));
+            enemies.add(new Enemy(tankType, x, y, powerUpTanks.contains(curLevelEnemyCount), playing));
             curLevelEnemyCount++;
         }
     }
@@ -172,7 +182,7 @@ public class EnemyManager {
     }
 
     public void spawnNewEnemy(TankType tankType, int x, int y) {
-        enemies.add(new Enemy(tankType, x, y, playing));
+        enemies.add(new Enemy(tankType, x, y, false, playing));
     }
 
     public void update() {

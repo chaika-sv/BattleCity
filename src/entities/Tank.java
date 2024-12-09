@@ -56,6 +56,7 @@ public abstract class Tank {
     protected Rectangle2D.Float hitbox;
     protected int aniTick, aniIndex;
     protected int state;
+    protected int tankColor;
 
     // Tank characteristics
     protected TankType tankType;
@@ -91,8 +92,6 @@ public abstract class Tank {
 
         this.x = x;
         this.y = y;
-        this.width = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
-        this.height = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
 
         this.currentHealth = maxHealth;
 
@@ -253,6 +252,10 @@ public abstract class Tank {
         this.shootDelayMS = tankType.getShootDelayMS();
         this.tankScale = tankType.getTankScale() * Game.SCALE;
         this.points = tankType.getPoints();
+
+        width = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
+        height = (int) (TILES_DEFAULT_SIZE * Game.SCALE * tankScale);
+
     }
 
 
@@ -285,11 +288,6 @@ public abstract class Tank {
     }
 
     public void draw(Graphics g) {
-
-        int tankColor = PLAYER_YELLOW;
-
-        if (this instanceof Enemy)
-            tankColor = ENEMY_GRAY;
 
         g.drawImage(TANK_IMAGES[tankColor][tankType.getId()] [curDir] [state == IDLE || state == ATTACK ? 0 : aniIndex],
                 (int) (x),

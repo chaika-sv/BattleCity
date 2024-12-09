@@ -37,6 +37,7 @@ public class Constants {
         public static final int POWER_UP_ACTIVE_TIME_MS = 20000;
         public static final int FREEZE_TIME_MS = 10000;
         public static final int WALL_TIME_MS = 10000;
+        public static final int MAX_POWER_UP_NUMBER = 6;
     }
 
     public static class EnemyConstants {

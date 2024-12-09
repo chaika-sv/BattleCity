@@ -2,6 +2,7 @@ package entities;
 
 import gamestates.Playing;
 
+import static utils.Constants.TankColorConstants.PLAYER_YELLOW;
 import static utils.Constants.TankTypeConstants.MAX_TANK_TYPE;
 
 
@@ -11,6 +12,7 @@ public class Player extends Tank{
 
     public Player(TankType tankType, float x, float y, Playing playing) {
         super(tankType, x, y, playing);
+        tankColor = PLAYER_YELLOW;
     }
 
     @Override
