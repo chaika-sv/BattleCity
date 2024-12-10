@@ -2,9 +2,11 @@ package objects;
 
 import entities.Tank;
 import gamestates.Playing;
+import main.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static main.Game.TILES_IN_HEIGHT;
 import static main.Game.TILES_SIZE;
@@ -18,11 +20,12 @@ public class ObjectManager {
     private ArrayList<TemporaryObject> temporaryObjects = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
 
+    private Random rand;
+
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadObjectSprites();
-
-        powerUps.add(new PowerUp(playing, PU_SHOVEL, 3 * TILES_SIZE, (TILES_IN_HEIGHT - 1) * TILES_SIZE));
+        rand = new Random();
     }
 
     private void loadObjectSprites() {
@@ -40,6 +43,18 @@ public class ObjectManager {
         temporaryObjects.add(shield);
         tank.setShield(shield);
     }
+
+    /**
+     * Generate random power up in random place
+     */
+    public void generateNewPowerUp() {
+        int powerUpType = rand.nextInt(MAX_POWER_UP_NUMBER);
+        int x = rand.nextInt(Game.GAME_WIDTH - TILES_SIZE);
+        int y = rand.nextInt(Game.GAME_HEIGHT - TILES_SIZE);
+
+        powerUps.add(new PowerUp(playing, powerUpType, x, y));
+    }
+
 
     /**
      * Create projectile
@@ -90,7 +105,9 @@ public class ObjectManager {
     }
 
     private void updatePowerUps() {
-        for (PowerUp p : powerUps)
+        ArrayList<PowerUp> tempPowerUps = new ArrayList<>(powerUps);
+
+        for (PowerUp p : tempPowerUps)
             if (p.isActive())
                 p.update();
     }
@@ -142,6 +159,10 @@ public class ObjectManager {
         for (TemporaryObject e : temporaryObjects)
             if (e.isActive())
                 e.setActive(false);
+
+        for (PowerUp p : powerUps)
+            if (p.isActive())
+                p.setActive(false);
     }
 
     public ArrayList<Projectile> getProjectiles() {

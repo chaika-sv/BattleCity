@@ -55,6 +55,9 @@ public class Projectile {
         checkIntersectWithAnotherProjectile();
     }
 
+    /**
+     * Destroy projectile when hit level edge
+     */
     private void checkLevelEdge() {
         if (hitbox.x < 0 || hitbox.y < 0
                 || hitbox.x + hitbox.width > Game.GAME_WIDTH
@@ -65,6 +68,10 @@ public class Projectile {
         }
     }
 
+    /**
+     * Destroy projectile when hit another projectile
+     * Another projectile will be just deactivated (w/o explosion)
+     */
     private void checkIntersectWithAnotherProjectile() {
         for (Projectile p : playing.getObjectManager().getProjectiles())
             // It's not current projectile
@@ -74,10 +81,15 @@ public class Projectile {
                         // Destroy current projectile with explosion
                         destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
                         // Another projectile just set inactive (we don't need two explosions)
-                        p.setActive(false);
+                        p.deactivateProjectile();
+                        break;
                     }
     }
 
+    /**
+     * Check if projectile meets any level block
+     * The effect depends on the level block type
+     */
     private void checkIntersectWithLevelBlock() {
         for (LevelBlock levelBlock : playing.getLevelManager().getCurrentLevel().getLevelBlocks()) {
             if (levelBlock.isActive())
@@ -98,6 +110,10 @@ public class Projectile {
         }
     }
 
+    /**
+     * Check if projectile hit tank
+     * It could be enemy or player
+     */
     private void checkIntersectWithTanks() {
         if (tank instanceof Player) {
 
@@ -119,30 +135,31 @@ public class Projectile {
 
 
     /**
-     * Check if the projectile hit the tank and if it does then destroy the projectile
+     * Check if the projectile hit the tank
      * @param damagedTank tank to check with the projectile
      * @return true if the projectile hit the tank
      */
     private boolean checkHitTank(Tank damagedTank) {
         if (hitbox.intersects(damagedTank.getHitbox())) {
 
-            if (damagedTank.hasShield())
+            if (damagedTank.hasShield()) {
                 // If the tank has shield then just deactivate the projectile w/o any explosion
-                active = false;
-            else
+                deactivateProjectile();
+            }
+            else {
                 // Damage the tank
-                if (damagedTank.hitByProjectile(1)) {
-                    // If the tank was killed then destroy the projectile with big explosion
-                    destroyProjectile(TemporaryObjectType.TO_BIG_EXPLOSION);
-                    playing.getEnemyManager().decreasedEnemiesToKillCount();
+                damagedTank.hitByProjectile(1);
 
-                    // Add points to player if it was player's projectile
-                    if (tank instanceof Player)
-                        ((Player)tank).addPoints(damagedTank.getPoints());
-                } else {
+                if (damagedTank.getCurrentHealth() <= 0) {
+                    damagedTank.killTheTank(tank);
+                    deactivateProjectile();
+                }
+                else {
                     // If the tank was just injured then destroy the projectile with small explosion
+                    damagedTank.injureTheTank();
                     destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
                 }
+            }
 
             return true;
         }
@@ -186,11 +203,17 @@ public class Projectile {
      * Set projectile inactive and create explosion
      */
     private void destroyProjectile(TemporaryObjectType explosionType) {
-        active = false;
+        deactivateProjectile();
         playing.getObjectManager().createExplosion(
                 (int)(hitbox.x - explosionType.getWidth() / 2),
                 (int)(hitbox.y - explosionType.getHeight() / 2),
                 explosionType);
+
+    }
+
+    private void deactivateProjectile() {
+        active = false;
+        tank.setHasActiveProjectile(false);
     }
 
     public void draw(Graphics g) {

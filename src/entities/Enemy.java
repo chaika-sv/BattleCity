@@ -1,17 +1,18 @@
 package entities;
 
 import gamestates.Playing;
-import levels.LevelBlockType;
-import main.Game;
+import objects.PowerUp;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
-import static main.Game.TILES_DEFAULT_SIZE;
+import static main.Game.*;
+import static main.Game.TILES_SIZE;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.EnemyConstants.*;
+import static utils.Constants.PowerUpConstants.PU_GRENADE;
 import static utils.Constants.TankColorConstants.*;
 
 public class Enemy extends Tank{
@@ -302,7 +303,21 @@ public class Enemy extends Tank{
         right = false;
     }
 
+    @Override
+    public void killTheTank(Tank killerTank) {
+        super.killTheTank(killerTank);
 
+        // Decrease number of enemies to kill
+        playing.getEnemyManager().decreasedEnemiesToKillCount();
+
+        // If the tank was killed by player then give points to player
+        if (killerTank instanceof Player)
+            ((Player)killerTank).addPoints(points);
+
+        if (withPowerUp)
+            playing.getObjectManager().generateNewPowerUp();
+
+    }
 
     @Override
     public void draw(Graphics g) {

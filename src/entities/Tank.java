@@ -8,6 +8,7 @@ import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
 import objects.TemporaryObject;
+import objects.TemporaryObjectType;
 import utils.LoadSave;
 
 import java.awt.*;
@@ -45,6 +46,7 @@ public abstract class Tank {
 
     protected boolean left, right, up, down;
     protected boolean moving = false, attacking = false;
+    protected boolean hasActiveProjectile = false;
 
 
     protected float x, y;
@@ -118,7 +120,8 @@ public abstract class Tank {
         // Player is attacking only when attacking bool is true (button pressed)
         if (
                 ((this instanceof Player && attacking) || (this instanceof Enemy)) &&
-                        currentTime - lastShootTimeMS > shootDelayMS
+                        currentTime - lastShootTimeMS > shootDelayMS &&
+                        !hasActiveProjectile
         )
             shoot();
     }
@@ -259,23 +262,29 @@ public abstract class Tank {
     }
 
 
-    /**
-     * Projectile hit the tank
-     * @param damageValue how many health to decrease
-     * @return true if the tank was destroyed by the projectile
-     */
-    public boolean hitByProjectile(int damageValue) {
+    public void hitByProjectile(int damageValue) {
         currentHealth -= damageValue;
-        if (currentHealth <= 0) {
-            active = false;
-            if (this instanceof Player) {
-                // If it was player who was killed then game over
-                playing.gameOver();
-            }
-            return true;
-        }
+    }
 
-        return false;
+    /**
+     * Kill the tank
+     * @param killerTank tank who killed the tank
+     */
+    public void killTheTank(Tank killerTank) {
+        // Deactivate the tank
+        active = false;
+
+        TemporaryObjectType bigExplosionType = TemporaryObjectType.TO_BIG_EXPLOSION;
+
+        // Set big explosion
+        playing.getObjectManager().createExplosion(
+                (int)(hitbox.x + hitbox.width / 2 - bigExplosionType.getWidth() / 2),
+                (int)(hitbox.y + hitbox.height / 2 - bigExplosionType.getHeight() / 2),
+                bigExplosionType);
+    }
+
+    public void injureTheTank() {
+
     }
 
     public void addHealth(int value) {
@@ -377,6 +386,7 @@ public abstract class Tank {
 
         objectManager.shootProjectile((int)(hitbox.x + xOffset), (int)hitbox.y + yOffset, curDir, projectileSpeed, this);
         lastShootTimeMS = System.currentTimeMillis();
+        hasActiveProjectile = true;
     }
 
     public boolean hasShield() {
@@ -488,5 +498,13 @@ public abstract class Tank {
 
     public int getPoints() {
         return points;
+    }
+
+    public boolean isHasActiveProjectile() {
+        return hasActiveProjectile;
+    }
+
+    public void setHasActiveProjectile(boolean hasActiveProjectile) {
+        this.hasActiveProjectile = hasActiveProjectile;
     }
 }

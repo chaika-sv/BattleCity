@@ -1,6 +1,7 @@
 package levels;
 
 import main.Game;
+import objects.TemporaryObject;
 
 import java.awt.*;
 import java.io.*;
@@ -101,7 +102,9 @@ public class Level implements Serializable {
     }
 
     public void draw(Graphics g, int drawOption) {
-        for (LevelBlock block : levelBlocks)
+        ArrayList<LevelBlock> tempLevelBlocks = new ArrayList<>(levelBlocks);
+
+        for (LevelBlock block : tempLevelBlocks)
             if (block.isActive())
                 if ((drawOption == DRAW_ALL_LEVEL)
                         || ((drawOption == DRAW_LEVEL_WO_GRASS) && block.getType() != LevelBlockType.GRASS )
