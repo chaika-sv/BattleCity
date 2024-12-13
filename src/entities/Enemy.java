@@ -8,11 +8,9 @@ import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 import static main.Game.*;
-import static main.Game.TILES_SIZE;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.EnemyConstants.*;
-import static utils.Constants.PowerUpConstants.PU_GRENADE;
 import static utils.Constants.TankColorConstants.*;
 
 public class Enemy extends Tank{
@@ -70,12 +68,6 @@ public class Enemy extends Tank{
 
         // Case #1 - Just keep moving and if it's time to change direction then change it randomly
         if (!meetObstacle && !seePlayer) {
-
-            // Calculate distance moving in one direction
-            if (curDir == UP || curDir == DOWN)
-                moveInOneDir = (int) (lastCoordinate - hitbox.y);
-            else if (curDir == LEFT || curDir == RIGHT)
-                moveInOneDir = (int) (lastCoordinate - hitbox.x);
 
             // It's time to change direction
             if (moveInOneDir >= curChangeDirDistance)
@@ -290,7 +282,7 @@ public class Enemy extends Tank{
         if (curDir == UP || curDir == DOWN)
             lastCoordinate = (int) hitbox.y;
         else if (curDir == LEFT || curDir == RIGHT)
-            lastCoordinate = (int)hitbox.x;
+            lastCoordinate = (int) hitbox.x;
 
         // Just random distance to move in the current direction
         curChangeDirDistance = rand.nextInt(5) * 100;

@@ -17,6 +17,7 @@ public class Constants {
 
     public static class MovementConstants {
         public static final int TANK_FRONT_AREA = 3;
+        public static final int MAX_SHIFT = 16;
     }
 
     public static class DirConstants {

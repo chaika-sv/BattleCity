@@ -1,6 +1,5 @@
 package entities;
 
-import gamestates.Gamestate;
 import gamestates.Playing;
 import levels.LevelBlock;
 import levels.LevelBlockType;
@@ -9,12 +8,10 @@ import main.Game;
 import objects.ObjectManager;
 import objects.TemporaryObject;
 import objects.TemporaryObjectType;
-import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import static levels.LevelBlockType.*;
 import static main.Game.TILES_DEFAULT_SIZE;
@@ -24,12 +21,11 @@ import static utils.Constants.DirConstants.*;
 import static utils.Constants.DirConstants.RIGHT;
 import static utils.Constants.LevelConstants.PLAYER_SPAWN_X;
 import static utils.Constants.LevelConstants.PLAYER_SPAWN_Y;
+import static utils.Constants.MovementConstants.MAX_SHIFT;
 import static utils.Constants.MovementConstants.TANK_FRONT_AREA;
 import static utils.Constants.ProjectileConstants.PROJECTILE_HEIGHT;
 import static utils.Constants.ProjectileConstants.PROJECTILE_WIDTH;
-import static utils.Constants.TankColorConstants.*;
 import static utils.Constants.TankStateConstants.*;
-import static utils.Constants.TankTypeConstants.*;
 import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_X;
 import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_Y;
 import static utils.LoadSave.TANK_HITBOX_OFFSETS;
@@ -47,6 +43,7 @@ public abstract class Tank {
     protected boolean left, right, up, down;
     protected boolean moving = false, attacking = false;
     protected boolean hasActiveProjectile = false;
+    protected int shiftX, shiftY;
 
 
     protected float x, y;
@@ -158,10 +155,19 @@ public abstract class Tank {
             moving = true;
         }
 
+        // Calculate distance moving in one direction
+        if (curDir == UP || curDir == DOWN)
+            moveInOneDir = (int) (lastCoordinate - hitbox.y);
+        else if (curDir == LEFT || curDir == RIGHT)
+            moveInOneDir = (int) (lastCoordinate - hitbox.x);
+
+        shiftX = 0;
+        shiftY = 0;
+
         // Check if tank still can move in the direction then move
         if (canMoveHere(hitbox.x + xSpeed + xFrontArea, hitbox.y + ySpeed + yFrontArea)) {
-            hitbox.x += xSpeed;
-            hitbox.y += ySpeed;
+            hitbox.x += xSpeed + shiftX;
+            hitbox.y += ySpeed + shiftY;
 
             applyHitboxOffset();
             syncHitboxWithSprite();
@@ -186,17 +192,91 @@ public abstract class Tank {
 
         // New possible hitbox to be checked
         Rectangle2D.Float newHitbox = new Rectangle2D.Float(x, y, hitbox.width, hitbox.height);
+        Rectangle2D.Float newHitboxShift = new Rectangle2D.Float(x, y, hitbox.width, hitbox.height);
 
         for (LevelBlock block : levelManager.getCurrentLevel().getLevelBlocks())
-            if (block.isActive())
+            if (block.isActive()) {
                 if (newHitbox.intersects(block.getHitbox())) {
                     obstacleType = block.getType();
 
                     switch (block.getType()) {
                         case BRICK, METAL, RIVER -> {
                             // If brick, metal or river then cannot move
-                            meetObstacle = true;
-                            return false;
+
+                            if (this instanceof Player) {
+                                // But we can try to help our tank with a little shift to move around the block
+                                // We are trying to shift tank left or right (for UP and DOWN direction) and up or down (for LEFT and RIGHT direction)
+                                // Try shift from 1 to MAX_SHIFT
+                                // And if the shift works then save it in shiftX or shiftY
+
+                                if (curDir == UP || curDir == DOWN) {
+
+                                    // Try right shift
+                                    for (int i = 1; i < MAX_SHIFT; i++) {
+                                        newHitboxShift.x = x + i;
+                                        if (!doesHitboxIntersectSolidBlocks(newHitboxShift)) {
+                                            shiftX = i + 2;
+                                            meetObstacle = false;
+                                            return true;
+                                        }
+                                    }
+
+                                    // Try left shift
+                                    for (int i = 1; i < MAX_SHIFT; i++) {
+                                        newHitboxShift.x = x - i;
+                                        if (!doesHitboxIntersectSolidBlocks(newHitboxShift)) {
+                                            shiftX = -i - 2;
+                                            meetObstacle = false;
+                                            return true;
+                                        }
+                                    }
+
+                                    // Shift doesn't help
+                                    if (shiftX == 0) {
+                                        meetObstacle = true;
+                                        return false;
+                                    }
+
+
+                                } else if (curDir == LEFT || curDir == RIGHT) {
+
+                                    // Try down shift
+                                    for (int i = 1; i < MAX_SHIFT; i++) {
+                                        newHitboxShift.y = y + i;
+                                        if (!doesHitboxIntersectSolidBlocks(newHitboxShift)) {
+                                            shiftY = i + 2;
+                                            meetObstacle = false;
+                                            return true;
+                                        }
+                                    }
+
+                                    // Try up shift
+                                    for (int i = 1; i < MAX_SHIFT; i++) {
+                                        newHitboxShift.y = y - i;
+                                        if (!doesHitboxIntersectSolidBlocks(newHitboxShift)) {
+                                            shiftY = -i - 2;
+                                            meetObstacle = false;
+                                            return true;
+                                        }
+                                    }
+
+                                    // Shift doesn't help
+                                    if (shiftY == 0) {
+                                        meetObstacle = true;
+                                        return false;
+                                    }
+
+                                } else {
+                                    meetObstacle = true;
+                                    return false;
+                                }
+
+                            } else {
+                                // We don't have enemies
+                                meetObstacle = true;
+                                return false;
+                            }
+
                         }
                         case GRASS, ICE -> {
                             // Grass or ice then can move
@@ -206,10 +286,13 @@ public abstract class Tank {
                     }
                 }
 
+            }
+
         // Any tank (player or enemy) shouldn't intersects with enemies
         for (Enemy enemy : playing.getEnemyManager().getEnemies())
             if (enemy.isActive() && this != enemy)
                 if (newHitbox.intersects(enemy.getHitbox())) {
+                    meetObstacle = true;
                     obstacleType = TANK;
                     return false;
                 }
@@ -217,6 +300,7 @@ public abstract class Tank {
         // If it's an enemy then it also shouldn't intersects with player
         if (this instanceof Enemy) {
             if (newHitbox.intersects(playing.getPlayer().getHitbox())) {
+                meetObstacle = true;
                 obstacleType = TANK;
                 return false;
             }
@@ -227,6 +311,31 @@ public abstract class Tank {
         return true;
     }
 
+
+    protected boolean doesHitboxIntersectSolidBlocks(Rectangle2D.Float hb) {
+
+        if (hb.x < 0 || hb.y < 0 || hb.x > Game.GAME_WIDTH - hb.width || hb.y > Game.GAME_HEIGHT - hb.height)
+            return true;
+
+        for (LevelBlock block : levelManager.getCurrentLevel().getLevelBlocks())
+            if (block.isActive())
+                if (hb.intersects(block.getHitbox()))
+                    if (block.getType() == BRICK || block.getType() == METAL || block.getType() == RIVER) {
+
+                        /*
+                        playing.getObjectManager().createDebugBlock(new Rectangle2D.Float(
+                                (float) block.getHitbox().getX(),
+                                (float) block.getHitbox().getY(),
+                                (float) block.getHitbox().getWidth(),
+                                (float) block.getHitbox().getHeight()
+                                ));
+                         */
+
+                        return true;
+                    }
+
+        return false;
+    }
 
 
     /**

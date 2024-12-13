@@ -2,6 +2,9 @@ package entities;
 
 import gamestates.Playing;
 
+import java.awt.*;
+
+import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.UP;
 import static utils.Constants.LevelConstants.PLAYER_SPAWN_X;
 import static utils.Constants.LevelConstants.PLAYER_SPAWN_Y;
@@ -46,10 +49,25 @@ public class Player extends Tank{
 
     public void levelUp() {
         if (tankType.getId() < MAX_TANK_TYPE) {
-            tankType = TankType.getTankTypeByCode(tankType.getId() + 1);
+            tankType = TankType.getTankTypeByCode(tankType.getId() + 1, Player.class);
             applyTankCharacteristics(tankType);
         }
     }
+
+    @Override
+    public void draw(Graphics g) {
+        super.draw(g);
+        if (DEBUG_MODE)
+            drawInfo(g);
+    }
+
+    private void drawInfo(Graphics g) {
+        String msg = String.valueOf(moveInOneDir);
+
+        g.setColor(Color.WHITE);
+        g.drawString(msg, (int)(hitbox.x - 5), (hitbox.y - 5 > 0) ? (int)(hitbox.y - 5) : (int)(hitbox.y + hitbox.height + 10));
+    }
+
 
     public void addPoints(int v) {
         points += v;

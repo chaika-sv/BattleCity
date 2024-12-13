@@ -3,7 +3,11 @@ package entities;
 import static utils.Constants.TankTypeConstants.*;
 
 public enum TankType {
-    T_BASE_PLAYER(BASE,             100, 5, 1.0f, 2.5f, 500, 52, 1.0f),
+    T_BASE_PLAYER(BASE,             0, 5, 1.0f, 2.5f, 500, 52, 1.0f),
+    T_FAST_PLAYER(FAST,             0, 5, 1.3f, 2.5f, 500, 52, 0.9f),
+    T_POWER_PLAYER(POWER,           0, 5, 1.2f, 2.5f, 500, 52, 0.9f),
+    T_HEAVY_PLAYER(HEAVY,           0, 5, 1.2f, 2.5f, 500, 52, 0.9f),
+
     T_BASE(BASE,                    100, 1, 1.0f, 2.5f, 1000, 52, 1.0f),
     T_FAST(FAST,                    200, 1, 1.3f, 2.5f, 500, 52, 0.9f),
     T_POWER(POWER,                  300, 1, 1.2f, 2.5f, 500, 52, 0.9f),
@@ -36,13 +40,25 @@ public enum TankType {
         this.tankScale = tankScale;
     }
 
-    public static TankType getTankTypeByCode(int tankCode) {
-        switch (tankCode) {
-            case 0 -> { return T_BASE; }
-            case 1 -> { return T_FAST; }
-            case 2 -> { return T_POWER; }
-            case 3 -> { return T_HEAVY; }
-            default -> { return T_BASE; }
+    public static TankType getTankTypeByCode(int tankCode, Class tankClass) {
+
+        if (tankClass == Enemy.class) {
+            switch (tankCode) {
+                case 0 -> { return T_BASE; }
+                case 1 -> { return T_FAST; }
+                case 2 -> { return T_POWER; }
+                case 3 -> { return T_HEAVY; }
+                default -> { return T_BASE; }
+            }
+        } else {
+            // Player
+            switch (tankCode) {
+                case 0 -> { return T_BASE_PLAYER; }
+                case 1 -> { return T_FAST_PLAYER; }
+                case 2 -> { return T_POWER_PLAYER; }
+                case 3 -> { return T_HEAVY_PLAYER; }
+                default -> { return T_BASE_PLAYER; }
+            }
         }
     }
 

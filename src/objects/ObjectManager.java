@@ -5,11 +5,13 @@ import gamestates.Playing;
 import main.Game;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Random;
 
 import static main.Game.TILES_IN_HEIGHT;
 import static main.Game.TILES_SIZE;
+import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.PowerUpConstants.*;
 import static utils.LoadSave.*;
 
@@ -19,6 +21,7 @@ public class ObjectManager {
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private ArrayList<TemporaryObject> temporaryObjects = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
+    private ArrayList<Rectangle2D.Float> debugBlocks = new ArrayList<>();
 
     private Random rand;
 
@@ -48,7 +51,8 @@ public class ObjectManager {
      * Generate random power up in random place
      */
     public void generateNewPowerUp() {
-        int powerUpType = rand.nextInt(MAX_POWER_UP_NUMBER);
+        //int powerUpType = rand.nextInt(MAX_POWER_UP_NUMBER);
+        int powerUpType = PU_STAR;
         int x = rand.nextInt(Game.GAME_WIDTH - TILES_SIZE);
         int y = rand.nextInt(Game.GAME_HEIGHT - TILES_SIZE);
 
@@ -72,6 +76,10 @@ public class ObjectManager {
         temporaryObjects.add(new TemporaryObject(x, y, explosionType, playing));
     }
 
+    public void createDebugBlock(Rectangle2D.Float block) {
+        debugBlocks.add(block);
+    }
+
     public void update() {
         updateProjectiles();
         updateTemporaryObjects();
@@ -81,11 +89,20 @@ public class ObjectManager {
     public void draw(Graphics g) {
         drawProjectiles(g);
         drawTemporaryObjects(g);
+
+        if (DEBUG_MODE)
+            drawDebugBlocks(g);
     }
 
     public void drawAfterPlayer(Graphics g) {
         drawShield(g);
         drawPowerUps(g);
+    }
+
+    private void drawDebugBlocks(Graphics g) {
+        g.setColor(new Color(27, 55, 76, 240));
+        for(Rectangle2D.Float block : debugBlocks)
+            g.fillRect((int)block.x, (int)block.y, (int)block.width, (int)block.height);
     }
 
 
@@ -167,5 +184,9 @@ public class ObjectManager {
 
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
+    }
+
+    public ArrayList<Rectangle2D.Float> getDebugBlocks() {
+        return debugBlocks;
     }
 }

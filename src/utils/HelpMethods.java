@@ -24,6 +24,8 @@ public class HelpMethods {
      */
     public static void DrawNumber(Graphics g, int number, int x, int y) {
 
+        int digitSize;
+
         if (number == 0) {
             g.drawImage(NUMBER_IMAGES[0], x, y, 32, 32, null);
         }
@@ -36,10 +38,18 @@ public class HelpMethods {
                 number = number / 10;
             }
 
+            if (stack.size() < 4)
+                digitSize = 32;
+            else if (stack.size() == 4)
+                digitSize = 26;
+            else
+                digitSize = 18;
+
+
             // Pop digits from stack to draw them
             int i = 0;
             while (!stack.isEmpty()) {
-                g.drawImage(NUMBER_IMAGES[stack.pop() % 10], x + i * 32, y, 32, 32, null);
+                g.drawImage(NUMBER_IMAGES[stack.pop() % 10], x + i * digitSize, y, digitSize, digitSize, null);
                 i++;
             }
 

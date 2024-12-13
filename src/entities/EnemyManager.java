@@ -141,11 +141,11 @@ public class EnemyManager {
         if (!doNotSpawn) {
 
             TankType tankType;
-            tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+            tankType = TankType.getTankTypeByCode(rand.nextInt(4), Enemy.class);
 
             // Trying to randomly select next tank type (if still need to spawn tanks of the type)
             while (!tanksCount.containsKey(tankType) || tanksCount.get(tankType) == 0)
-                tankType = TankType.getTankTypeByCode(rand.nextInt(4));
+                tankType = TankType.getTankTypeByCode(rand.nextInt(4), Enemy.class);
 
             // Decrease number of tanks of this type that still needs to be spawn
             tanksCount.computeIfPresent(tankType, (k, v) -> v - 1);
