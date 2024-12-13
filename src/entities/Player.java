@@ -62,7 +62,7 @@ public class Player extends Tank{
     }
 
     private void drawInfo(Graphics g) {
-        String msg = String.valueOf(moveInOneDir);
+        String msg = curDir + "; " + String.valueOf(moveInOneDir);
 
         g.setColor(Color.WHITE);
         g.drawString(msg, (int)(hitbox.x - 5), (hitbox.y - 5 > 0) ? (int)(hitbox.y - 5) : (int)(hitbox.y + hitbox.height + 10));

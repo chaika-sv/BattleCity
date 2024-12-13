@@ -3,8 +3,6 @@ package utils;
 import main.Game;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static main.Game.TILES_IN_HEIGHT;
@@ -43,8 +41,6 @@ public class Constants {
 
     public static class EnemyConstants {
         public static final int ENEMY_SPAWN_DELAY_MS = 4000;
-        public static final int MAX_ACTIVE_ENEMY_CNT = 2;
-        public static final int MAX_ENEMY_CNT = 4;
         public static final int ENEMY_SPAWN_X_1 = 0;
         public static final int ENEMY_SPAWN_Y_1 = 0;
         public static final int ENEMY_SPAWN_X_2 = 8 * TILES_SIZE;

@@ -133,6 +133,8 @@ public abstract class Tank {
         float xFrontArea = 0;
         float yFrontArea = 0;
 
+        int prevDir = curDir;
+
         if (left) {
             xSpeed -= driveSpeed;
             xFrontArea = -TANK_FRONT_AREA;
@@ -155,10 +157,18 @@ public abstract class Tank {
             moving = true;
         }
 
+        // Save last coordinate in this direction
+        if (prevDir != curDir) {
+            if (curDir == UP || curDir == DOWN)
+                lastCoordinate = (int) hitbox.y;
+            else
+                lastCoordinate = (int) hitbox.x;
+        }
+
         // Calculate distance moving in one direction
         if (curDir == UP || curDir == DOWN)
             moveInOneDir = (int) (lastCoordinate - hitbox.y);
-        else if (curDir == LEFT || curDir == RIGHT)
+        else
             moveInOneDir = (int) (lastCoordinate - hitbox.x);
 
         shiftX = 0;
@@ -203,10 +213,12 @@ public abstract class Tank {
                         case BRICK, METAL, RIVER -> {
                             // If brick, metal or river then cannot move
 
-                            if (this instanceof Player) {
-                                // But we can try to help our tank with a little shift to move around the block
+                            // But we can try to help player with a little shift to move around the block
+                            // We help only when player have just changed direction (small moveInOneDir)
+                            if (this instanceof Player && Math.abs(moveInOneDir) < 20) {
+
                                 // We are trying to shift tank left or right (for UP and DOWN direction) and up or down (for LEFT and RIGHT direction)
-                                // Try shift from 1 to MAX_SHIFT
+                                // Try shift from 1 to MAX_SHIFTss
                                 // And if the shift works then save it in shiftX or shiftY
 
                                 if (curDir == UP || curDir == DOWN) {
