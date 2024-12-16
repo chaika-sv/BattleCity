@@ -6,8 +6,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static utils.Constants.LevelConstants.*;
-import static utils.LoadSave.LoadBlockImages;
-import static utils.LoadSave.SetEnemySettings;
+import static utils.LoadSaveImages.LoadBlockImages;
+import static utils.LoadSaveImages.SetEnemySettings;
 
 public class LevelManager {
 

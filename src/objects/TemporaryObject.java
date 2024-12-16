@@ -1,12 +1,11 @@
 package objects;
 
-import entities.TankType;
 import gamestates.Playing;
 
 import java.awt.*;
 
 import static utils.Constants.ANI_SPEED;
-import static utils.LoadSave.TEMP_OBJECTS_IMAGES;
+import static utils.LoadSaveImages.TEMP_OBJECTS_IMAGES;
 
 public class TemporaryObject {
 

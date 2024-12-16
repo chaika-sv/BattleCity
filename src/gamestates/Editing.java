@@ -18,8 +18,8 @@ import java.io.*;
 import static main.Game.*;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.LevelConstants.*;
-import static utils.LoadSave.LoadLevelFromFile;
-import static utils.LoadSave.SaveLevelToFile;
+import static utils.LoadSaveImages.LoadLevelFromFile;
+import static utils.LoadSaveImages.SaveLevelToFile;
 
 public class Editing  extends State implements Statemethods {
 

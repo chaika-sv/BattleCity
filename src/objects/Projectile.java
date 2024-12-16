@@ -14,7 +14,7 @@ import java.awt.geom.Rectangle2D;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.ProjectileConstants.*;
-import static utils.LoadSave.PROJECTILE_IMAGES;
+import static utils.LoadSaveImages.PROJECTILE_IMAGES;
 
 public class Projectile {
 

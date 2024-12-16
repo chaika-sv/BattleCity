@@ -1,5 +1,6 @@
 package entities;
 
+import audio.AudioPlayer;
 import gamestates.Playing;
 
 import java.awt.*;
@@ -52,6 +53,12 @@ public class Player extends Tank{
             tankType = TankType.getTankTypeByCode(tankType.getId() + 1, Player.class);
             applyTankCharacteristics(tankType);
         }
+    }
+
+    @Override
+    protected void shoot() {
+        super.shoot();
+        playing.getGame().getAudioPlayer().shootEffect();
     }
 
     @Override

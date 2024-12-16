@@ -18,13 +18,12 @@ import static main.Game.TILES_DEFAULT_SIZE;
 import static ui.MenuItemType.*;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.LevelConstants.LEVEL_DIR;
-import static utils.Constants.PowerUpConstants.*;
 import static utils.Constants.ProjectileConstants.*;
 import static utils.Constants.TankColorConstants.*;
 import static utils.Constants.TankTypeConstants.*;
 import static utils.Constants.TempObjectsConstants.*;
 
-public class LoadSave {
+public class LoadSaveImages {
 
     public static final String MAIN_SPRITE = "sprite.png";
     public static final String LOGO_IMG = "logo.png";
@@ -54,7 +53,7 @@ public class LoadSave {
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
-        InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
+        InputStream is = LoadSaveImages.class.getResourceAsStream("/" + fileName);
         try {
             img = ImageIO.read(is);
 
@@ -127,7 +126,7 @@ public class LoadSave {
     }
 
     public static void LoadInfoPanelImages() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        BufferedImage img = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.MAIN_SPRITE);
         FIRST_PLAYER_INFO_IMG = img.getSubimage(1534, 544, 64, 32);
         SECOND_PLAYER_INFO_IMG = img.getSubimage(1534, 640, 64, 32);
         PLAYER_TANK_CNT_IMG = img.getSubimage(1534, 672, 32, 32);
@@ -168,7 +167,7 @@ public class LoadSave {
 
 
     public static void loadPowerUpImages() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        BufferedImage img = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.MAIN_SPRITE);
 
         POWER_UP_IMAGES = new BufferedImage[7];
 
@@ -182,7 +181,7 @@ public class LoadSave {
 
 
     public static void LoadTankImages() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        BufferedImage img = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.MAIN_SPRITE);
 
         int cX = 0;
         int cY = 0;
@@ -332,7 +331,7 @@ public class LoadSave {
 
 
     public static void LoadBlockImages() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        BufferedImage img = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.MAIN_SPRITE);
 
         BLOCK_IMAGES = new LinkedHashMap<>();
 
@@ -367,7 +366,7 @@ public class LoadSave {
     }
 
     public static void LoadProjectileImages() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        BufferedImage img = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.MAIN_SPRITE);
 
         PROJECTILE_IMAGES = new LinkedHashMap<>();
 
@@ -378,7 +377,7 @@ public class LoadSave {
     }
 
     public static void LoadTempObjectsImages() {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.MAIN_SPRITE);
+        BufferedImage img = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.MAIN_SPRITE);
 
         TEMP_OBJECTS_IMAGES = new BufferedImage[4][4];
 

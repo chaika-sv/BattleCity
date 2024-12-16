@@ -3,7 +3,7 @@ package ui;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-import static utils.LoadSave.MENU_ITEM_IMAGES;
+import static utils.LoadSaveImages.MENU_ITEM_IMAGES;
 
 public class MenuItem {
 

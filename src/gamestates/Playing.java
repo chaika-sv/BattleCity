@@ -1,5 +1,6 @@
 package gamestates;
 
+import audio.AudioPlayer;
 import entities.EnemyManager;
 import entities.Player;
 import entities.TankType;
@@ -12,17 +13,23 @@ import objects.ObjectManager;
 import ui.GameOverPauseOverlay;
 import ui.InfoPanel;
 import ui.StartLevelOverlay;
+import utils.LoadSaveAudio;
 
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static utils.Constants.LevelConstants.*;
 import static utils.Constants.PowerUpConstants.FREEZE_TIME_MS;
 import static utils.Constants.PowerUpConstants.WALL_TIME_MS;
-import static utils.LoadSave.ENEMY_SETTINGS;
-import static utils.LoadSave.LoadTankImages;
+import static utils.LoadSaveAudio.LEVEL_INTO_CLIP;
+import static utils.LoadSaveImages.ENEMY_SETTINGS;
+import static utils.LoadSaveImages.LoadTankImages;
 
 public class Playing extends State implements Statemethods{
 
@@ -33,6 +40,7 @@ public class Playing extends State implements Statemethods{
     private GameOverPauseOverlay gameOverPauseOverlay;
     private StartLevelOverlay startLevelOverlay;
     private InfoPanel infoPanel;
+    //private AudioPlayer audioPlayer;
 
     private boolean gameOver = false;
     private boolean pause = false;
@@ -79,11 +87,14 @@ public class Playing extends State implements Statemethods{
 
         getObjectManager().createShield(player);
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
+
     }
+
 
     public void returnToGameFromStartLevelOverlay() {
         Gamestate.state = Gamestate.PLAYING;
         setStartLevel(false);
+        game.getAudioPlayer().playEffect(AudioPlayer.LEVEL_INTRO);
     }
 
 
@@ -356,4 +367,6 @@ public class Playing extends State implements Statemethods{
     public boolean isFreeze() {
         return freeze;
     }
+
+
 }

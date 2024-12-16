@@ -1,16 +1,13 @@
 package ui;
 
-import gamestates.Gamestate;
 import gamestates.Playing;
 import main.Game;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import static utils.Constants.DirConstants.DOWN;
-import static utils.Constants.DirConstants.UP;
 import static utils.HelpMethods.DrawNumber;
-import static utils.LoadSave.STAGE_IMG;
+import static utils.LoadSaveImages.STAGE_IMG;
 
 public class StartLevelOverlay {
 

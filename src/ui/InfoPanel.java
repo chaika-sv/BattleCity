@@ -5,10 +5,9 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 import static utils.HelpMethods.DrawNumber;
-import static utils.LoadSave.*;
+import static utils.LoadSaveImages.*;
 
 public class InfoPanel {
 

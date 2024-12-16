@@ -4,7 +4,7 @@ import main.Game;
 import ui.MenuItem;
 import ui.MenuItemType;
 import ui.MenuSelector;
-import utils.LoadSave;
+import utils.LoadSaveImages;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -50,10 +50,10 @@ public class Menu extends State implements Statemethods{
 
 
     private void loadImages() {
-        BufferedImage logoImg = LoadSave.GetSpriteAtlas(LoadSave.LOGO_IMG);
+        BufferedImage logoImg = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.LOGO_IMG);
         logo = logoImg.getSubimage(0, 0, 382, 140);
 
-        BufferedImage copyrightImg = LoadSave.GetSpriteAtlas(LoadSave.COPYRIGHT_IMG);
+        BufferedImage copyrightImg = LoadSaveImages.GetSpriteAtlas(LoadSaveImages.COPYRIGHT_IMG);
         copyright = copyrightImg.getSubimage(0, 0, 403, 26);
     }
 

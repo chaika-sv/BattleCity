@@ -1,16 +1,9 @@
 package utils;
 
-import levels.LevelBlock;
-import levels.LevelBlockType;
-import main.Game;
-
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static utils.Constants.DEBUG_MODE;
-import static utils.LoadSave.NUMBER_IMAGES;
+import static utils.LoadSaveImages.NUMBER_IMAGES;
 
 public class HelpMethods {
 

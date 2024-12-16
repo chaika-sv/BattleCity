@@ -16,4 +16,7 @@ public class State {
         this.editor = editor;
     }
 
+    public Game getGame() {
+        return game;
+    }
 }

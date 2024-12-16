@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import static utils.Constants.PowerUpConstants.*;
-import static utils.LoadSave.POWER_UP_IMAGES;
+import static utils.LoadSaveImages.POWER_UP_IMAGES;
 
 public class PowerUp {
 

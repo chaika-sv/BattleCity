@@ -1,5 +1,6 @@
 package main;
 
+import audio.AudioPlayer;
 import editor.Editor;
 import gamestates.Gamestate;
 import gamestates.Menu;
@@ -16,6 +17,7 @@ public class Game implements Runnable{
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;        // updates per second
 
+    private AudioPlayer audioPlayer;
     private Playing playing;
     private Menu menu;
     private Editor editor;
@@ -45,6 +47,7 @@ public class Game implements Runnable{
     }
 
     private void initClasses() {
+        audioPlayer = new AudioPlayer();
         playing = new Playing(this);
         menu = new Menu(this, playing);
         //editor = new Editor();
@@ -151,5 +154,9 @@ public class Game implements Runnable{
 
     public Menu getMenu() {
         return menu;
+    }
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 }

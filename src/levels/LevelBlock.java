@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 import static levels.LevelBlockType.*;
 import static utils.Constants.DEBUG_MODE;
-import static utils.LoadSave.BLOCK_IMAGES;
+import static utils.LoadSaveImages.BLOCK_IMAGES;
 
 public class LevelBlock implements Serializable {
 

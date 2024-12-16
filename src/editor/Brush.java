@@ -12,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 import static main.Game.GAME_HEIGHT;
 import static main.Game.GAME_WIDTH;
 import static utils.Constants.DirConstants.*;
-import static utils.LoadSave.BLOCK_IMAGES;
+import static utils.LoadSaveImages.BLOCK_IMAGES;
 
 public class Brush {
 

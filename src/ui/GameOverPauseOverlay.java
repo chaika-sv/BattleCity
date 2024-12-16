@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 import static utils.Constants.DirConstants.DOWN;
 import static utils.Constants.DirConstants.UP;
-import static utils.LoadSave.GAME_OVER_IMG;
-import static utils.LoadSave.PAUSE_IMG;
+import static utils.LoadSaveImages.GAME_OVER_IMG;
+import static utils.LoadSaveImages.PAUSE_IMG;
 
 /**
  * The overlay is using for both Pause and Game over states

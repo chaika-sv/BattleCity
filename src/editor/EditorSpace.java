@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static main.Game.*;
-import static utils.LoadSave.LoadBlockImages;
+import static utils.LoadSaveImages.LoadBlockImages;
 
 public class EditorSpace {
 

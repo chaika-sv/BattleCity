@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import static utils.Constants.DirConstants.RIGHT;
 import static utils.Constants.TankColorConstants.PLAYER_YELLOW;
 import static utils.Constants.TankTypeConstants.BASE;
-import static utils.LoadSave.TANK_IMAGES;
+import static utils.LoadSaveImages.TANK_IMAGES;
 
 public class MenuSelector {
 

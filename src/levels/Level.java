@@ -1,14 +1,13 @@
 package levels;
 
 import main.Game;
-import objects.TemporaryObject;
 
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
 import static utils.Constants.LevelConstants.*;
-import static utils.LoadSave.LoadLevelFromFile;
+import static utils.LoadSaveImages.LoadLevelFromFile;
 
 public class Level implements Serializable {
 

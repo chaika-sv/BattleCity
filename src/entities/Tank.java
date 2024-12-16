@@ -28,8 +28,8 @@ import static utils.Constants.ProjectileConstants.PROJECTILE_WIDTH;
 import static utils.Constants.TankStateConstants.*;
 import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_X;
 import static utils.Constants.TempObjectsConstants.SHIELD_OFFSET_Y;
-import static utils.LoadSave.TANK_HITBOX_OFFSETS;
-import static utils.LoadSave.TANK_IMAGES;
+import static utils.LoadSaveImages.TANK_HITBOX_OFFSETS;
+import static utils.LoadSaveImages.TANK_IMAGES;
 
 public abstract class Tank {
 
@@ -485,7 +485,7 @@ public abstract class Tank {
 
     }
 
-    private void shoot() {
+    protected void shoot() {
         int xOffset = 0;
         int yOffset = 0;
 
