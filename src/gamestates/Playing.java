@@ -139,6 +139,8 @@ public class Playing extends State implements Statemethods{
         setPause(true);
         Gamestate.state = Gamestate.PAUSE;
         gameOverPauseOverlay.setDefaultMenuItemSelected();
+
+        game.getAudioPlayer().playMenuEffect();
     }
 
     public void resumeToGameAfterPause() {

@@ -1,6 +1,5 @@
 package entities;
 
-import audio.AudioPlayer;
 import gamestates.Playing;
 
 import java.awt.*;
@@ -27,6 +26,22 @@ public class Player extends Tank{
         super.resetAll();
         active = true;
         points = 0;
+    }
+
+    @Override
+    protected void updatePosition() {
+        boolean movingPrev = moving;
+
+        super.updatePosition();
+
+        // If tank have just started moving then start tank move effect (and stop tank idle)
+        if (moving && !movingPrev)
+            playing.getGame().getAudioPlayer().startTankMoveEffect();
+
+        // If tank is not moving then stop tank moving and start tank idle
+        if (!moving)
+            playing.getGame().getAudioPlayer().stopTankIdleEffect();
+
     }
 
     @Override

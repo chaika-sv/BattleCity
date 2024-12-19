@@ -15,6 +15,24 @@ public class AudioPlayer {
     public static int LEVEL_INTRO = 1;
     public static int TANK_IDLE = 2;
     public static int TANK_MOVE = 3;
+    public static int ENEMY_EXPLOSION = 4;
+    public static int GAME_OVER = 5;
+    public static int HIGH_SCORE = 6;
+    public static int HIT_BRICK = 7;
+    public static int HIT_ENEMY = 8;
+    public static int HIT_STEEL = 9;
+    public static int ICE = 10;
+    public static int LIFE = 11;
+    public static int PAUSE = 12;
+    public static int PLAYER_EXPLOSION = 13;
+    public static int POWER_UP_APPEAR = 14;
+    public static int POWER_UP_PICKUP = 15;
+    public static int SCORE = 16;
+    public static int SCORE_BONUS = 17;
+    public static int UNKNOWN_1 = 18;
+    public static int UNKNOWN_2 = 19;
+    public static int VICTORY = 20;
+
 
     private Clip[] songs, effects;
     private int currentSongId;
@@ -35,7 +53,29 @@ public class AudioPlayer {
     }
 
     private void loadEffects() {
-        String[] effectNames = { "fire", "level-intro", "tank-idle", "tank-move" };
+        String[] effectNames = { 
+                "fire", 
+                "level-intro", 
+                "tank-idle", 
+                "tank-move",
+                "enemy-explosion",
+                "game-over",
+                "high-score",
+                "hit-brick",
+                "hit-enemy",
+                "hit-steel",
+                "ice",
+                "life_1",
+                "pause_1",
+                "player-explosion",
+                "powerup-appear",
+                "powerup-pickup_1",
+                "score",
+                "score-bonus",
+                "unknown-2",
+                "unknown-3",
+                "victory_1"
+        };
         effects = new Clip[effectNames.length];
         for (int i = 0; i < effects.length; i++) {
             effects[i] = getClip(effectNames[i]);
@@ -165,6 +205,38 @@ public class AudioPlayer {
         effects[FIRE].stop();
         effects[currentSongId].setMicrosecondPosition(0);
         effects[FIRE].start();
+    }
+
+    public void startTankMoveEffect() {
+        if (effects[TANK_IDLE].isActive())
+            effects[TANK_IDLE].stop();
+
+        if (!effects[TANK_MOVE].isActive()) {
+            effects[TANK_MOVE].setMicrosecondPosition(0);
+            effects[TANK_MOVE].loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+
+    public void stopTankIdleEffect() {
+        if (effects[TANK_MOVE].isActive())
+            effects[TANK_MOVE].stop();
+
+        if (!effects[TANK_IDLE].isActive()) {
+            effects[TANK_IDLE].setMicrosecondPosition(0);
+            effects[TANK_IDLE].loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+
+    private void stopTankMoveEffects() {
+        if (effects[TANK_IDLE].isActive())
+            effects[TANK_IDLE].stop();
+        if (effects[TANK_MOVE].isActive())
+            effects[TANK_MOVE].stop();
+    }
+
+    public void playMenuEffect() {
+        stopTankMoveEffects();
+        playEffect(PAUSE);
     }
 
 }
