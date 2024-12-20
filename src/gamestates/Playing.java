@@ -24,6 +24,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static utils.Constants.Audio.GAME_OVER;
+import static utils.Constants.Audio.LEVEL_INTRO;
 import static utils.Constants.LevelConstants.*;
 import static utils.Constants.PowerUpConstants.FREEZE_TIME_MS;
 import static utils.Constants.PowerUpConstants.WALL_TIME_MS;
@@ -94,7 +96,7 @@ public class Playing extends State implements Statemethods{
     public void returnToGameFromStartLevelOverlay() {
         Gamestate.state = Gamestate.PLAYING;
         setStartLevel(false);
-        game.getAudioPlayer().playEffect(AudioPlayer.LEVEL_INTRO);
+        game.getAudioPlayer().playEffect(LEVEL_INTRO);
     }
 
 
@@ -106,6 +108,7 @@ public class Playing extends State implements Statemethods{
         setGameOver(false);
         setPause(false);
         Gamestate.state = Gamestate.PLAYING;
+        game.getAudioPlayer().playEffect(LEVEL_INTRO);
     }
 
     private void startCurrentLevelAgain() {
@@ -161,6 +164,7 @@ public class Playing extends State implements Statemethods{
         setGameOver(true);
         Gamestate.state = Gamestate.GAMEOVER;
         gameOverPauseOverlay.setDefaultMenuItemSelected();
+        game.getAudioPlayer().playGameOverEffect();
     }
 
 

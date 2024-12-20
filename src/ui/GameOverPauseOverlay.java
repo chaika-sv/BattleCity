@@ -67,7 +67,7 @@ public class GameOverPauseOverlay {
     }
 
     public void update() {
-
+        playing.getGame().getAudioPlayer().stopTankMoveEffects();
     }
 
     public void draw(Graphics g) {

@@ -5,34 +5,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 
+import static utils.Constants.Audio.*;
+
 public class AudioPlayer {
-
-    public static int MENU_1 = 0;
-    public static int LEVEL_1 = 1;
-    public static int LEVEL_2 = 2;
-
-    public static int FIRE = 0;
-    public static int LEVEL_INTRO = 1;
-    public static int TANK_IDLE = 2;
-    public static int TANK_MOVE = 3;
-    public static int ENEMY_EXPLOSION = 4;
-    public static int GAME_OVER = 5;
-    public static int HIGH_SCORE = 6;
-    public static int HIT_BRICK = 7;
-    public static int HIT_ENEMY = 8;
-    public static int HIT_STEEL = 9;
-    public static int ICE = 10;
-    public static int LIFE = 11;
-    public static int PAUSE = 12;
-    public static int PLAYER_EXPLOSION = 13;
-    public static int POWER_UP_APPEAR = 14;
-    public static int POWER_UP_PICKUP = 15;
-    public static int SCORE = 16;
-    public static int SCORE_BONUS = 17;
-    public static int UNKNOWN_1 = 18;
-    public static int UNKNOWN_2 = 19;
-    public static int VICTORY = 20;
-
 
     private Clip[] songs, effects;
     private int currentSongId;
@@ -121,35 +96,6 @@ public class AudioPlayer {
             songs[currentSongId].stop();
     }
 
-    /**
-     * We have only two level songs for now so we are just rotating them
-     */
-    public void setLevelSong(int lvlIndex) {
-        if (lvlIndex % 2 == 0)
-            playSong(LEVEL_1);
-        else
-            playSong(LEVEL_2);
-    }
-
-    /**
-     * Play this when level completed
-     */
-//    public void lvlCompleted() {
-//        stopSong();
-//        playEffect(LVL_COMPLETED);
-//    }
-
-    /**
-     * We have three different sounds for attack ("attack1", "attack2", "attack3")
-     * So when player attacks we play one of them randomly
-     */
-    public void playAttackSound() {
-        // Index of the first attack effect in the effects array
-        int start = 4;
-        start += random.nextInt(3);
-        playEffect(start);
-    }
-
     public void playEffect(int effect) {
         effects[effect].setMicrosecondPosition(0);      // Play from the begging
         effects[effect].start();
@@ -201,10 +147,12 @@ public class AudioPlayer {
         }
     }
 
-    public void shootEffect() {
-        effects[FIRE].stop();
-        effects[currentSongId].setMicrosecondPosition(0);
-        effects[FIRE].start();
+
+
+    public void playFastEffect(int effect) {
+        effects[effect].stop();
+        effects[effect].setMicrosecondPosition(0);
+        effects[effect].start();
     }
 
     public void startTankMoveEffect() {
@@ -214,6 +162,7 @@ public class AudioPlayer {
         if (!effects[TANK_MOVE].isActive()) {
             effects[TANK_MOVE].setMicrosecondPosition(0);
             effects[TANK_MOVE].loop(Clip.LOOP_CONTINUOUSLY);
+            effects[TANK_MOVE].start();
         }
     }
 
@@ -222,12 +171,13 @@ public class AudioPlayer {
             effects[TANK_MOVE].stop();
 
         if (!effects[TANK_IDLE].isActive()) {
-            effects[TANK_IDLE].setMicrosecondPosition(0);
+             effects[TANK_IDLE].setMicrosecondPosition(0);
             effects[TANK_IDLE].loop(Clip.LOOP_CONTINUOUSLY);
+            effects[TANK_IDLE].start();
         }
     }
 
-    private void stopTankMoveEffects() {
+    public void stopTankMoveEffects() {
         if (effects[TANK_IDLE].isActive())
             effects[TANK_IDLE].stop();
         if (effects[TANK_MOVE].isActive())
@@ -237,6 +187,11 @@ public class AudioPlayer {
     public void playMenuEffect() {
         stopTankMoveEffects();
         playEffect(PAUSE);
+    }
+
+    public void playGameOverEffect() {
+        stopTankMoveEffects();
+        playEffect(GAME_OVER);
     }
 
 }

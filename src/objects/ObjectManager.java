@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static main.Game.TILES_SIZE;
+import static utils.Constants.Audio.POWER_UP_APPEAR;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.PowerUpConstants.*;
 import static utils.LoadSaveImages.*;
@@ -56,6 +57,7 @@ public class ObjectManager {
         int y = rand.nextInt(Game.GAME_HEIGHT - TILES_SIZE);
 
         powerUps.add(new PowerUp(playing, powerUpType, x, y));
+        playing.getGame().getAudioPlayer().playFastEffect(POWER_UP_APPEAR);
     }
 
 

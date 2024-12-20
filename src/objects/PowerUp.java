@@ -8,6 +8,7 @@ import main.Game;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+import static utils.Constants.Audio.POWER_UP_PICKUP;
 import static utils.Constants.PowerUpConstants.*;
 import static utils.LoadSaveImages.POWER_UP_IMAGES;
 
@@ -52,6 +53,7 @@ public class PowerUp {
         if (player.isActive())
             if (powerUpHitbox.intersects(player.getHitbox())) {
                 applyPowerUp(type, player);
+                playing.getGame().getAudioPlayer().playFastEffect(POWER_UP_PICKUP);
                 active = false;
             }
 

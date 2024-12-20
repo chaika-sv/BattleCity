@@ -4,6 +4,8 @@ import gamestates.Playing;
 
 import java.awt.*;
 
+import static utils.Constants.Audio.FIRE;
+import static utils.Constants.Audio.PLAYER_EXPLOSION;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.UP;
 import static utils.Constants.LevelConstants.PLAYER_SPAWN_X;
@@ -61,6 +63,8 @@ public class Player extends Tank{
         syncHitboxWithSprite();
         playing.getObjectManager().createShield(this);
         tankType = TankType.T_BASE;
+
+        playing.getGame().getAudioPlayer().playFastEffect(PLAYER_EXPLOSION);
     }
 
     public void levelUp() {
@@ -73,7 +77,7 @@ public class Player extends Tank{
     @Override
     protected void shoot() {
         super.shoot();
-        playing.getGame().getAudioPlayer().shootEffect();
+        playing.getGame().getAudioPlayer().playFastEffect(FIRE);
     }
 
     @Override

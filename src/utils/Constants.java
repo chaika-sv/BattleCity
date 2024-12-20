@@ -135,4 +135,28 @@ public class Constants {
         );
     }
 
+    public static class Audio {
+        public static int FIRE = 0;
+        public static int LEVEL_INTRO = 1;
+        public static int TANK_IDLE = 2;
+        public static int TANK_MOVE = 3;
+        public static int ENEMY_EXPLOSION = 4;
+        public static int GAME_OVER = 5;
+        public static int HIGH_SCORE = 6;
+        public static int HIT_BRICK = 7;
+        public static int HIT_ENEMY = 8;
+        public static int HIT_STEEL = 9;
+        public static int ICE = 10;
+        public static int LIFE = 11;
+        public static int PAUSE = 12;
+        public static int PLAYER_EXPLOSION = 13;
+        public static int POWER_UP_APPEAR = 14;
+        public static int POWER_UP_PICKUP = 15;
+        public static int SCORE = 16;
+        public static int SCORE_BONUS = 17;
+        public static int UNKNOWN_1 = 18;
+        public static int UNKNOWN_2 = 19;
+        public static int VICTORY = 20;
+    }
+
 }

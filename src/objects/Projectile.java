@@ -5,12 +5,12 @@ import entities.Player;
 import entities.Tank;
 import gamestates.Playing;
 import levels.LevelBlock;
-import levels.LevelBlockType;
 import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+import static utils.Constants.Audio.*;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.ProjectileConstants.*;
@@ -99,9 +99,23 @@ public class Projectile {
                         destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
                         // Check if the explosion should destroy any other neighbor blocks
                         checkExplosionIntersect();
-                        // If base was destroyed then game over
-                        if (levelBlock.getType() == LevelBlockType.BASE)
-                            playing.gameOver();;
+
+                        switch (levelBlock.getType()) {
+                            case BASE -> {
+                                // If base was destroyed then game over
+                                playing.gameOver();;
+                            }
+                            case BRICK -> {
+                                // Play the effect for player only
+                                if (tank instanceof Player)
+                                    playing.getGame().getAudioPlayer().playFastEffect(HIT_BRICK);
+                            }
+                            case METAL -> {
+                                // Play the effect for player only
+                                if (tank instanceof Player)
+                                    playing.getGame().getAudioPlayer().playFastEffect(HIT_STEEL);
+                            }
+                        }
 
                         return;
                     }
@@ -153,11 +167,15 @@ public class Projectile {
                 if (damagedTank.getCurrentHealth() <= 0) {
                     damagedTank.killTheTank(tank);
                     deactivateProjectile();
+                    if (tank instanceof Player)
+                        playing.getGame().getAudioPlayer().playFastEffect(ENEMY_EXPLOSION);
                 }
                 else {
                     // If the tank was just injured then destroy the projectile with small explosion
                     damagedTank.injureTheTank();
                     destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
+                    if (tank instanceof Player)
+                        playing.getGame().getAudioPlayer().playFastEffect(HIT_ENEMY);
                 }
             }
 
