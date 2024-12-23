@@ -53,7 +53,7 @@ public class PowerUp {
         if (player.isActive())
             if (powerUpHitbox.intersects(player.getHitbox())) {
                 applyPowerUp(type, player);
-                playing.getGame().getAudioPlayer().playFastEffect(POWER_UP_PICKUP);
+                playing.getGame().getAudioPlayer().playEffect(POWER_UP_PICKUP);
                 active = false;
             }
 

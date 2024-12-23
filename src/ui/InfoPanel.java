@@ -51,11 +51,15 @@ public class InfoPanel {
         DrawNumber(g, playing.getPlayer().getPoints(), Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f + 150));
 
         // Level flag
-        g.drawImage(STAGE_NUM_IMG, Game.GAME_WIDTH + 10, Game.GAME_HEIGHT - 80, 64, 64, null);
+        g.drawImage(STAGE_NUM_IMG, Game.GAME_WIDTH + 10, Game.GAME_HEIGHT - 100, 64, 64, null);
 
         // Level number
-        DrawNumber(g, playing.getLevelManager().getCurrentLevelIndex() + 1, Game.GAME_WIDTH + 10 + 70, Game.GAME_HEIGHT - 46);
+        DrawNumber(g, playing.getLevelManager().getCurrentLevelIndex() + 1, Game.GAME_WIDTH + 10 + 70, Game.GAME_HEIGHT - 66);
 
+
+        g.setColor(Color.BLACK);
+        g.drawString("Press M for mute,", Game.GAME_WIDTH + 10, Game.GAME_HEIGHT - 15);
+        g.drawString("N - mute movement", Game.GAME_WIDTH + 10, Game.GAME_HEIGHT - 5);
     }
 
 

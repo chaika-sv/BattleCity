@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import static utils.Constants.Audio.HIT_BRICK;
 import static utils.Constants.DirConstants.DOWN;
 import static utils.Constants.DirConstants.UP;
 import static utils.LoadSaveImages.GAME_OVER_IMG;
@@ -49,7 +50,7 @@ public class GameOverPauseOverlay {
 
     public void setDefaultMenuItemSelected() {
         // For game over menu start with 1 (RESTART). RESUME is inactive in this case
-        if (Gamestate.state == Gamestate.GAMEOVER) {
+        if (Gamestate.state == Gamestate.GAME_OVER) {
             menuItems.get(0).setActive(false);
             minSelectorIndex = 1;
         }
@@ -67,7 +68,6 @@ public class GameOverPauseOverlay {
     }
 
     public void update() {
-        playing.getGame().getAudioPlayer().stopTankMoveEffects();
     }
 
     public void draw(Graphics g) {
@@ -75,7 +75,7 @@ public class GameOverPauseOverlay {
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 
         // Title (Game Over or Pause)
-        if (Gamestate.state == Gamestate.GAMEOVER)
+        if (Gamestate.state == Gamestate.GAME_OVER)
             g.drawImage(GAME_OVER_IMG, Game.GAME_WIDTH / 2 - 64, Game.GAME_HEIGHT / 2 - 100, 128, 64, null);
         else if (Gamestate.state == Gamestate.PAUSE)
             g.drawImage(PAUSE_IMG, Game.GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2 - 130, 160, 32, null);
@@ -104,6 +104,7 @@ public class GameOverPauseOverlay {
                 curSelectorIndex--;
 
         menuSelector.setSelectedItem(menuItems.get(curSelectorIndex));
+        playing.getGame().getAudioPlayer().playEffect(HIT_BRICK);
     }
 
     /**

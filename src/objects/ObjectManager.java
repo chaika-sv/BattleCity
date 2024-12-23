@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static main.Game.TILES_SIZE;
 import static utils.Constants.Audio.POWER_UP_APPEAR;
@@ -57,7 +58,7 @@ public class ObjectManager {
         int y = rand.nextInt(Game.GAME_HEIGHT - TILES_SIZE);
 
         powerUps.add(new PowerUp(playing, powerUpType, x, y));
-        playing.getGame().getAudioPlayer().playFastEffect(POWER_UP_APPEAR);
+        playing.getGame().getAudioPlayer().playEffect(POWER_UP_APPEAR);
     }
 
 
@@ -156,11 +157,12 @@ public class ObjectManager {
     }
 
     private void drawShield(Graphics g) {
-        for (TemporaryObject e : temporaryObjects)
+
+        java.util.List<TemporaryObject> shields = temporaryObjects.stream().filter(tempObj -> tempObj.getType().equals(TemporaryObjectType.TO_SHIELD)).collect(Collectors.toList());
+
+        for (TemporaryObject e : shields)
             if (e.isActive())
-                // Shield should be drawn after player
-                if (e.getType() == TemporaryObjectType.TO_SHIELD)
-                    e.draw(g);
+                e.draw(g);
     }
 
     private void drawPowerUps(Graphics g) {

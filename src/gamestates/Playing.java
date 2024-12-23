@@ -1,6 +1,5 @@
 package gamestates;
 
-import audio.AudioPlayer;
 import entities.EnemyManager;
 import entities.Player;
 import entities.TankType;
@@ -12,24 +11,18 @@ import main.Game;
 import objects.ObjectManager;
 import ui.GameOverPauseOverlay;
 import ui.InfoPanel;
+import ui.LevelCompleteOverlay;
 import ui.StartLevelOverlay;
-import utils.LoadSaveAudio;
 
-import javax.print.attribute.standard.Media;
-import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.InputStream;
 
-import static utils.Constants.Audio.GAME_OVER;
-import static utils.Constants.Audio.LEVEL_INTRO;
+import static utils.Constants.Audio.*;
 import static utils.Constants.LevelConstants.*;
 import static utils.Constants.PowerUpConstants.FREEZE_TIME_MS;
 import static utils.Constants.PowerUpConstants.WALL_TIME_MS;
-import static utils.LoadSaveAudio.LEVEL_INTO_CLIP;
 import static utils.LoadSaveImages.ENEMY_SETTINGS;
 import static utils.LoadSaveImages.LoadTankImages;
 
@@ -41,12 +34,13 @@ public class Playing extends State implements Statemethods{
     private EnemyManager enemyManager;
     private GameOverPauseOverlay gameOverPauseOverlay;
     private StartLevelOverlay startLevelOverlay;
+    private LevelCompleteOverlay levelCompleteOverlay;
     private InfoPanel infoPanel;
-    //private AudioPlayer audioPlayer;
 
     private boolean gameOver = false;
     private boolean pause = false;
     private boolean startLevel = false;
+    private boolean levelComplete = false;
     private boolean freeze = false;
     private boolean metalWall = false;
 
@@ -71,6 +65,7 @@ public class Playing extends State implements Statemethods{
         player = new Player(TankType.T_BASE_PLAYER, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
         gameOverPauseOverlay = new GameOverPauseOverlay(this);
         startLevelOverlay = new StartLevelOverlay(this);
+        levelCompleteOverlay = new LevelCompleteOverlay(this);
         infoPanel = new InfoPanel(this);
     }
 
@@ -79,7 +74,7 @@ public class Playing extends State implements Statemethods{
         // We are starting the game ...
         startGame();
         // ... but for now pause everything and show the Start Level overlay
-        Gamestate.state = Gamestate.STARTLEVEL;
+        Gamestate.state = Gamestate.START_LEVEL;
         setStartLevel(true);
     }
 
@@ -124,17 +119,24 @@ public class Playing extends State implements Statemethods{
             // todo: no more levels
             goToMainMenu();
         } else {
-            resetAll();
-            levelManager.loadNextLevel();
-
-            getObjectManager().createShield(player);
-            enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
-
-            // ... but for now pause everything and show the Start Level overlay
-            Gamestate.state = Gamestate.STARTLEVEL;
-            setStartLevel(true);
-
+            game.getAudioPlayer().playEffect(VICTORY);
+            Gamestate.state = Gamestate.LEVEL_COMPLETE;
+            setLevelComplete(true);
         }
+    }
+
+    public void returnToGameFromLevelCompleteOverlay() {
+        setLevelComplete(false);
+
+        resetAll();
+        levelManager.loadNextLevel();
+
+        getObjectManager().createShield(player);
+        enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
+
+        // ... but for now pause everything and show the Start Level overlay
+        Gamestate.state = Gamestate.START_LEVEL;
+        setStartLevel(true);
     }
 
 
@@ -143,7 +145,7 @@ public class Playing extends State implements Statemethods{
         Gamestate.state = Gamestate.PAUSE;
         gameOverPauseOverlay.setDefaultMenuItemSelected();
 
-        game.getAudioPlayer().playMenuEffect();
+        game.getAudioPlayer().playEffect(PAUSE);
     }
 
     public void resumeToGameAfterPause() {
@@ -162,9 +164,10 @@ public class Playing extends State implements Statemethods{
 
     public void gameOver() {
         setGameOver(true);
-        Gamestate.state = Gamestate.GAMEOVER;
+        Gamestate.state = Gamestate.GAME_OVER;
         gameOverPauseOverlay.setDefaultMenuItemSelected();
-        game.getAudioPlayer().playGameOverEffect();
+
+        game.getAudioPlayer().playEffect(GAME_OVER);
     }
 
 
@@ -223,6 +226,8 @@ public class Playing extends State implements Statemethods{
             gameOverPauseOverlay.update();
         } else if (startLevel) {
             startLevelOverlay.update();
+        } else if (levelComplete) {
+            levelCompleteOverlay.update();
         } else {
 
             long currentTime = System.currentTimeMillis();
@@ -263,6 +268,8 @@ public class Playing extends State implements Statemethods{
             gameOverPauseOverlay.draw(g);
         } else if (startLevel) {
             startLevelOverlay.draw(g);
+        } else if (levelComplete) {
+            levelCompleteOverlay.draw(g);
         }
     }
 
@@ -292,6 +299,8 @@ public class Playing extends State implements Statemethods{
             gameOverPauseOverlay.keyPressed(e);
         } if (startLevel) {
             startLevelOverlay.keyPressed(e);
+        } if (levelComplete) {
+            levelCompleteOverlay.keyPressed(e);
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A -> player.setLeft(true);
@@ -300,6 +309,8 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_S -> player.setDown(true);
                 case KeyEvent.VK_SPACE -> player.setAttacking(true);
                 case KeyEvent.VK_ESCAPE -> pauseGame();
+                case KeyEvent.VK_M -> game.getAudioPlayer().toggleEffectMute();
+                case KeyEvent.VK_N -> game.getAudioPlayer().toggleEffectMuteMove();
             }
         }
 
@@ -310,6 +321,8 @@ public class Playing extends State implements Statemethods{
         if (gameOver || pause) {
             //gameOverOverlay.keyRelease(e);
         } if (startLevel) {
+            //startLevelOverlay.keyRelease(e);
+        } if (levelComplete) {
             //startLevelOverlay.keyRelease(e);
         } else {
             switch (e.getKeyCode()) {
@@ -374,5 +387,15 @@ public class Playing extends State implements Statemethods{
         return freeze;
     }
 
+    public LevelCompleteOverlay getLevelCompleteOverlay() {
+        return levelCompleteOverlay;
+    }
 
+    public boolean isLevelComplete() {
+        return levelComplete;
+    }
+
+    public void setLevelComplete(boolean levelComplete) {
+        this.levelComplete = levelComplete;
+    }
 }

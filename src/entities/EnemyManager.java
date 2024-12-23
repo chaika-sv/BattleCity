@@ -171,7 +171,7 @@ public class EnemyManager {
     }
 
     public void update() {
-        if (!playing.isGameOver() || !playing.isPause() || !playing.isStartLevel())
+        if (!playing.isGameOver() || !playing.isPause() || !playing.isStartLevel() || !playing.isLevelComplete())
             generateEnemies();
 
         if (!playing.isFreeze())

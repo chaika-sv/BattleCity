@@ -30,11 +30,14 @@ public class KeyboardInputs implements KeyListener {
             case PLAYING -> {
                 gamePanel.getGame().getPlaying().keyPressed(e);
             }
-            case GAMEOVER, PAUSE -> {
+            case GAME_OVER, PAUSE -> {
                 gamePanel.getGame().getPlaying().getGameOverPauseOverlay().keyPressed(e);
             }
-            case STARTLEVEL -> {
+            case START_LEVEL -> {
                 gamePanel.getGame().getPlaying().getStartLevelOverlay().keyPressed(e);
+            }
+            case LEVEL_COMPLETE -> {
+                gamePanel.getGame().getPlaying().getLevelCompleteOverlay().keyPressed(e);
             }
             case MENU -> {
                 gamePanel.getGame().getMenu().keyPressed(e);
@@ -54,7 +57,7 @@ public class KeyboardInputs implements KeyListener {
             case PLAYING -> {
                 gamePanel.getGame().getPlaying().keyReleased(e);
             }
-            case GAMEOVER, PAUSE -> {
+            case GAME_OVER, PAUSE -> {
                 //gamePanel.getGame().getPlaying().getGameOverOverlay().keyReleased(e);
             }
             case MENU -> {

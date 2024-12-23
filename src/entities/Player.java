@@ -64,7 +64,7 @@ public class Player extends Tank{
         playing.getObjectManager().createShield(this);
         tankType = TankType.T_BASE;
 
-        playing.getGame().getAudioPlayer().playFastEffect(PLAYER_EXPLOSION);
+        playing.getGame().getAudioPlayer().playEffect(PLAYER_EXPLOSION);
     }
 
     public void levelUp() {
@@ -77,7 +77,7 @@ public class Player extends Tank{
     @Override
     protected void shoot() {
         super.shoot();
-        playing.getGame().getAudioPlayer().playFastEffect(FIRE);
+        playing.getGame().getAudioPlayer().playEffect(FIRE);
     }
 
     @Override

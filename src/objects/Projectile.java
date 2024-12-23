@@ -108,12 +108,12 @@ public class Projectile {
                             case BRICK -> {
                                 // Play the effect for player only
                                 if (tank instanceof Player)
-                                    playing.getGame().getAudioPlayer().playFastEffect(HIT_BRICK);
+                                    playing.getGame().getAudioPlayer().playEffect(HIT_BRICK);
                             }
                             case METAL -> {
                                 // Play the effect for player only
                                 if (tank instanceof Player)
-                                    playing.getGame().getAudioPlayer().playFastEffect(HIT_STEEL);
+                                    playing.getGame().getAudioPlayer().playEffect(HIT_STEEL);
                             }
                         }
 
@@ -168,14 +168,14 @@ public class Projectile {
                     damagedTank.killTheTank(tank);
                     deactivateProjectile();
                     if (tank instanceof Player)
-                        playing.getGame().getAudioPlayer().playFastEffect(ENEMY_EXPLOSION);
+                        playing.getGame().getAudioPlayer().playEffect(ENEMY_EXPLOSION);
                 }
                 else {
                     // If the tank was just injured then destroy the projectile with small explosion
                     damagedTank.injureTheTank();
                     destroyProjectile(TemporaryObjectType.TO_SMALL_EXPLOSION);
                     if (tank instanceof Player)
-                        playing.getGame().getAudioPlayer().playFastEffect(HIT_ENEMY);
+                        playing.getGame().getAudioPlayer().playEffect(HIT_ENEMY);
                 }
             }
 

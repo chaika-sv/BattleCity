@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static utils.Constants.Audio.HIT_STEEL;
 import static utils.Constants.DirConstants.DOWN;
 import static utils.Constants.DirConstants.UP;
 
@@ -97,6 +98,7 @@ public class Menu extends State implements Statemethods{
                 curSelectorIndex--;
 
         menuSelector.setSelectedItem(menuItems.get(curSelectorIndex));
+        playing.getGame().getAudioPlayer().playEffect(HIT_STEEL);
     }
 
     /**

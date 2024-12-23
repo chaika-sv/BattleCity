@@ -28,6 +28,7 @@ public class LoadSaveImages {
     public static final String MAIN_SPRITE = "sprite.png";
     public static final String LOGO_IMG = "logo.png";
     public static final String COPYRIGHT_IMG = "copyright.png";
+    public static final String VICTORY_IMG = "victory.png";
 
     public static Map<LevelBlockType, BufferedImage> BLOCK_IMAGES;
     public static Map<Integer, BufferedImage> PROJECTILE_IMAGES;
@@ -75,7 +76,7 @@ public class LoadSaveImages {
         Map<TankType, Integer> settings = new LinkedHashMap<>();
 
         ENEMY_SETTINGS.put(0, new EnemySettings(new LinkedHashMap<>() {{
-            put(T_BASE, 6);
+            put(T_BASE, 1);
             put(T_FAST, 0);
             put(T_POWER, 0);
             put(T_HEAVY, 0);
