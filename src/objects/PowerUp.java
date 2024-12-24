@@ -48,7 +48,7 @@ public class PowerUp {
 
         Rectangle2D.Float powerUpHitbox = new Rectangle2D.Float(x, y, width, height);
 
-        Player player = playing.getPlayer();
+        Player player = playing.getPlayer1();
 
         if (player.isActive())
             if (powerUpHitbox.intersects(player.getHitbox())) {

@@ -28,7 +28,8 @@ import static utils.LoadSaveImages.LoadTankImages;
 
 public class Playing extends State implements Statemethods{
 
-    private Player player;
+    private Player player1;
+    private Player player2;
     private LevelManager levelManager;
     private ObjectManager objectManager;
     private EnemyManager enemyManager;
@@ -62,7 +63,9 @@ public class Playing extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player = new Player(TankType.T_BASE_PLAYER, PLAYER_SPAWN_X, PLAYER_SPAWN_Y, this);
+        player1 = new Player(TankType.T_BASE_PLAYER, PLAYER_1_SPAWN_X, PLAYER_1_SPAWN_Y, this);
+        player2 = new Player(TankType.T_BASE_PLAYER, PLAYER_2_SPAWN_X, PLAYER_2_SPAWN_Y, this);
+        player2.setActive(false);
         gameOverPauseOverlay = new GameOverPauseOverlay(this);
         startLevelOverlay = new StartLevelOverlay(this);
         levelCompleteOverlay = new LevelCompleteOverlay(this);
@@ -82,7 +85,7 @@ public class Playing extends State implements Statemethods{
         resetAll();
         levelManager.loadFirstLevel();
 
-        getObjectManager().createShield(player);
+        getObjectManager().createShield(player1);
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
 
     }
@@ -109,7 +112,7 @@ public class Playing extends State implements Statemethods{
     private void startCurrentLevelAgain() {
         levelManager.reloadCurrentLevel();
 
-        getObjectManager().createShield(player);
+        getObjectManager().createShield(player1);
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
@@ -131,7 +134,7 @@ public class Playing extends State implements Statemethods{
         resetAll();
         levelManager.loadNextLevel();
 
-        getObjectManager().createShield(player);
+        getObjectManager().createShield(player1);
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
 
         // ... but for now pause everything and show the Start Level overlay
@@ -172,7 +175,7 @@ public class Playing extends State implements Statemethods{
 
 
     private void resetAll() {
-        player.resetAll();
+        player1.resetAll();
         objectManager.resetAll();
         enemyManager.resetAll();
     }
@@ -240,8 +243,10 @@ public class Playing extends State implements Statemethods{
 
             // Still playing
             objectManager.update();
-            if (player.isActive())
-                player.update();
+            if (player1.isActive())
+                player1.update();
+            if (player2.isActive())
+                player2.update();
             enemyManager.update();
         }
     }
@@ -257,8 +262,11 @@ public class Playing extends State implements Statemethods{
         levelManager.draw(g);
         objectManager.draw(g);
 
-        if (player.isActive())
-            player.draw(g);
+        if (player1.isActive())
+            player1.draw(g);
+
+        if (player2.isActive())
+            player2.draw(g);
 
         enemyManager.draw(g);
         objectManager.drawAfterPlayer(g);
@@ -303,11 +311,19 @@ public class Playing extends State implements Statemethods{
             levelCompleteOverlay.keyPressed(e);
         } else {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_A -> player.setLeft(true);
-                case KeyEvent.VK_D -> player.setRight(true);
-                case KeyEvent.VK_W -> player.setUp(true);
-                case KeyEvent.VK_S -> player.setDown(true);
-                case KeyEvent.VK_SPACE -> player.setAttacking(true);
+                case KeyEvent.VK_A -> player1.setLeft(true);
+                case KeyEvent.VK_D -> player1.setRight(true);
+                case KeyEvent.VK_W -> player1.setUp(true);
+                case KeyEvent.VK_S -> player1.setDown(true);
+                case KeyEvent.VK_SPACE -> player1.setAttacking(true);
+
+                case KeyEvent.VK_LEFT -> player2.setLeft(true);
+                case KeyEvent.VK_RIGHT -> player2.setRight(true);
+                case KeyEvent.VK_UP -> player2.setUp(true);
+                case KeyEvent.VK_DOWN -> player2.setDown(true);
+                case KeyEvent.VK_SHIFT -> player2.setAttacking(true);
+
+
                 case KeyEvent.VK_ESCAPE -> pauseGame();
                 case KeyEvent.VK_M -> game.getAudioPlayer().toggleEffectMute();
                 case KeyEvent.VK_N -> game.getAudioPlayer().toggleEffectMuteMove();
@@ -326,11 +342,11 @@ public class Playing extends State implements Statemethods{
             //startLevelOverlay.keyRelease(e);
         } else {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_A -> player.setLeft(false);
-                case KeyEvent.VK_D -> player.setRight(false);
-                case KeyEvent.VK_W -> player.setUp(false);
-                case KeyEvent.VK_S -> player.setDown(false);
-                case KeyEvent.VK_SPACE -> player.setAttacking(false);
+                case KeyEvent.VK_A -> player1.setLeft(false);
+                case KeyEvent.VK_D -> player1.setRight(false);
+                case KeyEvent.VK_W -> player1.setUp(false);
+                case KeyEvent.VK_S -> player1.setDown(false);
+                case KeyEvent.VK_SPACE -> player1.setAttacking(false);
             }
         }
     }
@@ -347,8 +363,12 @@ public class Playing extends State implements Statemethods{
         return enemyManager;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 
     public boolean isGameOver() {

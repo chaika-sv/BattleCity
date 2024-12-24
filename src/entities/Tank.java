@@ -19,8 +19,8 @@ import static utils.Constants.ANI_SPEED;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.*;
 import static utils.Constants.DirConstants.RIGHT;
-import static utils.Constants.LevelConstants.PLAYER_SPAWN_X;
-import static utils.Constants.LevelConstants.PLAYER_SPAWN_Y;
+import static utils.Constants.LevelConstants.PLAYER_1_SPAWN_X;
+import static utils.Constants.LevelConstants.PLAYER_1_SPAWN_Y;
 import static utils.Constants.MovementConstants.MAX_SHIFT;
 import static utils.Constants.MovementConstants.TANK_FRONT_AREA;
 import static utils.Constants.ProjectileConstants.PROJECTILE_HEIGHT;
@@ -311,7 +311,7 @@ public abstract class Tank {
 
         // If it's an enemy then it also shouldn't intersects with player
         if (this instanceof Enemy) {
-            if (newHitbox.intersects(playing.getPlayer().getHitbox())) {
+            if (newHitbox.intersects(playing.getPlayer1().getHitbox())) {
                 meetObstacle = true;
                 obstacleType = TANK;
                 return false;
@@ -531,8 +531,8 @@ public abstract class Tank {
         curDir = UP;
         currentHealth = maxHealth;
         //tankType = TankType.T_FAST;
-        hitbox.x = PLAYER_SPAWN_X;
-        hitbox.y = PLAYER_SPAWN_Y;
+        hitbox.x = PLAYER_1_SPAWN_X;
+        hitbox.y = PLAYER_1_SPAWN_Y;
         syncHitboxWithSprite();
     }
 

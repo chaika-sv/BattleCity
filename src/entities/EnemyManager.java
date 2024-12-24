@@ -134,7 +134,7 @@ public class EnemyManager {
                     doNotSpawn = true;
 
         // Check if new possible tank intersects player
-        if (playing.getPlayer().getHitbox().intersects(possibleTank))
+        if (playing.getPlayer1().getHitbox().intersects(possibleTank))
             doNotSpawn = true;
 
         // Don't spawn new enemy if any possible collision

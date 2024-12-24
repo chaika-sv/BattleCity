@@ -4,9 +4,9 @@ import static utils.Constants.TankTypeConstants.*;
 
 public enum TankType {
     T_BASE_PLAYER(BASE,             0, 5, 1.0f, 2.5f, 500, 52, 1.0f),
-    T_FAST_PLAYER(FAST,             0, 5, 1.3f, 2.5f, 500, 52, 0.9f),
-    T_POWER_PLAYER(POWER,           0, 5, 1.2f, 2.5f, 500, 52, 0.9f),
-    T_HEAVY_PLAYER(HEAVY,           0, 5, 1.2f, 2.5f, 500, 52, 0.9f),
+    T_FAST_PLAYER(FAST,             0, 5, 1.3f, 3.0f, 500, 52, 0.9f),
+    T_POWER_PLAYER(POWER,           0, 5, 1.2f, 3.5f, 500, 52, 0.9f),
+    T_HEAVY_PLAYER(HEAVY,           0, 5, 1.2f, 3.0f, 500, 52, 0.9f),
 
     T_BASE(BASE,                    100, 1, 1.0f, 2.5f, 1000, 52, 1.0f),
     T_FAST(FAST,                    200, 1, 1.3f, 2.5f, 500, 52, 0.9f),

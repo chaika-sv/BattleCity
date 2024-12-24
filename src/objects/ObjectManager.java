@@ -52,8 +52,8 @@ public class ObjectManager {
      * Generate random power up in random place
      */
     public void generateNewPowerUp() {
-        //int powerUpType = rand.nextInt(MAX_POWER_UP_NUMBER);
-        int powerUpType = PU_STAR;
+        //int powerUpType = PU_STAR;
+        int powerUpType = rand.nextInt(MAX_POWER_UP_NUMBER);
         int x = rand.nextInt(Game.GAME_WIDTH - TILES_SIZE);
         int y = rand.nextInt(Game.GAME_HEIGHT - TILES_SIZE);
 

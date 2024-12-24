@@ -8,8 +8,8 @@ import static utils.Constants.Audio.FIRE;
 import static utils.Constants.Audio.PLAYER_EXPLOSION;
 import static utils.Constants.DEBUG_MODE;
 import static utils.Constants.DirConstants.UP;
-import static utils.Constants.LevelConstants.PLAYER_SPAWN_X;
-import static utils.Constants.LevelConstants.PLAYER_SPAWN_Y;
+import static utils.Constants.LevelConstants.PLAYER_1_SPAWN_X;
+import static utils.Constants.LevelConstants.PLAYER_1_SPAWN_Y;
 import static utils.Constants.TankColorConstants.PLAYER_YELLOW;
 import static utils.Constants.TankTypeConstants.MAX_TANK_TYPE;
 
@@ -58,8 +58,8 @@ public class Player extends Tank{
         super.injureTheTank();
 
         curDir = UP;
-        hitbox.x = PLAYER_SPAWN_X;
-        hitbox.y = PLAYER_SPAWN_Y;
+        hitbox.x = PLAYER_1_SPAWN_X;
+        hitbox.y = PLAYER_1_SPAWN_Y;
         syncHitboxWithSprite();
         playing.getObjectManager().createShield(this);
         tankType = TankType.T_BASE;

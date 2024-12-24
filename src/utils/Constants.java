@@ -79,7 +79,7 @@ public class Constants {
         public static final int SUPER_HEAVY = 7;
         public static final int LONG_GUN = 8;
 
-        public static final int MAX_TANK_TYPE = 3;
+        public static final int MAX_TANK_TYPE = 2;
     }
 
     public static class ProjectileConstants {
@@ -119,8 +119,10 @@ public class Constants {
         public static final int DRAW_LEVEL_WO_GRASS = 1;
         public static final int DRAW_GRASS = 2;
         public static final String LEVEL_DIR = "res/levels";
-        public static final int PLAYER_SPAWN_X = 5 * TILES_SIZE;
-        public static final int PLAYER_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
+        public static final int PLAYER_1_SPAWN_X = 5 * TILES_SIZE;
+        public static final int PLAYER_1_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
+        public static final int PLAYER_2_SPAWN_X = 10 * TILES_SIZE;
+        public static final int PLAYER_2_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
         public static final List<Point> BASE_WALL_POINTS = List.of(
                 new Point(416, 864),
                 new Point(416, 896),

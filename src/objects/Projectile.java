@@ -141,8 +141,8 @@ public class Projectile {
         } else if (tank instanceof Enemy) {
 
             // check if enemy's projectile hit player
-            if (playing.getPlayer().isActive())
-                checkHitTank(playing.getPlayer());
+            if (playing.getPlayer1().isActive())
+                checkHitTank(playing.getPlayer1());
 
         }
     }

@@ -1,7 +1,6 @@
 package entities;
 
 import gamestates.Playing;
-import objects.PowerUp;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -219,7 +218,7 @@ public class Enemy extends Tank{
         searchBox.x = x - (SEARCH_BOX_WIDTH - width) / 2f;
         searchBox.y = y - (SEARCH_BOX_HEIGHT - height) / 2f;
 
-        Rectangle2D.Float playerHitbox = playing.getPlayer().getHitbox();
+        Rectangle2D.Float playerHitbox = playing.getPlayer1().getHitbox();
 
         resetPlayerDirectionBooleans();
 
