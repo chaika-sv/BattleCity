@@ -42,8 +42,8 @@ public class Menu extends State implements Statemethods{
 
         menuItems.add(new ui.MenuItem(MenuItemType.MI_1_PLAYER, Game.FULL_GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2));
         menuItems.add(new ui.MenuItem(MenuItemType.MI_2_PLAYERS, Game.FULL_GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2 + 50));
-        menuItems.add(new MenuItem(MenuItemType.MI_EDITOR, Game.FULL_GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2 + 100));
-        menuItems.add(new MenuItem(MenuItemType.MI_EXIT_GAME, Game.FULL_GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2 + 150));
+        //menuItems.add(new MenuItem(MenuItemType.MI_EDITOR, Game.FULL_GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2 + 100));
+        menuItems.add(new MenuItem(MenuItemType.MI_EXIT_GAME, Game.FULL_GAME_WIDTH / 2 - 80, Game.GAME_HEIGHT / 2 + 100));
 
         // The menu selector is pointer (tank) in the left of the menu item
         menuSelector = new MenuSelector(menuItems.get(curSelectorIndex));

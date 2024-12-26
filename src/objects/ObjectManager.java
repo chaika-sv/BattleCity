@@ -21,6 +21,7 @@ public class ObjectManager {
     private Playing playing;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private ArrayList<TemporaryObject> temporaryObjects = new ArrayList<>();
+    private ArrayList<TemporaryObject> shields = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private ArrayList<Rectangle2D.Float> debugBlocks = new ArrayList<>();
 
@@ -43,8 +44,12 @@ public class ObjectManager {
     }
 
     public void createShield(Tank tank) {
+        // If tank has existing shield then deactivate it
+        if (tank.hasShield())
+            tank.getShield().setActive(false);
+
         TemporaryObject shield = new TemporaryObject((int)tank.getHitbox().getX(), (int)tank.getHitbox().getY(), TemporaryObjectType.TO_SHIELD, playing);
-        temporaryObjects.add(shield);
+        shields.add(shield);
         tank.setShield(shield);
     }
 
@@ -52,7 +57,7 @@ public class ObjectManager {
      * Generate random power up in random place
      */
     public void generateNewPowerUp() {
-        //int powerUpType = PU_STAR;
+        //int powerUpType = PU_SHIELD;
         int powerUpType = rand.nextInt(MAX_POWER_UP_NUMBER);
         int x = rand.nextInt(Game.GAME_WIDTH - TILES_SIZE);
         int y = rand.nextInt(Game.GAME_HEIGHT - TILES_SIZE);
@@ -121,6 +126,10 @@ public class ObjectManager {
         for (TemporaryObject e : temporaryObjects)
             if (e.isActive())
                 e.update();
+
+        for (TemporaryObject s : shields)
+            if (s.isActive())
+                s.update();
     }
 
     private void updatePowerUps() {
@@ -151,14 +160,12 @@ public class ObjectManager {
 
         for (TemporaryObject e : tempTempObjects)
             if (e.isActive())
-                // Shield should be drawn after player
-                if (e.getType() != TemporaryObjectType.TO_SHIELD)
-                    e.draw(g);
+                e.draw(g);
     }
 
     private void drawShield(Graphics g) {
 
-        java.util.List<TemporaryObject> shields = temporaryObjects.stream().filter(tempObj -> tempObj.getType().equals(TemporaryObjectType.TO_SHIELD)).collect(Collectors.toList());
+        //java.util.List<TemporaryObject> shields = temporaryObjects.stream().filter(tempObj -> tempObj.getType().equals(TemporaryObjectType.TO_SHIELD)).collect(Collectors.toList());
 
         for (TemporaryObject e : shields)
             if (e.isActive())
@@ -176,9 +183,13 @@ public class ObjectManager {
             if (p.isActive())
                 p.setActive(false);
 
-        for (TemporaryObject e : temporaryObjects)
-            if (e.isActive())
-                e.setActive(false);
+        for (TemporaryObject o : temporaryObjects)
+            if (o.isActive())
+                o.setActive(false);
+
+        for (TemporaryObject s : shields)
+            if (s.isActive())
+                s.setActive(false);
 
         for (PowerUp p : powerUps)
             if (p.isActive())
