@@ -17,10 +17,14 @@ import static utils.Constants.TankTypeConstants.MAX_TANK_TYPE;
 public class Player extends Tank{
 
     private int points;
+    private int spawnX;
+    private int spawnY;
 
-    public Player(TankType tankType, float x, float y, Playing playing) {
+    public Player(TankType tankType, float x, float y, int color, Playing playing) {
         super(tankType, x, y, playing);
-        tankColor = PLAYER_YELLOW;
+        this.tankColor = color;
+        this.spawnX = (int) x;
+        this.spawnY = (int) y;
     }
 
     @Override
@@ -28,6 +32,8 @@ public class Player extends Tank{
         super.resetAll();
         active = true;
         points = 0;
+        hitbox.x = spawnX;
+        hitbox.y = spawnY;
     }
 
     @Override
@@ -58,8 +64,8 @@ public class Player extends Tank{
         super.injureTheTank();
 
         curDir = UP;
-        hitbox.x = PLAYER_1_SPAWN_X;
-        hitbox.y = PLAYER_1_SPAWN_Y;
+        hitbox.x = spawnX;
+        hitbox.y = spawnY;
         syncHitboxWithSprite();
         playing.getObjectManager().createShield(this);
         tankType = TankType.T_BASE;

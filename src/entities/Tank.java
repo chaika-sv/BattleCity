@@ -311,11 +311,19 @@ public abstract class Tank {
 
         // If it's an enemy then it also shouldn't intersects with player
         if (this instanceof Enemy) {
-            if (newHitbox.intersects(playing.getPlayer1().getHitbox())) {
-                meetObstacle = true;
-                obstacleType = TANK;
-                return false;
-            }
+            if (playing.getPlayer1().isActive())
+                if (newHitbox.intersects(playing.getPlayer1().getHitbox())) {
+                    meetObstacle = true;
+                    obstacleType = TANK;
+                    return false;
+                }
+
+            if (playing.getPlayer2().isActive())
+                if (newHitbox.intersects(playing.getPlayer2().getHitbox())) {
+                    meetObstacle = true;
+                    obstacleType = TANK;
+                    return false;
+                }
         }
 
         meetObstacle = false;
@@ -531,8 +539,6 @@ public abstract class Tank {
         curDir = UP;
         currentHealth = maxHealth;
         //tankType = TankType.T_FAST;
-        hitbox.x = PLAYER_1_SPAWN_X;
-        hitbox.y = PLAYER_1_SPAWN_Y;
         syncHitboxWithSprite();
     }
 

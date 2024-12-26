@@ -121,7 +121,7 @@ public class Constants {
         public static final String LEVEL_DIR = "res/levels";
         public static final int PLAYER_1_SPAWN_X = 5 * TILES_SIZE;
         public static final int PLAYER_1_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
-        public static final int PLAYER_2_SPAWN_X = 10 * TILES_SIZE;
+        public static final int PLAYER_2_SPAWN_X = 9 * TILES_SIZE;
         public static final int PLAYER_2_SPAWN_Y = (TILES_IN_HEIGHT - 1) * TILES_SIZE;
         public static final List<Point> BASE_WALL_POINTS = List.of(
                 new Point(416, 864),

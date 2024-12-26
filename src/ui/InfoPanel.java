@@ -38,17 +38,34 @@ public class InfoPanel {
                 10,
                 playing.getEnemyManager().getEnemiesToKillCount(), 3, 32, 0);
 
+
         // Label "IP"
-        g.drawImage(FIRST_PLAYER_INFO_IMG, Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f), 64, 32, null);
+        g.drawImage(FIRST_PLAYER_INFO_IMG, Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f) - 32, 64, 32, null);
 
         // Player's health ( = number of tanks)
         drawTanksInRows(g, PLAYER_TANK_CNT_IMG,
                 Game.GAME_WIDTH + 10,
-                (int) (Game.GAME_HEIGHT / 2f) + 32,
+                (int) (Game.GAME_HEIGHT / 2f),
                 playing.getPlayer1().getCurrentHealth(), 3, 32, 3);
 
         // Points
-        DrawNumber(g, playing.getPlayer1().getPoints(), Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f + 150));
+        DrawNumber(g, playing.getPlayer1().getPoints(), Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f + 78));
+
+
+        if (playing.getPlayersCount() == 2) {
+            // Label "IIP"
+            g.drawImage(SECOND_PLAYER_INFO_IMG, Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f) + 160, 64, 32, null);
+
+            // Player's health ( = number of tanks)
+            drawTanksInRows(g, PLAYER_TANK_CNT_IMG,
+                    Game.GAME_WIDTH + 10,
+                    (int) (Game.GAME_HEIGHT / 2f) + 192,
+                    playing.getPlayer2().getCurrentHealth(), 3, 32, 3);
+
+            // Points
+            DrawNumber(g, playing.getPlayer2().getPoints(), Game.GAME_WIDTH + 10, (int) (Game.GAME_HEIGHT / 2f + 270));
+        }
+
 
         // Level flag
         g.drawImage(STAGE_NUM_IMG, Game.GAME_WIDTH + 10, Game.GAME_HEIGHT - 100, 64, 64, null);

@@ -23,6 +23,8 @@ import static utils.Constants.Audio.*;
 import static utils.Constants.LevelConstants.*;
 import static utils.Constants.PowerUpConstants.FREEZE_TIME_MS;
 import static utils.Constants.PowerUpConstants.WALL_TIME_MS;
+import static utils.Constants.TankColorConstants.PLAYER_GREEN;
+import static utils.Constants.TankColorConstants.PLAYER_YELLOW;
 import static utils.LoadSaveImages.ENEMY_SETTINGS;
 import static utils.LoadSaveImages.LoadTankImages;
 
@@ -37,6 +39,7 @@ public class Playing extends State implements Statemethods{
     private StartLevelOverlay startLevelOverlay;
     private LevelCompleteOverlay levelCompleteOverlay;
     private InfoPanel infoPanel;
+    private int playersCount;
 
     private boolean gameOver = false;
     private boolean pause = false;
@@ -63,9 +66,8 @@ public class Playing extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
         enemyManager = new EnemyManager(this);
-        player1 = new Player(TankType.T_BASE_PLAYER, PLAYER_1_SPAWN_X, PLAYER_1_SPAWN_Y, this);
-        player2 = new Player(TankType.T_BASE_PLAYER, PLAYER_2_SPAWN_X, PLAYER_2_SPAWN_Y, this);
-        player2.setActive(false);
+        player1 = new Player(TankType.T_BASE_PLAYER, PLAYER_1_SPAWN_X, PLAYER_1_SPAWN_Y, PLAYER_YELLOW, this);
+        player2 = new Player(TankType.T_BASE_PLAYER, PLAYER_2_SPAWN_X, PLAYER_2_SPAWN_Y, PLAYER_GREEN, this);
         gameOverPauseOverlay = new GameOverPauseOverlay(this);
         startLevelOverlay = new StartLevelOverlay(this);
         levelCompleteOverlay = new LevelCompleteOverlay(this);
@@ -74,6 +76,10 @@ public class Playing extends State implements Statemethods{
 
 
     public void startGameWithStartLevelOverlay() {
+
+        if (playersCount == 1)
+            player2.setActive(false);
+
         // We are starting the game ...
         startGame();
         // ... but for now pause everything and show the Start Level overlay
@@ -85,7 +91,8 @@ public class Playing extends State implements Statemethods{
         resetAll();
         levelManager.loadFirstLevel();
 
-        getObjectManager().createShield(player1);
+        createShields();
+
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
 
     }
@@ -112,7 +119,8 @@ public class Playing extends State implements Statemethods{
     private void startCurrentLevelAgain() {
         levelManager.reloadCurrentLevel();
 
-        getObjectManager().createShield(player1);
+        createShields();
+
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
     }
 
@@ -134,12 +142,21 @@ public class Playing extends State implements Statemethods{
         resetAll();
         levelManager.loadNextLevel();
 
-        getObjectManager().createShield(player1);
+        createShields();
+
         enemyManager.applyEnemySettings(ENEMY_SETTINGS.get(levelManager.getCurrentLevelIndex()));
 
         // ... but for now pause everything and show the Start Level overlay
         Gamestate.state = Gamestate.START_LEVEL;
         setStartLevel(true);
+    }
+
+    private void createShields() {
+        if (player1.isActive())
+            getObjectManager().createShield(player1);
+
+        if (player2.isActive())
+            getObjectManager().createShield(player2);
     }
 
 
@@ -175,7 +192,12 @@ public class Playing extends State implements Statemethods{
 
 
     private void resetAll() {
+
         player1.resetAll();
+
+        if (playersCount == 2)
+            player2.resetAll();
+
         objectManager.resetAll();
         enemyManager.resetAll();
     }
@@ -321,7 +343,7 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_RIGHT -> player2.setRight(true);
                 case KeyEvent.VK_UP -> player2.setUp(true);
                 case KeyEvent.VK_DOWN -> player2.setDown(true);
-                case KeyEvent.VK_SHIFT -> player2.setAttacking(true);
+                case KeyEvent.VK_P -> player2.setAttacking(true);
 
 
                 case KeyEvent.VK_ESCAPE -> pauseGame();
@@ -347,6 +369,13 @@ public class Playing extends State implements Statemethods{
                 case KeyEvent.VK_W -> player1.setUp(false);
                 case KeyEvent.VK_S -> player1.setDown(false);
                 case KeyEvent.VK_SPACE -> player1.setAttacking(false);
+
+                case KeyEvent.VK_LEFT -> player2.setLeft(false);
+                case KeyEvent.VK_RIGHT -> player2.setRight(false);
+                case KeyEvent.VK_UP -> player2.setUp(false);
+                case KeyEvent.VK_DOWN -> player2.setDown(false);
+                case KeyEvent.VK_P -> player2.setAttacking(false);
+
             }
         }
     }
@@ -417,5 +446,13 @@ public class Playing extends State implements Statemethods{
 
     public void setLevelComplete(boolean levelComplete) {
         this.levelComplete = levelComplete;
+    }
+
+    public int getPlayersCount() {
+        return playersCount;
+    }
+
+    public void setPlayersCount(int playersCount) {
+        this.playersCount = playersCount;
     }
 }

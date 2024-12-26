@@ -76,25 +76,25 @@ public class LoadSaveImages {
         Map<TankType, Integer> settings = new LinkedHashMap<>();
 
         ENEMY_SETTINGS.put(0, new EnemySettings(new LinkedHashMap<>() {{
-            put(T_BASE, 6);
-            put(T_FAST, 0);
-            put(T_POWER, 0);
+            put(T_BASE, 10);
+            put(T_FAST, 2);
+            put(T_POWER, 2);
             put(T_HEAVY, 0);
-        }}, 4, 6));
+        }}, 4, 10));
 
         ENEMY_SETTINGS.put(1, new EnemySettings(new LinkedHashMap<>() {{
-            put(T_BASE, 0);
-            put(T_FAST, 1);
-            put(T_POWER, 0);
+            put(T_BASE, 10);
+            put(T_FAST, 2);
+            put(T_POWER, 2);
             put(T_HEAVY, 0);
-        }}, 4, 1));
+        }}, 4, 10));
 
         ENEMY_SETTINGS.put(2, new EnemySettings(new LinkedHashMap<>() {{
-            put(T_BASE, 0);
-            put(T_FAST, 0);
-            put(T_POWER, 1);
+            put(T_BASE, 10);
+            put(T_FAST, 2);
+            put(T_POWER, 2);
             put(T_HEAVY, 0);
-        }}, 4, 1));
+        }}, 4, 10));
 
     }
 

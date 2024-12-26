@@ -218,9 +218,29 @@ public class Enemy extends Tank{
         searchBox.x = x - (SEARCH_BOX_WIDTH - width) / 2f;
         searchBox.y = y - (SEARCH_BOX_HEIGHT - height) / 2f;
 
-        Rectangle2D.Float playerHitbox = playing.getPlayer1().getHitbox();
+        resetSearchBoxBooleans();
 
-        resetPlayerDirectionBooleans();
+        if (playing.getPlayer1().isActive()) {
+
+            Rectangle2D.Float playerHitbox1 = playing.getPlayer1().getHitbox();
+            if (checkIntersectSearchBoxWithPlayer(playerHitbox1))
+                return true;
+
+        }
+
+        if (playing.getPlayer2().isActive()) {
+
+            Rectangle2D.Float playerHitbox2 = playing.getPlayer2().getHitbox();
+            if (checkIntersectSearchBoxWithPlayer(playerHitbox2))
+                return true;
+
+        }
+
+        return false;
+    }
+
+
+    private boolean checkIntersectSearchBoxWithPlayer(Rectangle2D.Float playerHitbox) {
 
         // If the search box intersects player's search box (found the player)
         if (searchBox.intersects(playerHitbox)) {
@@ -251,10 +271,10 @@ public class Enemy extends Tank{
             moveToPlayer = false;
             return false;
         }
-
     }
 
-    private void resetPlayerDirectionBooleans() {
+
+    private void resetSearchBoxBooleans() {
         pDirUp = false;
         pDirDown = false;
         pDirLeft = false;

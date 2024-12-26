@@ -106,8 +106,14 @@ public class Menu extends State implements Statemethods{
      */
     private void selectItem() {
         switch (menuItems.get(curSelectorIndex).getType()) {
-            case MI_1_PLAYER -> playing.startGameWithStartLevelOverlay();
-            case MI_2_PLAYERS -> {}
+            case MI_1_PLAYER -> {
+                playing.setPlayersCount(1);
+                playing.startGameWithStartLevelOverlay();
+            }
+            case MI_2_PLAYERS -> {
+                playing.setPlayersCount(2);
+                playing.startGameWithStartLevelOverlay();
+            }
             case MI_EDITOR -> Gamestate.state = Gamestate.EDITOR;
             case MI_EXIT_GAME -> System.exit(0);
         }
@@ -148,4 +154,6 @@ public class Menu extends State implements Statemethods{
     public void keyReleased(KeyEvent e) {
 
     }
+
+
 }

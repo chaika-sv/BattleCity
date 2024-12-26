@@ -35,7 +35,11 @@ public class PowerUp {
 
     public void update() {
 
-        checkIntersectWithPlayer();
+        if (playing.getPlayer1().isActive())
+            checkIntersectWithPlayer(playing.getPlayer1());
+
+        if (playing.getPlayer2().isActive())
+            checkIntersectWithPlayer(playing.getPlayer2());
 
         long currentTime = System.currentTimeMillis();
 
@@ -44,11 +48,9 @@ public class PowerUp {
 
     }
 
-    private void checkIntersectWithPlayer() {
+    private void checkIntersectWithPlayer(Player player) {
 
         Rectangle2D.Float powerUpHitbox = new Rectangle2D.Float(x, y, width, height);
-
-        Player player = playing.getPlayer1();
 
         if (player.isActive())
             if (powerUpHitbox.intersects(player.getHitbox())) {
